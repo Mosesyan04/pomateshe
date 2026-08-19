@@ -16,7 +16,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased select-none">
 
-    <!-- ==================== 1. ЭКРАН ВХОДА (МГНОВЕННЫЙ БЕЗ СБОЕВ) ==================== -->
+    <!-- ==================== 1. ЭКРАН ВХОДА (ТОЛЬКО PIN) ==================== -->
     <div id="view-login" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center">
             
@@ -40,10 +40,6 @@
 
                 <button type="button" onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-sm shadow-md shadow-indigo-200 transition">
                     Войти →
-                </button>
-
-                <button type="button" onclick="emergencyTutorLogin()" class="text-[11px] text-slate-400 hover:text-indigo-600 pt-2 block mx-auto underline transition">
-                    Войти как репетитор (без ввода)
                 </button>
             </div>
         </div>
@@ -494,11 +490,13 @@
 
     <!-- ==================== СИСТЕМНЫЙ СКРИПТ ==================== -->
     <script>
-        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT ЕСЛИ ЕСТЬ:
-        const DEFAULT_CLOUD_URL = "";
+        // =========================================================================
+        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (оканчивается на /exec):
+        const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
+        // =========================================================================
 
         let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [] };
-        let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || DEFAULT_CLOUD_URL;
+        let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
         let currentAuth = localStorage.getItem('tutor_current_auth') || null;
         let currentTab = 'calendar';
         let activeStudentId = null;
@@ -515,8 +513,8 @@
             return data;
         }
 
-        // ================= МГНОВЕННЫЙ ВХОД (БЕЗ ОЖИДАНИЯ СЕТИ) =================
-        function doLogin() {
+        // ВХОД ПО PIN-КОДУ
+        async function doLogin() {
             const input = document.getElementById('login-pin');
             const errorMsg = document.getElementById('login-error-msg');
             if (!input) return;
@@ -524,39 +522,38 @@
             const pin = input.value.replace(/\D/g, '').trim();
             if (errorMsg) errorMsg.classList.add('hidden');
 
-            const savedMasterPin = localStorage.getItem('tutor_master_pin');
+            const masterPin = localStorage.getItem('tutor_master_pin') || '7777';
 
-            // 1. ВХОД РЕПЕТИТОРА: 7777 или сохраненный
-            if (pin === '7777' || (savedMasterPin && pin === savedMasterPin)) {
+            // 1. Репетитор (7777)
+            if (pin === '7777' || pin === masterPin) {
                 currentAuth = 'tutor';
                 localStorage.setItem('tutor_current_auth', 'tutor');
                 applyAuthSession();
-                if (cloudUrl) pullFromCloud(); // Фоновое обновление
+                if (cloudUrl) pullFromCloud();
                 return;
             }
 
-            // 2. ВХОД УЧЕНИКА
-            const student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
+            // 2. Ученик (ищем в локальной базе)
+            let student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
+
+            // Если не нашли сразу (на телефоне база ещё не подгружена), запрашиваем из облака
+            if (!student && cloudUrl) {
+                await pullFromCloud();
+                student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
+            }
+
             if (student) {
                 currentAuth = student.id;
                 localStorage.setItem('tutor_current_auth', student.id);
                 applyAuthSession();
-                if (cloudUrl) pullFromCloud(); // Фоновое обновление
+                if (cloudUrl) pullFromCloud();
                 return;
             }
 
-            // 3. НЕВЕРНЫЙ КОД
+            // 3. Неверный PIN
             if (errorMsg) errorMsg.classList.remove('hidden');
             input.value = '';
             input.focus();
-        }
-
-        // Резервный экстренный вход
-        function emergencyTutorLogin() {
-            currentAuth = 'tutor';
-            localStorage.setItem('tutor_current_auth', 'tutor');
-            applyAuthSession();
-            if (cloudUrl) pullFromCloud();
         }
 
         function logout() {
@@ -637,31 +634,17 @@
             return { xp, level, icon, streak };
         }
 
-        function initApp() {
+        async function initApp() {
             try {
                 const local = localStorage.getItem('tutor_local_db');
                 if (local) {
                     db = sanitizeDb(JSON.parse(local));
-                } else {
-                    db = {
-                        students: [
-                            { id: 'st_1', name: 'Иван Сергеев', pin: '1042', subject: 'Математика (ЕГЭ)', price: 1500, paidLessons: 2, topics: ['Логарифмы', 'Стереометрия'], exams: [{month: 'Сентябрь', score: 55}, {month: 'Октябрь', score: 70}] }
-                        ],
-                        lessons: [
-                            { id: 'ls_1', studentId: 'st_1', date: new Date().toISOString().split('T')[0], time: '16:00', topic: 'Тригонометрические формулы', hasHomework: true }
-                        ],
-                        materials: [
-                            { id: 'm_1', title: 'Все формулы тригонометрии', category: 'Математика', url: 'https://google.com' }
-                        ],
-                        deletedCalendarEventIds: []
-                    };
-                    persistLocal();
                 }
 
                 if (cloudUrl) {
                     const inp = document.getElementById('cloud-url-input');
                     if (inp) inp.value = cloudUrl;
-                    pullFromCloud();
+                    await pullFromCloud();
                 } else {
                     setCloudStatus('local');
                 }
@@ -706,7 +689,7 @@
                 await fetch(cloudUrl, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(db)
                 });
                 db.deletedCalendarEventIds = [];
