@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TutorPro — Кабинет репетитора и учеников</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .pb-safe { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased select-none">
+
+    <!-- ==================== 1. ЭКРАН ВХОДА (PIN-КОД) ==================== -->
+    <div id="view-login" class="fixed inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-indigo-950 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center">
+            
+            <div class="w-14 h-14 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl text-white flex items-center justify-center mx-auto shadow-lg mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+
+            <h2 class="text-xl font-black text-slate-900">Вход в TutorPro</h2>
+            <p class="text-xs text-slate-500 mt-1 mb-6">Введите ваш 4-значный PIN-код</p>
+
+            <form onsubmit="handlePinLogin(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="login-pin" maxlength="4" pattern="[0-9]*" inputmode="numeric" required placeholder="••••" 
+                           class="w-full text-center tracking-[1em] text-2xl font-black bg-slate-50 border-2 border-slate-200 rounded-2xl py-3 focus:outline-none focus:border-indigo-600 transition">
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl text-sm shadow-md shadow-indigo-200 transition">
+                    Войти в кабинет →
+                </button>
+            </form>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-400">
+                <span>🔑 Пароль репетитора по умолчанию: <b>7777</b></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 2. ШАПКА РЕПЕТИТОРА ==================== -->
+    <header id="tutor-header" class="hidden bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+            
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-base font-extrabold text-slate-900 leading-none">TutorPro</h1>
+                    <div class="flex items-center gap-1.5 mt-1">
+                        <span id="cloud-indicator" class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        <span id="cloud-status" class="text-[11px] text-slate-500 font-medium">Локально</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Десктопные вкладки -->
+            <div class="hidden md:flex bg-slate-100 p-1 rounded-xl space-x-1">
+                <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition">📅 Календарь</button>
+                <button onclick="switchTab('students')" id="tab-btn-students" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">👥 Ученики</button>
+                <button onclick="switchTab('billing')" id="tab-btn-billing" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">💳 Оплаты (Вс)</button>
+                <button onclick="switchTab('materials')" id="tab-btn-materials" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">📚 База знаний</button>
+            </div>
+
+            <!-- Кнопки справа -->
+            <div class="flex items-center space-x-2">
+                <button onclick="pullFromCloud()" title="Синхронизировать" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">🔄</button>
+                <button onclick="openCloudModal()" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">☁️ Google</button>
+                <button onclick="openLessonModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">+ Урок</button>
+                <button onclick="logout()" title="Выйти" class="p-2 text-slate-400 hover:text-rose-600 transition">🚪</button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ==================== 3. ШАПКА УЧЕНИКА ==================== -->
+    <header id="student-header" class="hidden bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 flex justify-between items-center h-16">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-sm" id="student-avatar">У</div>
+                <div>
+                    <h2 class="text-sm font-bold text-slate-900" id="student-portal-name">Личный кабинет</h2>
+                    <p class="text-xs text-indigo-600 font-medium" id="student-portal-subject">Предмет</p>
+                </div>
+            </div>
+            <button onclick="logout()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold transition flex items-center gap-1">
+                <span>Выйти</span> 🚪
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== ОСНОВНОЙ КОНТЕНТ ==================== -->
+    <main id="main-content" class="hidden max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full pb-safe md:pb-6">
+
+        <!-- 1. КАЛЕНДАРЬ -->
+        <section id="view-calendar" class="space-y-4">
+            <div class="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center space-x-2">
+                    <h2 id="cal-month-year" class="text-base sm:text-lg font-bold text-slate-900 capitalize">Август 2026</h2>
+                    <div class="flex items-center bg-slate-100 rounded-lg p-0.5">
+                        <button onclick="changeMonth(-1)" class="p-1 hover:bg-white rounded-md text-slate-600 font-bold transition">◀</button>
+                        <button onclick="goToCurrentMonth()" class="px-2 py-0.5 text-xs font-medium text-slate-700 hover:bg-white rounded-md transition">Сегодня</button>
+                        <button onclick="changeMonth(1)" class="p-1 hover:bg-white rounded-md text-slate-600 font-bold transition">▶</button>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 text-xs">
+                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> ДЗ задано</span>
+                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Без ДЗ</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center text-[11px] font-semibold text-slate-500 py-2">
+                    <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 auto-rows-fr bg-slate-200 gap-[1px]"></div>
+            </div>
+        </section>
+
+        <!-- 2. УЧЕНИКИ -->
+        <section id="view-students" class="hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-900">Ученики</h2>
+                    <p class="text-xs text-slate-500">Профили, PIN-коды для входа, уровни и прогресс</p>
+                </div>
+                <button onclick="openStudentModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">
+                    + Добавить
+                </button>
+            </div>
+            <div id="students-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
+        </section>
+
+        <!-- 3. ПРОФИЛЬ УЧЕНИКА ДЕТАЛЬНО -->
+        <section id="view-student-profile" class="hidden space-y-4">
+            <button onclick="switchTab('students')" class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+                ← Назад ко всем ученикам
+            </button>
+            <div id="student-profile-details"></div>
+        </section>
+
+        <!-- 4. ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ -->
+        <section id="view-billing" class="hidden space-y-4">
+            <div class="bg-gradient-to-r from-indigo-700 to-violet-700 text-white p-5 rounded-3xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide">Расчет на неделю вперед</span>
+                    <h2 class="text-xl font-extrabold mt-2">Оплаты в это воскресенье</h2>
+                    <p class="text-xs text-indigo-100 mt-0.5" id="billing-week-dates">Период: следующий понедельник — воскресенье</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 w-full md:w-auto text-center md:text-right">
+                    <span class="text-xs text-indigo-100 block">Ожидается к получению:</span>
+                    <span class="text-2xl font-black text-white" id="billing-total-sum">0 ₽</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-4 sm:p-5">
+                <h3 class="text-sm font-bold text-slate-800 mb-3">Список учеников и уроков на следующую неделю</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b text-slate-400 font-semibold uppercase text-[10px]">
+                                <th class="py-2.5">Ученик</th>
+                                <th class="py-2.5">Уроков на след. неделе</th>
+                                <th class="py-2.5">Ставка</th>
+                                <th class="py-2.5">К оплате</th>
+                                <th class="py-2.5 text-right">Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billing-table-body" class="divide-y"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. БАЗА МАТЕРИАЛОВ -->
+        <section id="view-materials" class="hidden space-y-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-900">База знаний и материалы</h2>
+                    <p class="text-xs text-slate-500">Шпаргалки, формулы и ссылки, доступные ученикам</p>
+                </div>
+                <button onclick="openMaterialModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">
+                    + Добавить материал
+                </button>
+            </div>
+            <div id="materials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА -->
+        <section id="view-student-portal" class="hidden max-w-4xl mx-auto space-y-5">
+            <!-- Плашка: Ближайший урок -->
+            <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide inline-flex items-center gap-1">
+                            ⏰ Ближайшее занятие
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-black mt-2.5" id="portal-next-date">Нет уроков</h3>
+                        <p class="text-xs sm:text-sm text-indigo-100 mt-1" id="portal-next-topic">Репетитор скоро назначит дату</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/20 text-left md:text-right w-full md:w-auto">
+                        <span class="text-[11px] text-indigo-200 block">Домашнее задание:</span>
+                        <span class="text-sm font-bold" id="portal-next-hw">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Геймификация -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-2xl" id="portal-level-icon">🏆</div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-400">Уровень</span>
+                        <h4 class="font-extrabold text-slate-900 text-base" id="portal-level-title">Профи</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center text-2xl">🔥</div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-400">Серия уроков</span>
+                        <h4 class="font-extrabold text-slate-900 text-base" id="portal-streak-val">0 зан. подряд</h4>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">⚡</div>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-slate-400">Опыт (XP)</span>
+                        <h4 class="font-extrabold text-slate-900 text-base" id="portal-xp-val">0 XP</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- График пробников -->
+            <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">📈 График прогресса (Пробники)</h3>
+                        <p class="text-xs text-slate-500">Динамика баллов за курс обучения</p>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg" id="portal-score-growth">+0 баллов</span>
+                </div>
+                <div id="portal-exams-chart" class="h-40 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-slate-100"></div>
+                <div id="portal-exams-labels" class="flex justify-between text-[11px] text-slate-400 mt-2 px-2"></div>
+            </div>
+
+            <!-- Вкладки внутри кабинета ученика -->
+            <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex border-b border-slate-100 pb-3 gap-2 overflow-x-auto">
+                    <button onclick="switchStudentSubTab('schedule')" id="st-tab-schedule" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600">📅 Все уроки</button>
+                    <button onclick="switchStudentSubTab('topics')" id="st-tab-topics" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">✅ Пройденные темы</button>
+                    <button onclick="switchStudentSubTab('materials')" id="st-tab-materials" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">📚 Материалы</button>
+                </div>
+
+                <div id="student-subview-schedule" class="space-y-2"></div>
+                <div id="student-subview-topics" class="hidden space-y-2"></div>
+                <div id="student-subview-materials" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- НИЖНЕЕ МЕНЮ РЕПЕТИТОРА (МОБИЛЬНОЕ) -->
+    <nav id="mobile-nav" class="hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-30 px-3 py-2 flex justify-around items-center shadow-lg">
+        <button onclick="switchTab('calendar')" class="flex flex-col items-center text-indigo-600" id="mob-btn-calendar">
+            <span class="text-lg">📅</span>
+            <span class="text-[10px] font-bold mt-0.5">Календарь</span>
+        </button>
+        <button onclick="switchTab('students')" class="flex flex-col items-center text-slate-400" id="mob-btn-students">
+            <span class="text-lg">👥</span>
+            <span class="text-[10px] font-bold mt-0.5">Ученики</span>
+        </button>
+        <button onclick="switchTab('billing')" class="flex flex-col items-center text-slate-400" id="mob-btn-billing">
+            <span class="text-lg">💳</span>
+            <span class="text-[10px] font-bold mt-0.5">Оплаты</span>
+        </button>
+        <button onclick="switchTab('materials')" class="flex flex-col items-center text-slate-400" id="mob-btn-materials">
+            <span class="text-lg">📚</span>
+            <span class="text-[10px] font-bold mt-0.5">База</span>
+        </button>
+    </nav>
+
+    <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
+
+    <!-- Модалка: Урок -->
+    <div id="modal-lesson" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="lesson-modal-heading" class="text-base font-bold text-slate-900">Запланировать урок</h3>
+                <button onclick="closeLessonModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            
+            <form id="lesson-form" onsubmit="submitLesson(event)" class="space-y-3.5">
+                <input type="hidden" id="lesson-id">
+                
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Ученик *</label>
+                    <select id="lesson-student" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-500"></select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Дата *</label>
+                        <input type="date" id="lesson-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Время *</label>
+                        <input type="time" id="lesson-time" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Тема занятия</label>
+                    <input type="text" id="lesson-topic" placeholder="например: Тригонометрия / Разбор варианта" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+
+                <!-- Регулярность -->
+                <div id="recurrence-box" class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100 space-y-2">
+                    <label class="block text-[11px] font-bold text-indigo-900 uppercase">🔁 Повторение</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <select id="lesson-repeat-type" onchange="toggleRepeatOptions()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs">
+                            <option value="none">Один урок</option>
+                            <option value="weekly">Раз в неделю</option>
+                            <option value="biweekly">Раз в 2 недели</option>
+                        </select>
+                        <div id="repeat-count-container" class="hidden">
+                            <select id="lesson-repeat-count" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs">
+                                <option value="4">4 урока</option>
+                                <option value="8" selected>8 уроков</option>
+                                <option value="12">12 уроков</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Чекбокс ДЗ -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-slate-800 block">Домашнее задание (ДЗ)</span>
+                        <span class="text-[10px] text-slate-500">Отметьте, если выдано задание</span>
+                    </div>
+                    <input type="checkbox" id="lesson-hw" class="w-5 h-5 text-indigo-600 rounded border-slate-300 cursor-pointer">
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <button type="button" id="lesson-btn-delete" onclick="deleteLessonAction()" class="text-rose-600 text-xs font-bold hidden">Удалить</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button type="button" onclick="closeLessonModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модалка: Ученик (С PIN-КОДОМ) -->
+    <div id="modal-student" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="student-modal-heading" class="text-base font-bold text-slate-900">Новый ученик</h3>
+                <button onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            
+            <form id="student-form" onsubmit="submitStudent(event)" class="space-y-3.5">
+                <input type="hidden" id="student-id">
+                
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Имя и фамилия *</label>
+                    <input type="text" id="student-name" required placeholder="например: Анна Смирнова" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Предмет *</label>
+                    <input type="text" id="student-subject" required placeholder="например: Профильная математика" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Стоимость (₽/урок) *</label>
+                        <input type="number" id="student-price" required min="0" step="50" placeholder="1500" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Оплачено уроков</label>
+                        <input type="number" id="student-paid" required min="0" value="0" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    </div>
+                </div>
+                
+                <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
+                    <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1">Личный PIN-код для входа (4 цифры) *</label>
+                    <input type="text" id="student-pin" maxlength="4" pattern="[0-9]{4}" required placeholder="1042" class="w-full bg-white border border-indigo-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700">
+                    <span class="text-[10px] text-slate-500 mt-1 block">Ученик введет этот PIN со своего телефона для входа в свой кабинет</span>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeStudentModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модалка: Пробник -->
+    <div id="modal-exam" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 shadow-xl border border-slate-100">
+            <h3 class="text-sm font-bold text-slate-900 mb-3">Результат пробника</h3>
+            <form onsubmit="submitExamScore(event)" class="space-y-3">
+                <input type="hidden" id="exam-student-id">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Месяц</label>
+                    <select id="exam-month" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                        <option value="Сентябрь">Сентябрь</option>
+                        <option value="Октябрь">Октябрь</option>
+                        <option value="Ноябрь">Ноябрь</option>
+                        <option value="Декабрь">Декабрь</option>
+                        <option value="Январь">Январь</option>
+                        <option value="Февраль">Февраль</option>
+                        <option value="Март">Март</option>
+                        <option value="Апрель">Апрель</option>
+                        <option value="Май">Май</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Балл (из 100)</label>
+                    <input type="number" id="exam-score" min="0" max="100" required placeholder="например: 68" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                </div>
+                <div class="flex justify-end gap-2 pt-1">
+                    <button type="button" onclick="closeExamModal()" class="px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модалка: Материал -->
+    <div id="modal-material" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 shadow-xl border border-slate-100">
+            <h3 class="text-base font-bold text-slate-900 mb-3">Новый полезный материал</h3>
+            <form onsubmit="submitMaterial(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Название *</label>
+                    <input type="text" id="mat-title" required placeholder="например: Шпаргалка по стереометрии" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Категория</label>
+                    <input type="text" id="mat-cat" placeholder="Математика / Формулы" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ссылка на файл / сайт *</label>
+                    <input type="url" id="mat-url" required placeholder="https://drive.google.com/..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeMaterialModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Добавить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модалка: Google URL -->
+    <div id="modal-cloud" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-base font-bold text-slate-900">☁️ Настройка Google Синхронизации</h3>
+                <button onclick="closeCloudModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+            </div>
+            <p class="text-xs text-slate-500 mb-4">Вставьте ссылку на веб-приложение Google Apps Script (/exec):</p>
+            <div class="space-y-3">
+                <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                <div class="flex gap-2 pt-1">
+                    <button onclick="saveCloudUrl()" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs font-semibold">Сохранить</button>
+                    <button onclick="disconnectCloud()" class="px-3 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отключить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
+    <script>
+        const TUTOR_MASTER_PIN = "7777"; // Пароль репетитора
+
+        let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [] };
+        let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || '';
+        let currentAuth = localStorage.getItem('tutor_current_auth') || null; // 'tutor' или ID ученика
+        let currentTab = 'calendar';
+        let activeStudentId = null;
+        let calDate = new Date();
+
+        const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+
+        function sanitizeDb(data) {
+            if (!data || typeof data !== 'object') data = {};
+            if (!Array.isArray(data.students)) data.students = [];
+            if (!Array.isArray(data.lessons)) data.lessons = [];
+            if (!Array.isArray(data.materials)) data.materials = [];
+            if (!Array.isArray(data.deletedCalendarEventIds)) data.deletedCalendarEventIds = [];
+            return data;
+        }
+
+        // ВХОД ПО PIN-КОДУ
+        function handlePinLogin(e) {
+            e.preventDefault();
+            const pin = document.getElementById('login-pin').value.trim();
+
+            // 1. Вход репетитора
+            if (pin === TUTOR_MASTER_PIN) {
+                currentAuth = 'tutor';
+                localStorage.setItem('tutor_current_auth', 'tutor');
+                applyAuthSession();
+                return;
+            }
+
+            // 2. Вход ученика по личному PIN
+            const student = (db.students || []).find(s => s.pin === pin);
+            if (student) {
+                currentAuth = student.id;
+                localStorage.setItem('tutor_current_auth', student.id);
+                applyAuthSession();
+                return;
+            }
+
+            alert('Неверный PIN-код! Попробуйте снова.');
+            document.getElementById('login-pin').value = '';
+        }
+
+        function logout() {
+            currentAuth = null;
+            localStorage.removeItem('tutor_current_auth');
+            document.getElementById('login-pin').value = '';
+            document.getElementById('view-login').classList.remove('hidden');
+            document.getElementById('tutor-header').classList.add('hidden');
+            document.getElementById('student-header').classList.add('hidden');
+            document.getElementById('mobile-nav').classList.add('hidden');
+            document.getElementById('main-content').classList.add('hidden');
+        }
+
+        function applyAuthSession() {
+            if (!currentAuth) {
+                document.getElementById('view-login').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+
+            if (currentAuth === 'tutor') {
+                // Показываем кабинет репетитора
+                document.getElementById('tutor-header').classList.remove('hidden');
+                document.getElementById('mobile-nav').classList.remove('hidden');
+                document.getElementById('student-header').classList.add('hidden');
+                document.getElementById('view-student-portal').classList.add('hidden');
+                switchTab('calendar');
+            } else {
+                // Показываем изолированный кабинет ученика
+                document.getElementById('tutor-header').classList.add('hidden');
+                document.getElementById('mobile-nav').classList.add('hidden');
+                document.getElementById('student-header').classList.remove('hidden');
+                ['calendar', 'students', 'billing', 'materials', 'student-profile'].forEach(v => {
+                    const el = document.getElementById(`view-${v}`);
+                    if (el) el.classList.add('hidden');
+                });
+                document.getElementById('view-student-portal').classList.remove('hidden');
+                renderStudentPortal(currentAuth);
+            }
+        }
+
+        // РАСЧЕТ УРОВНЯ
+        function calculateStudentGamification(studentId) {
+            const lessons = (db.lessons || []).filter(l => l.studentId === studentId);
+            const student = (db.students || []).find(s => s.id === studentId) || {};
+            
+            const completedLessons = lessons.length;
+            const completedHw = lessons.filter(l => l.hasHomework).length;
+            const exams = student.exams || [];
+            
+            let xp = (completedLessons * 20) + (completedHw * 30);
+            exams.forEach(e => xp += Number(e.score || 0));
+
+            let level = "Новичок";
+            let icon = "🌱";
+            if (xp >= 1500) { level = "Магистр"; icon = "👑"; }
+            else if (xp >= 900) { level = "Эксперт"; icon = "💎"; }
+            else if (xp >= 500) { level = "Профи"; icon = "🏆"; }
+            else if (xp >= 250) { level = "Знаток"; icon = "⭐"; }
+            else if (xp >= 100) { level = "Ученик"; icon = "📚"; }
+
+            const streak = Math.min(completedLessons, 12);
+            return { xp, level, icon, streak };
+        }
+
+        // ИНИЦИАЛИЗАЦИЯ
+        function initApp() {
+            try {
+                const local = localStorage.getItem('tutor_local_db');
+                if (local) {
+                    db = sanitizeDb(JSON.parse(local));
+                } else {
+                    db = {
+                        students: [
+                            { id: 'st_1', name: 'Иван Сергеев', pin: '1042', subject: 'Математика (ЕГЭ)', price: 1500, paidLessons: 2, topics: ['Логарифмы', 'Стереометрия'], exams: [{month: 'Сентябрь', score: 55}, {month: 'Октябрь', score: 70}] }
+                        ],
+                        lessons: [
+                            { id: 'ls_1', studentId: 'st_1', date: new Date().toISOString().split('T')[0], time: '16:00', topic: 'Тригонометрические формулы', hasHomework: true }
+                        ],
+                        materials: [
+                            { id: 'm_1', title: 'Все формулы тригонометрии', category: 'Математика', url: 'https://google.com' }
+                        ],
+                        deletedCalendarEventIds: []
+                    };
+                    persistLocal();
+                }
+
+                if (cloudUrl) {
+                    const inp = document.getElementById('cloud-url-input');
+                    if (inp) inp.value = cloudUrl;
+                    pullFromCloud();
+                } else {
+                    setCloudStatus('local');
+                }
+
+                applyAuthSession();
+            } catch (err) {
+                console.error("Ошибка запуска:", err);
+                db = sanitizeDb({});
+                applyAuthSession();
+            }
+        }
+
+        function setCloudStatus(status) {
+            const dot = document.getElementById('cloud-indicator');
+            const txt = document.getElementById('cloud-status');
+            if (!dot || !txt) return;
+            if (status === 'connected') {
+                dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+                txt.innerText = 'Google подключен';
+            } else if (status === 'syncing') {
+                dot.className = 'w-2 h-2 rounded-full bg-indigo-500 animate-pulse';
+                txt.innerText = 'Синхронизация...';
+            } else {
+                dot.className = 'w-2 h-2 rounded-full bg-slate-400';
+                txt.innerText = 'Локально';
+            }
+        }
+
+        function persistLocal() {
+            localStorage.setItem('tutor_local_db', JSON.stringify(db));
+        }
+
+        async function syncToCloud() {
+            persistLocal();
+            if (!cloudUrl) return;
+            setCloudStatus('syncing');
+            try {
+                await fetch(cloudUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(db)
+                });
+                db.deletedCalendarEventIds = [];
+                persistLocal();
+                setTimeout(() => setCloudStatus('connected'), 600);
+            } catch (err) {
+                setCloudStatus('local');
+            }
+        }
+
+        async function pullFromCloud() {
+            if (!cloudUrl) return;
+            setCloudStatus('syncing');
+            try {
+                const res = await fetch(`${cloudUrl}?action=load`);
+                const data = await res.json();
+                if (data && typeof data === 'object') {
+                    db = sanitizeDb(data);
+                    persistLocal();
+                    refreshViews();
+                }
+                setCloudStatus('connected');
+            } catch (err) {
+                setCloudStatus('local');
+            }
+        }
+
+        function refreshViews() {
+            if (currentAuth && currentAuth !== 'tutor') {
+                renderStudentPortal(currentAuth);
+                return;
+            }
+            if (currentTab === 'calendar') renderCalendar();
+            if (currentTab === 'students') renderStudents();
+            if (currentTab === 'billing') renderBilling();
+            if (currentTab === 'materials') renderMaterials();
+            if (activeStudentId) renderStudentProfile(activeStudentId);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            ['calendar', 'students', 'billing', 'materials'].forEach(t => {
+                const view = document.getElementById(`view-${t}`);
+                if (view) view.classList.toggle('hidden', t !== tab);
+                
+                const dBtn = document.getElementById(`tab-btn-${t}`);
+                if (dBtn) {
+                    dBtn.className = (t === tab)
+                        ? 'tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition'
+                        : 'tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition';
+                }
+
+                const mBtn = document.getElementById(`mob-btn-${t}`);
+                if (mBtn) {
+                    mBtn.className = (t === tab)
+                        ? 'flex flex-col items-center text-indigo-600'
+                        : 'flex flex-col items-center text-slate-400';
+                }
+            });
+
+            const profView = document.getElementById('view-student-profile');
+            if (profView) profView.classList.add('hidden');
+            refreshViews();
+        }
+
+        // ================= КАЛЕНДАРЬ =================
+        function changeMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); }
+        function goToCurrentMonth() { calDate = new Date(); renderCalendar(); }
+
+        function renderCalendar() {
+            const year = calDate.getFullYear();
+            const month = calDate.getMonth();
+            const heading = document.getElementById('cal-month-year');
+            if (heading) heading.innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrev = new Date(year, month, 0).getDate();
+            const grid = document.getElementById('calendar-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            for (let i = firstDay - 1; i >= 0; i--) {
+                grid.innerHTML += `<div class="min-h-[75px] sm:min-h-[90px] bg-slate-50/50 p-1.5 text-slate-300 text-xs">${daysInPrev - i}</div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const dayLessons = (db.lessons || []).filter(l => l.date === dateStr);
+                const isToday = dateStr === todayStr;
+
+                let badgeList = dayLessons.map(l => {
+                    const st = (db.students || []).find(s => s.id === l.studentId);
+                    const name = st ? st.name.split(' ')[0] : 'Ученик';
+                    return `
+                        <div onclick="event.stopPropagation(); openLessonModal('${l.id}')" 
+                             class="cursor-pointer text-[10px] p-1 rounded border transition ${l.hasHomework ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-slate-100 border-slate-200 text-slate-800'}">
+                            <div class="flex items-center justify-between font-semibold">
+                                <span class="truncate">${l.time} ${name}</span>
+                                <span class="w-1.5 h-1.5 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                grid.innerHTML += `
+                    <div onclick="quickCreateLesson('${dateStr}')" 
+                         class="min-h-[75px] sm:min-h-[90px] bg-white p-1.5 text-xs flex flex-col justify-between hover:bg-indigo-50/20 cursor-pointer ${isToday ? 'ring-2 ring-indigo-500 ring-inset' : ''}">
+                        <span class="font-bold text-[10px] sm:text-xs ${isToday ? 'bg-indigo-600 text-white w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center' : 'text-slate-600'}">${day}</span>
+                        <div class="space-y-1 overflow-y-auto max-h-[55px] custom-scrollbar flex-1 mt-0.5">${badgeList}</div>
+                    </div>
+                `;
+            }
+
+            const total = firstDay + daysInMonth;
+            const extra = (7 - (total % 7)) % 7;
+            for (let i = 1; i <= extra; i++) {
+                grid.innerHTML += `<div class="min-h-[75px] sm:min-h-[90px] bg-slate-50/50 p-1.5 text-slate-300 text-xs">${i}</div>`;
+            }
+        }
+
+        // ================= СПИСОК УЧЕНИКОВ =================
+        function renderStudents() {
+            const grid = document.getElementById('students-grid');
+            if (!grid) return;
+            if (!db.students || db.students.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white">Учеников пока нет. Нажмите «+ Добавить»!</div>`;
+                return;
+            }
+
+            grid.innerHTML = db.students.map(st => {
+                const game = calculateStudentGamification(st.id);
+                return `
+                    <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h3 class="font-bold text-slate-900 text-base">${st.name}</h3>
+                                    <span class="text-xs bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-lg font-semibold">${st.subject}</span>
+                                </div>
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-full ${st.paidLessons > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+                                    Оплачено: ${st.paidLessons}
+                                </span>
+                            </div>
+
+                            <div class="bg-indigo-50/60 p-2.5 rounded-2xl flex items-center justify-between text-xs my-3 border border-indigo-100">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block">PIN-код для входа:</span>
+                                    <span class="font-black text-indigo-700 tracking-widest text-sm">${st.pin || '1042'}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] text-slate-400 block">${game.icon} ${game.level}</span>
+                                    <span class="font-bold text-slate-700">${game.xp} XP</span>
+                                </div>
+                            </div>
+
+                            <div class="text-xs text-slate-500 space-y-1">
+                                <p>Ставка: <b>${st.price} ₽</b> за урок</p>
+                                <p>Пройденных тем: <b>${(st.topics || []).length}</b></p>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 flex gap-2 mt-3">
+                            <button onclick="openProfile('${st.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-2 rounded-xl text-xs font-bold text-slate-800 transition">
+                                Профиль
+                            </button>
+                            <button onclick="copyStudentInstructions('${st.id}')" title="Скопировать инструкцию для ученика" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition">
+                                📋 Доступ
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function copyStudentInstructions(studentId) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            if (!st) return;
+            const text = `👋 Привет, ${st.name.split(' ')[0]}!\n\nТвой личный кабинет репетитора доступен по ссылке:\n${window.location.href.split('#')[0]}\n\n🔑 Твой личный PIN-код для входа: ${st.pin || '1042'}\n\nТам ты сможешь смотреть даты занятий, домашку, темы и график пробников!`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`Инструкция для ${st.name} скопирована!\n\nОтправьте её ученику в мессенджер.`);
+            }).catch(() => {
+                prompt('Скопируйте текст сообщения для ученика:', text);
+            });
+        }
+
+        // ================= ПРОФИЛЬ УЧЕНИКА =================
+        function openProfile(id) {
+            activeStudentId = id;
+            document.getElementById('view-calendar').classList.add('hidden');
+            document.getElementById('view-students').classList.add('hidden');
+            document.getElementById('view-student-profile').classList.remove('hidden');
+            renderStudentProfile(id);
+        }
+
+        function renderStudentProfile(id) {
+            const st = (db.students || []).find(s => s.id === id);
+            if (!st) return;
+            const studentLessons = (db.lessons || []).filter(l => l.studentId === id).sort((a, b) => new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time));
+
+            document.getElementById('student-profile-details').innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-900">${st.name}</h2>
+                                    <p class="text-xs text-indigo-600 font-semibold">${st.subject}</p>
+                                </div>
+                                <button onclick="openStudentModal('${st.id}')" class="text-xs text-indigo-600 font-bold hover:underline">Изм.</button>
+                            </div>
+                            
+                            <div class="p-3 bg-slate-50 rounded-2xl flex justify-between items-center mb-3">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block font-bold uppercase">Оплачено уроков</span>
+                                    <span class="text-base font-bold ${st.paidLessons > 0 ? 'text-emerald-600' : 'text-rose-600'}">${st.paidLessons} зан.</span>
+                                </div>
+                                <div class="space-x-1">
+                                    <button onclick="updateBalance('${st.id}', -1)" class="px-2.5 py-1 bg-white border rounded-lg font-bold text-xs">-</button>
+                                    <button onclick="updateBalance('${st.id}', 1)" class="px-2.5 py-1 bg-indigo-600 text-white rounded-lg font-bold text-xs">+</button>
+                                </div>
+                            </div>
+
+                            <div class="p-2.5 bg-indigo-50 rounded-2xl flex justify-between items-center mb-3 text-xs border border-indigo-100">
+                                <span class="text-slate-500">PIN для входа:</span>
+                                <span class="font-black text-indigo-700 tracking-wider">${st.pin || '1042'}</span>
+                            </div>
+
+                            <div class="flex gap-2 pt-2">
+                                <button onclick="openLessonModal(null, '${st.id}')" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs font-bold">+ Урок</button>
+                                <button onclick="copyStudentInstructions('${st.id}')" class="px-3 py-2 bg-indigo-50 text-indigo-700 rounded-xl text-xs font-bold">📋 Доступ</button>
+                                <button onclick="deleteStudent('${st.id}')" class="px-3 py-2 bg-rose-50 text-rose-600 rounded-xl text-xs font-bold">✕</button>
+                            </div>
+                        </div>
+
+                        <!-- Пройденные темы -->
+                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+                            <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Пройденные темы</h4>
+                            <form onsubmit="addTopic(event, '${st.id}')" class="flex gap-1.5 mb-3">
+                                <input type="text" id="topic-input" placeholder="Новая тема..." required class="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50">
+                                <button class="text-xs bg-slate-900 text-white px-3 py-2 rounded-xl font-bold">Добавить</button>
+                            </form>
+                            <div class="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
+                                ${(st.topics || []).map((t, idx) => `
+                                    <div class="text-xs bg-slate-50 p-2 rounded-xl flex justify-between items-center border border-slate-100">
+                                        <span class="text-slate-700">${t}</span>
+                                        <button onclick="removeTopic('${st.id}', ${idx})" class="text-slate-400 hover:text-rose-600">✕</button>
+                                    </div>
+                                `).join('') || '<span class="text-xs text-slate-400">Тем пока нет</span>'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-4">
+                        <!-- Пробники -->
+                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+                            <div class="flex justify-between items-center mb-3">
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-800 uppercase">📊 Результаты пробников</h4>
+                                    <p class="text-[11px] text-slate-500">Отображаются в графике ученика</p>
+                                </div>
+                                <button onclick="openExamModal('${st.id}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl text-xs font-bold transition">
+                                    + Выставить балл
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                ${(st.exams || []).map((ex, idx) => `
+                                    <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-100 flex justify-between items-center">
+                                        <div>
+                                            <span class="text-[10px] text-slate-400 block">${ex.month}</span>
+                                            <span class="text-sm font-black text-indigo-600">${ex.score} б.</span>
+                                        </div>
+                                        <button onclick="removeExam('${st.id}', ${idx})" class="text-slate-300 hover:text-rose-500 text-xs">✕</button>
+                                    </div>
+                                `).join('') || '<span class="text-xs text-slate-400 col-span-full">Баллы еще не выставлялись</span>'}
+                            </div>
+                        </div>
+
+                        <!-- Таблица уроков -->
+                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-sm text-slate-900 mb-3">Даты занятий и домашние задания</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="border-b text-slate-400 font-semibold uppercase text-[10px]">
+                                            <th class="py-2">Дата и время</th>
+                                            <th class="py-2">Тема</th>
+                                            <th class="py-2 text-center">Задано ДЗ</th>
+                                            <th class="py-2 text-right">Действие</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        ${studentLessons.map(l => `
+                                            <tr class="hover:bg-slate-50 transition">
+                                                <td class="py-2.5 font-semibold text-slate-800">${l.date} <span class="text-slate-400 font-normal">(${l.time})</span></td>
+                                                <td class="py-2.5 text-slate-600">${l.topic || '<span class="text-slate-300">Без темы</span>'}</td>
+                                                <td class="py-2.5 text-center">
+                                                    <input type="checkbox" ${l.hasHomework ? 'checked' : ''} onchange="toggleHw('${l.id}', this.checked)" class="w-4 h-4 text-emerald-600 rounded border-slate-300 cursor-pointer">
+                                                </td>
+                                                <td class="py-2.5 text-right">
+                                                    <button onclick="openLessonModal('${l.id}')" class="text-indigo-600 font-semibold hover:underline">Изм.</button>
+                                                </td>
+                                            </tr>
+                                        `).join('') || '<tr><td colspan="4" class="text-center py-6 text-slate-400">Уроков еще не было</td></tr>'}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
+        }
+
+        // ================= ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ =================
+        function renderBilling() {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const daysUntilNextMonday = ((8 - dayOfWeek) % 7) || 7;
+            
+            const nextMonday = new Date(today);
+            nextMonday.setDate(today.getDate() + daysUntilNextMonday);
+            
+            const nextSunday = new Date(nextMonday);
+            nextSunday.setDate(nextMonday.getDate() + 6);
+
+            const pad = n => (n < 10 ? '0' : '') + n;
+            const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+            const startStr = formatDate(nextMonday);
+            const endStr = formatDate(nextSunday);
+
+            const datesLabel = document.getElementById('billing-week-dates');
+            if (datesLabel) datesLabel.innerText = `Период: ${nextMonday.toLocaleDateString('ru')} — ${nextSunday.toLocaleDateString('ru')}`;
+
+            let totalExpected = 0;
+            const tbody = document.getElementById('billing-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            (db.students || []).forEach(st => {
+                const nextWeekLessons = (db.lessons || []).filter(l => l.studentId === st.id && l.date >= startStr && l.date <= endStr);
+                const count = nextWeekLessons.length;
+                const sum = count * st.price;
+                totalExpected += sum;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 font-bold text-slate-900">${st.name} <span class="text-[11px] text-slate-400 block font-normal">${st.subject}</span></td>
+                        <td class="py-3"><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 font-bold rounded-lg">${count} зан.</span></td>
+                        <td class="py-3 text-slate-600">${st.price} ₽</td>
+                        <td class="py-3 font-extrabold text-slate-900">${sum} ₽</td>
+                        <td class="py-3 text-right">
+                            <button onclick="confirmWeeklyPayment('${st.id}', ${count})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition">
+                                ✓ Оплачено (+${count || 1})
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            const sumLabel = document.getElementById('billing-total-sum');
+            if (sumLabel) sumLabel.innerText = `${totalExpected} ₽`;
+        }
+
+        function confirmWeeklyPayment(studentId, count) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            if (st) {
+                st.paidLessons += (count > 0 ? count : 1);
+                syncToCloud();
+                renderBilling();
+                alert(`Оплата для ${st.name} успешно зачислена (+${count || 1} к балансу)!`);
+            }
+        }
+
+        // ================= БАЗА МАТЕРИАЛОВ =================
+        function renderMaterials() {
+            const grid = document.getElementById('materials-grid');
+            if (!grid) return;
+            if (!db.materials || db.materials.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white">Материалов пока нет. Нажмите «+ Добавить материал»!</div>`;
+                return;
+            }
+
+            grid.innerHTML = db.materials.map((m, idx) => `
+                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold uppercase">${m.category || 'Материал'}</span>
+                        <h4 class="font-bold text-slate-900 text-sm mt-2">${m.title}</h4>
+                    </div>
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
+                        <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">Открыть материал ↗</a>
+                        <button onclick="removeMaterial(${idx})" class="text-slate-300 hover:text-rose-500 text-xs">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ================= ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА =================
+        function renderStudentPortal(studentId) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            if (!st) return;
+
+            document.getElementById('student-portal-name').innerText = st.name;
+            document.getElementById('student-portal-subject').innerText = st.subject;
+            document.getElementById('student-avatar').innerText = (st.name || 'У')[0];
+
+            const game = calculateStudentGamification(studentId);
+            document.getElementById('portal-level-title').innerText = game.level;
+            document.getElementById('portal-level-icon').innerText = game.icon;
+            document.getElementById('portal-streak-val').innerText = `${game.streak} зан. подряд`;
+            document.getElementById('portal-xp-val').innerText = `${game.xp} XP`;
+
+            const nowStr = new Date().toISOString().split('T')[0];
+            const upcomingLessons = (db.lessons || [])
+                .filter(l => l.studentId === studentId && l.date >= nowStr)
+                .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+
+            if (upcomingLessons.length > 0) {
+                const next = upcomingLessons[0];
+                document.getElementById('portal-next-date').innerText = `📅 ${next.date} в ${next.time}`;
+                document.getElementById('portal-next-topic').innerText = `Тема: ${next.topic || 'Без темы'}`;
+                document.getElementById('portal-next-hw').innerText = next.hasHomework ? '✓ Задано' : 'Не задано';
+            } else {
+                document.getElementById('portal-next-date').innerText = 'Нет запланированных уроков';
+                document.getElementById('portal-next-topic').innerText = 'Репетитор скоро назначит занятие';
+                document.getElementById('portal-next-hw').innerText = '—';
+            }
+
+            renderExamsChart(st.exams || []);
+            renderStudentPortalSubviews(studentId);
+        }
+
+        function renderExamsChart(exams) {
+            const chart = document.getElementById('portal-exams-chart');
+            const labels = document.getElementById('portal-exams-labels');
+            if (!chart || !labels) return;
+            chart.innerHTML = '';
+            labels.innerHTML = '';
+
+            if (!exams || exams.length === 0) {
+                chart.innerHTML = '<div class="w-full text-center text-slate-400 text-xs self-center">Результаты пробников появятся здесь</div>';
+                document.getElementById('portal-score-growth').innerText = '+0 баллов';
+                return;
+            }
+
+            const first = Number(exams[0].score || 0);
+            const last = Number(exams[exams.length - 1].score || 0);
+            const diff = last - first;
+            document.getElementById('portal-score-growth').innerText = `${diff >= 0 ? '+' : ''}${diff} баллов за курс`;
+
+            exams.forEach(ex => {
+                const heightPercent = Math.max(10, Math.min(100, ex.score));
+                chart.innerHTML += `
+                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+                        <span class="text-[11px] font-black text-indigo-600">${ex.score}</span>
+                        <div class="w-full max-w-[40px] bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-xl transition-all" style="height: ${heightPercent}%"></div>
+                    </div>
+                `;
+                labels.innerHTML += `<span class="flex-1 text-center truncate">${ex.month.substring(0, 3)}</span>`;
+            });
+        }
+
+        function renderStudentPortalSubviews(studentId) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            const studentLessons = (db.lessons || []).filter(l => l.studentId === studentId).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            document.getElementById('student-subview-schedule').innerHTML = studentLessons.map(l => `
+                <div class="p-3 bg-slate-50 rounded-2xl flex justify-between items-center border border-slate-100">
+                    <div>
+                        <span class="font-bold text-xs text-slate-800">${l.date} (${l.time})</span>
+                        <p class="text-xs text-slate-500 mt-0.5">${l.topic || 'Без темы'}</p>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${l.hasHomework ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">
+                        ${l.hasHomework ? 'ДЗ ✓' : 'Без ДЗ'}
+                    </span>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 py-4 text-center">Уроков пока нет</p>';
+
+            document.getElementById('student-subview-topics').innerHTML = (st.topics || []).map(t => `
+                <div class="p-2.5 bg-slate-50 rounded-2xl text-xs font-medium text-slate-700 flex items-center gap-2 border border-slate-100">
+                    <span class="text-emerald-500 font-bold">✓</span> ${t}
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 py-4 text-center">Список тем пуст</p>';
+
+            document.getElementById('student-subview-materials').innerHTML = (db.materials || []).map(m => `
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-[9px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold uppercase">${m.category}</span>
+                        <h5 class="text-xs font-bold text-slate-800 mt-1">${m.title}</h5>
+                    </div>
+                    <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">Открыть ↗</a>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 py-4 col-span-full text-center">Материалов пока нет</p>';
+        }
+
+        function switchStudentSubTab(tab) {
+            ['schedule', 'topics', 'materials'].forEach(t => {
+                document.getElementById(`student-subview-${t}`).classList.toggle('hidden', t !== tab);
+                const btn = document.getElementById(`st-tab-${t}`);
+                if (btn) {
+                    btn.className = (t === tab)
+                        ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600'
+                        : 'px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800';
+                }
+            });
+        }
+
+        // ================= ОПЕРАЦИИ С ДАННЫМИ =================
+        function updateBalance(id, delta) {
+            const st = (db.students || []).find(s => s.id === id);
+            if (st) {
+                st.paidLessons = Math.max(0, st.paidLessons + delta);
+                syncToCloud();
+                renderStudentProfile(id);
+            }
+        }
+
+        function addTopic(e, id) {
+            e.preventDefault();
+            const input = document.getElementById('topic-input');
+            const st = (db.students || []).find(s => s.id === id);
+            if (st && input && input.value.trim()) {
+                if (!st.topics) st.topics = [];
+                st.topics.push(input.value.trim());
+                syncToCloud();
+                renderStudentProfile(id);
+            }
+        }
+
+        function removeTopic(id, idx) {
+            const st = (db.students || []).find(s => s.id === id);
+            if (st && st.topics) {
+                st.topics.splice(idx, 1);
+                syncToCloud();
+                renderStudentProfile(id);
+            }
+        }
+
+        function toggleHw(id, val) {
+            const l = (db.lessons || []).find(item => item.id === id);
+            if (l) {
+                l.hasHomework = val;
+                syncToCloud();
+            }
+        }
+
+        function openExamModal(stId) {
+            document.getElementById('exam-student-id').value = stId;
+            document.getElementById('exam-score').value = '';
+            document.getElementById('modal-exam').classList.remove('hidden');
+        }
+
+        function closeExamModal() { document.getElementById('modal-exam').classList.add('hidden'); }
+
+        function submitExamScore(e) {
+            e.preventDefault();
+            const stId = document.getElementById('exam-student-id').value;
+            const month = document.getElementById('exam-month').value;
+            const score = Number(document.getElementById('exam-score').value);
+
+            const st = (db.students || []).find(s => s.id === stId);
+            if (st) {
+                if (!st.exams) st.exams = [];
+                st.exams.push({ month, score });
+                syncToCloud();
+                closeExamModal();
+                renderStudentProfile(stId);
+            }
+        }
+
+        function removeExam(stId, idx) {
+            const st = (db.students || []).find(s => s.id === stId);
+            if (st && st.exams) {
+                st.exams.splice(idx, 1);
+                syncToCloud();
+                renderStudentProfile(stId);
+            }
+        }
+
+        function openMaterialModal() {
+            document.getElementById('mat-title').value = '';
+            document.getElementById('mat-cat').value = '';
+            document.getElementById('mat-url').value = '';
+            document.getElementById('modal-material').classList.remove('hidden');
+        }
+
+        function closeMaterialModal() { document.getElementById('modal-material').classList.add('hidden'); }
+
+        function submitMaterial(e) {
+            e.preventDefault();
+            const title = document.getElementById('mat-title').value.trim();
+            const category = document.getElementById('mat-cat').value.trim() || 'Материалы';
+            const url = document.getElementById('mat-url').value.trim();
+
+            if (!db.materials) db.materials = [];
+            db.materials.push({ id: 'm_' + Date.now(), title, category, url });
+            syncToCloud();
+            closeMaterialModal();
+            renderMaterials();
+        }
+
+        function removeMaterial(idx) {
+            if (confirm('Удалить этот материал?')) {
+                db.materials.splice(idx, 1);
+                syncToCloud();
+                renderMaterials();
+            }
+        }
+
+        function toggleRepeatOptions() {
+            const val = document.getElementById('lesson-repeat-type').value;
+            document.getElementById('repeat-count-container').classList.toggle('hidden', val === 'none');
+        }
+
+        function openLessonModal(id = null, preselectedStudentId = null) {
+            const sel = document.getElementById('lesson-student');
+            if (sel) {
+                sel.innerHTML = (db.students || []).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            }
+            const delBtn = document.getElementById('lesson-btn-delete');
+            const recBox = document.getElementById('recurrence-box');
+
+            if (id) {
+                const l = (db.lessons || []).find(item => item.id === id);
+                document.getElementById('lesson-modal-heading').innerText = 'Редактировать урок';
+                document.getElementById('lesson-id').value = l.id;
+                document.getElementById('lesson-student').value = l.studentId;
+                document.getElementById('lesson-date').value = l.date;
+                document.getElementById('lesson-time').value = l.time;
+                document.getElementById('lesson-topic').value = l.topic || '';
+                document.getElementById('lesson-hw').checked = !!l.hasHomework;
+                if (delBtn) delBtn.classList.remove('hidden');
+                if (recBox) recBox.classList.add('hidden');
+            } else {
+                document.getElementById('lesson-modal-heading').innerText = 'Запланировать урок';
+                document.getElementById('lesson-form').reset();
+                document.getElementById('lesson-id').value = '';
+                document.getElementById('lesson-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('lesson-time').value = '14:00';
+                document.getElementById('lesson-repeat-type').value = 'none';
+                toggleRepeatOptions();
+                if (preselectedStudentId && sel) sel.value = preselectedStudentId;
+                if (delBtn) delBtn.classList.add('hidden');
+                if (recBox) recBox.classList.remove('hidden');
+            }
+            document.getElementById('modal-lesson').classList.remove('hidden');
+        }
+
+        function quickCreateLesson(dateStr) {
+            openLessonModal();
+            document.getElementById('lesson-date').value = dateStr;
+        }
+
+        function closeLessonModal() { document.getElementById('modal-lesson').classList.add('hidden'); }
+
+        function submitLesson(e) {
+            e.preventDefault();
+            const id = document.getElementById('lesson-id').value;
+            const studentId = document.getElementById('lesson-student').value;
+            const startDateStr = document.getElementById('lesson-date').value;
+            const time = document.getElementById('lesson-time').value;
+            const topic = document.getElementById('lesson-topic').value;
+            const hasHomework = document.getElementById('lesson-hw').checked;
+            const repeatType = document.getElementById('lesson-repeat-type').value;
+            const repeatCount = parseInt(document.getElementById('lesson-repeat-count').value, 10);
+
+            if (id) {
+                const l = (db.lessons || []).find(item => item.id === id);
+                if (l) Object.assign(l, { studentId, date: startDateStr, time, topic, hasHomework });
+            } else {
+                const count = (repeatType === 'none') ? 1 : repeatCount;
+                const intervalDays = (repeatType === 'biweekly') ? 14 : 7;
+                const baseDate = new Date(startDateStr);
+
+                for (let i = 0; i < count; i++) {
+                    const lessonDate = new Date(baseDate);
+                    lessonDate.set
