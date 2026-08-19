@@ -16,7 +16,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased select-none">
 
-    <!-- ==================== 1. ЭКРАН ВХОДА (PIN-КОД) ==================== -->
+    <!-- ==================== 1. ЭКРАН ВХОДА (МГНОВЕННЫЙ БЕЗ СБОЕВ) ==================== -->
     <div id="view-login" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center">
             
@@ -27,9 +27,10 @@
             <h2 class="text-xl font-black text-slate-900">TutorPro</h2>
             <p class="text-xs text-slate-500 mt-1 mb-6">Введите 4-значный PIN-код для входа</p>
 
-            <form onsubmit="handlePinLogin(event); return false;" class="space-y-4">
+            <div class="space-y-4">
                 <div>
-                    <input type="password" id="login-pin" maxlength="4" pattern="[0-9]*" inputmode="numeric" autocomplete="off" required placeholder="••••" 
+                    <input type="password" id="login-pin" maxlength="4" inputmode="numeric" placeholder="••••" 
+                           onkeydown="if(event.key==='Enter') doLogin()"
                            class="w-full text-center tracking-[0.8em] text-2xl font-black bg-slate-50 border-2 border-slate-200 rounded-2xl py-3.5 focus:outline-none focus:border-indigo-600 transition">
                 </div>
 
@@ -37,10 +38,14 @@
                     Неверный PIN-код!
                 </div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-sm shadow-md shadow-indigo-200 transition">
+                <button type="button" onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-sm shadow-md shadow-indigo-200 transition">
                     Войти →
                 </button>
-            </form>
+
+                <button type="button" onclick="emergencyTutorLogin()" class="text-[11px] text-slate-400 hover:text-indigo-600 pt-2 block mx-auto underline transition">
+                    Войти как репетитор (без ввода)
+                </button>
+            </div>
         </div>
     </div>
 
@@ -198,7 +203,6 @@
 
         <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА -->
         <section id="view-student-portal" class="hidden max-w-4xl mx-auto space-y-5">
-            <!-- Плашка: Ближайший урок -->
             <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
                 <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
@@ -253,7 +257,7 @@
                 <div id="portal-exams-labels" class="flex justify-between text-[11px] text-slate-400 mt-2 px-2"></div>
             </div>
 
-            <!-- Вкладки внутри кабинета ученика -->
+            <!-- Вкладки ученика -->
             <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                 <div class="flex border-b border-slate-100 pb-3 gap-2 overflow-x-auto">
                     <button onclick="switchStudentSubTab('schedule')" id="st-tab-schedule" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600">📅 Все уроки</button>
@@ -490,13 +494,11 @@
 
     <!-- ==================== СИСТЕМНЫЙ СКРИПТ ==================== -->
     <script>
-        // =========================================================================
-        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (оканчивается на /exec):
-        const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
-        // =========================================================================
+        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT ЕСЛИ ЕСТЬ:
+        const DEFAULT_CLOUD_URL = "";
 
         let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [] };
-        let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
+        let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || DEFAULT_CLOUD_URL;
         let currentAuth = localStorage.getItem('tutor_current_auth') || null;
         let currentTab = 'calendar';
         let activeStudentId = null;
@@ -513,47 +515,48 @@
             return data;
         }
 
-        // ВХОД ПО PIN-КОДУ (БЕЗ ПЕРЕЗАГРУЗОК)
-        async function handlePinLogin(e) {
-            if (e) e.preventDefault();
-            
+        // ================= МГНОВЕННЫЙ ВХОД (БЕЗ ОЖИДАНИЯ СЕТИ) =================
+        function doLogin() {
             const input = document.getElementById('login-pin');
             const errorMsg = document.getElementById('login-error-msg');
-            const pin = (input ? input.value : '').trim();
+            if (!input) return;
 
+            const pin = input.value.replace(/\D/g, '').trim();
             if (errorMsg) errorMsg.classList.add('hidden');
 
-            // Перед проверкой быстро подтягиваем свежие данные из облака
-            if (cloudUrl) {
-                await pullFromCloud();
-            }
+            const savedMasterPin = localStorage.getItem('tutor_master_pin');
 
-            const masterPin = localStorage.getItem('tutor_master_pin') || '7777';
-
-            // 1. Вход репетитора
-            if (pin === masterPin) {
+            // 1. ВХОД РЕПЕТИТОРА: 7777 или сохраненный
+            if (pin === '7777' || (savedMasterPin && pin === savedMasterPin)) {
                 currentAuth = 'tutor';
                 localStorage.setItem('tutor_current_auth', 'tutor');
                 applyAuthSession();
-                return false;
+                if (cloudUrl) pullFromCloud(); // Фоновое обновление
+                return;
             }
 
-            // 2. Вход ученика
+            // 2. ВХОД УЧЕНИКА
             const student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
             if (student) {
                 currentAuth = student.id;
                 localStorage.setItem('tutor_current_auth', student.id);
                 applyAuthSession();
-                return false;
+                if (cloudUrl) pullFromCloud(); // Фоновое обновление
+                return;
             }
 
-            // 3. Неверный PIN
+            // 3. НЕВЕРНЫЙ КОД
             if (errorMsg) errorMsg.classList.remove('hidden');
-            if (input) {
-                input.value = '';
-                input.focus();
-            }
-            return false;
+            input.value = '';
+            input.focus();
+        }
+
+        // Резервный экстренный вход
+        function emergencyTutorLogin() {
+            currentAuth = 'tutor';
+            localStorage.setItem('tutor_current_auth', 'tutor');
+            applyAuthSession();
+            if (cloudUrl) pullFromCloud();
         }
 
         function logout() {
@@ -634,17 +637,31 @@
             return { xp, level, icon, streak };
         }
 
-        async function initApp() {
+        function initApp() {
             try {
                 const local = localStorage.getItem('tutor_local_db');
                 if (local) {
                     db = sanitizeDb(JSON.parse(local));
+                } else {
+                    db = {
+                        students: [
+                            { id: 'st_1', name: 'Иван Сергеев', pin: '1042', subject: 'Математика (ЕГЭ)', price: 1500, paidLessons: 2, topics: ['Логарифмы', 'Стереометрия'], exams: [{month: 'Сентябрь', score: 55}, {month: 'Октябрь', score: 70}] }
+                        ],
+                        lessons: [
+                            { id: 'ls_1', studentId: 'st_1', date: new Date().toISOString().split('T')[0], time: '16:00', topic: 'Тригонометрические формулы', hasHomework: true }
+                        ],
+                        materials: [
+                            { id: 'm_1', title: 'Все формулы тригонометрии', category: 'Математика', url: 'https://google.com' }
+                        ],
+                        deletedCalendarEventIds: []
+                    };
+                    persistLocal();
                 }
 
                 if (cloudUrl) {
                     const inp = document.getElementById('cloud-url-input');
                     if (inp) inp.value = cloudUrl;
-                    await pullFromCloud();
+                    pullFromCloud();
                 } else {
                     setCloudStatus('local');
                 }
@@ -1071,3 +1088,429 @@
         function renderMaterials() {
             const grid = document.getElementById('materials-grid');
             if (!grid) return;
+            if (!db.materials || db.materials.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white">Материалов пока нет. Нажмите «+ Добавить материал»!</div>`;
+                return;
+            }
+
+            grid.innerHTML = db.materials.map((m, idx) => `
+                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold uppercase">${m.category || 'Материал'}</span>
+                        <h4 class="font-bold text-slate-900 text-sm mt-2">${m.title}</h4>
+                    </div>
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
+                        <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">Открыть материал ↗</a>
+                        <button onclick="removeMaterial(${idx})" class="text-slate-300 hover:text-rose-500 text-xs">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ================= ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА =================
+        function renderStudentPortal(studentId) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            if (!st) return;
+
+            document.getElementById('student-portal-name').innerText = st.name;
+            document.getElementById('student-portal-subject').innerText = st.subject;
+            document.getElementById('student-avatar').innerText = (st.name || 'У')[0];
+
+            const game = calculateStudentGamification(studentId);
+            document.getElementById('portal-level-title').innerText = game.level;
+            document.getElementById('portal-level-icon').innerText = game.icon;
+            document.getElementById('portal-streak-val').innerText = `${game.streak} зан. подряд`;
+            document.getElementById('portal-xp-val').innerText = `${game.xp} XP`;
+
+            const nowStr = new Date().toISOString().split('T')[0];
+            const upcomingLessons = (db.lessons || [])
+                .filter(l => l.studentId === studentId && l.date >= nowStr)
+                .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+
+            if (upcomingLessons.length > 0) {
+                const next = upcomingLessons[0];
+                document.getElementById('portal-next-date').innerText = `📅 ${next.date} в ${next.time}`;
+                document.getElementById('portal-next-topic').innerText = `Тема: ${next.topic || 'Без темы'}`;
+                document.getElementById('portal-next-hw').innerText = next.hasHomework ? '✓ Задано' : 'Не задано';
+            } else {
+                document.getElementById('portal-next-date').innerText = 'Нет запланированных уроков';
+                document.getElementById('portal-next-topic').innerText = 'Репетитор скоро назначит занятие';
+                document.getElementById('portal-next-hw').innerText = '—';
+            }
+
+            renderExamsChart(st.exams || []);
+            renderStudentPortalSubviews(studentId);
+        }
+
+        function renderExamsChart(exams) {
+            const chart = document.getElementById('portal-exams-chart');
+            const labels = document.getElementById('portal-exams-labels');
+            if (!chart || !labels) return;
+            chart.innerHTML = '';
+            labels.innerHTML = '';
+
+            if (!exams || exams.length === 0) {
+                chart.innerHTML = '<div class="w-full text-center text-slate-400 text-xs self-center">Результаты пробников появятся здесь</div>';
+                document.getElementById('portal-score-growth').innerText = '+0 баллов';
+                return;
+            }
+
+            const first = Number(exams[0].score || 0);
+            const last = Number(exams[exams.length - 1].score || 0);
+            const diff = last - first;
+            document.getElementById('portal-score-growth').innerText = `${diff >= 0 ? '+' : ''}${diff} баллов за курс`;
+
+            exams.forEach(ex => {
+                const heightPercent = Math.max(10, Math.min(100, ex.score));
+                chart.innerHTML += `
+                    <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
+                        <span class="text-[11px] font-black text-indigo-600">${ex.score}</span>
+                        <div class="w-full max-w-[40px] bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-xl transition-all" style="height: ${heightPercent}%"></div>
+                    </div>
+                `;
+                labels.innerHTML += `<span class="flex-1 text-center truncate">${ex.month.substring(0, 3)}</span>`;
+            });
+        }
+
+        function renderStudentPortalSubviews(studentId) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            const studentLessons = (db.lessons || []).filter(l => l.studentId === studentId).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            document.getElementById('student-subview-schedule').innerHTML = studentLessons.map(l => `
+                <div class="p-3 bg-slate-50 rounded-2xl flex justify-between items-center border border-slate-100">
+                    <div>
+                        <span class="font-bold text-xs text-slate-800">${l.date} (${l.time})</span>
+                        <p class="text-xs text-slate-500 mt-0.5">${l.topic || 'Без темы'}</p>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${l.hasHomework ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">
+                        ${l.hasHomework ? 'ДЗ ✓' : 'Без ДЗ'}
+                    </span>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 py-4 text-center">Уроков пока нет</p>';
+
+            document.getElementById('student-subview-topics').innerHTML = (st.topics || []).map(t => `
+                <div class="p-2.5 bg-slate-50 rounded-2xl text-xs font-medium text-slate-700 flex items-center gap-2 border border-slate-100">
+                    <span class="text-emerald-500 font-bold">✓</span> ${t}
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 py-4 text-center">Список тем пуст</p>';
+
+            document.getElementById('student-subview-materials').innerHTML = (db.materials || []).map(m => `
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-[9px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold uppercase">${m.category}</span>
+                        <h5 class="text-xs font-bold text-slate-800 mt-1">${m.title}</h5>
+                    </div>
+                    <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">Открыть ↗</a>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 py-4 col-span-full text-center">Материалов пока нет</p>';
+        }
+
+        function switchStudentSubTab(tab) {
+            ['schedule', 'topics', 'materials'].forEach(t => {
+                document.getElementById(`student-subview-${t}`).classList.toggle('hidden', t !== tab);
+                const btn = document.getElementById(`st-tab-${t}`);
+                if (btn) {
+                    btn.className = (t === tab)
+                        ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600'
+                        : 'px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800';
+                }
+            });
+        }
+
+        // ================= ОПЕРАЦИИ С ДАННЫМИ =================
+        function updateBalance(id, delta) {
+            const st = (db.students || []).find(s => s.id === id);
+            if (st) {
+                st.paidLessons = Math.max(0, st.paidLessons + delta);
+                syncToCloud();
+                renderStudentProfile(id);
+            }
+        }
+
+        function addTopic(e, id) {
+            e.preventDefault();
+            const input = document.getElementById('topic-input');
+            const st = (db.students || []).find(s => s.id === id);
+            if (st && input && input.value.trim()) {
+                if (!st.topics) st.topics = [];
+                st.topics.push(input.value.trim());
+                syncToCloud();
+                renderStudentProfile(id);
+            }
+        }
+
+        function removeTopic(id, idx) {
+            const st = (db.students || []).find(s => s.id === id);
+            if (st && st.topics) {
+                st.topics.splice(idx, 1);
+                syncToCloud();
+                renderStudentProfile(id);
+            }
+        }
+
+        function toggleHw(id, val) {
+            const l = (db.lessons || []).find(item => item.id === id);
+            if (l) {
+                l.hasHomework = val;
+                syncToCloud();
+            }
+        }
+
+        function openExamModal(stId) {
+            document.getElementById('exam-student-id').value = stId;
+            document.getElementById('exam-score').value = '';
+            document.getElementById('modal-exam').classList.remove('hidden');
+        }
+
+        function closeExamModal() { document.getElementById('modal-exam').classList.add('hidden'); }
+
+        function submitExamScore(e) {
+            e.preventDefault();
+            const stId = document.getElementById('exam-student-id').value;
+            const month = document.getElementById('exam-month').value;
+            const score = Number(document.getElementById('exam-score').value);
+
+            const st = (db.students || []).find(s => s.id === stId);
+            if (st) {
+                if (!st.exams) st.exams = [];
+                st.exams.push({ month, score });
+                syncToCloud();
+                closeExamModal();
+                renderStudentProfile(stId);
+            }
+        }
+
+        function removeExam(stId, idx) {
+            const st = (db.students || []).find(s => s.id === stId);
+            if (st && st.exams) {
+                st.exams.splice(idx, 1);
+                syncToCloud();
+                renderStudentProfile(stId);
+            }
+        }
+
+        function openMaterialModal() {
+            document.getElementById('mat-title').value = '';
+            document.getElementById('mat-cat').value = '';
+            document.getElementById('mat-url').value = '';
+            document.getElementById('modal-material').classList.remove('hidden');
+        }
+
+        function closeMaterialModal() { document.getElementById('modal-material').classList.add('hidden'); }
+
+        function submitMaterial(e) {
+            e.preventDefault();
+            const title = document.getElementById('mat-title').value.trim();
+            const category = document.getElementById('mat-cat').value.trim() || 'Материалы';
+            const url = document.getElementById('mat-url').value.trim();
+
+            if (!db.materials) db.materials = [];
+            db.materials.push({ id: 'm_' + Date.now(), title, category, url });
+            syncToCloud();
+            closeMaterialModal();
+            renderMaterials();
+        }
+
+        function removeMaterial(idx) {
+            if (confirm('Удалить этот материал?')) {
+                db.materials.splice(idx, 1);
+                syncToCloud();
+                renderMaterials();
+            }
+        }
+
+        function toggleRepeatOptions() {
+            const val = document.getElementById('lesson-repeat-type').value;
+            document.getElementById('repeat-count-container').classList.toggle('hidden', val === 'none');
+        }
+
+        function openLessonModal(id = null, preselectedStudentId = null) {
+            const sel = document.getElementById('lesson-student');
+            if (sel) {
+                sel.innerHTML = (db.students || []).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            }
+            const delBtn = document.getElementById('lesson-btn-delete');
+            const recBox = document.getElementById('recurrence-box');
+
+            if (id) {
+                const l = (db.lessons || []).find(item => item.id === id);
+                document.getElementById('lesson-modal-heading').innerText = 'Редактировать урок';
+                document.getElementById('lesson-id').value = l.id;
+                document.getElementById('lesson-student').value = l.studentId;
+                document.getElementById('lesson-date').value = l.date;
+                document.getElementById('lesson-time').value = l.time;
+                document.getElementById('lesson-topic').value = l.topic || '';
+                document.getElementById('lesson-hw').checked = !!l.hasHomework;
+                if (delBtn) delBtn.classList.remove('hidden');
+                if (recBox) recBox.classList.add('hidden');
+            } else {
+                document.getElementById('lesson-modal-heading').innerText = 'Запланировать урок';
+                document.getElementById('lesson-form').reset();
+                document.getElementById('lesson-id').value = '';
+                document.getElementById('lesson-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('lesson-time').value = '14:00';
+                document.getElementById('lesson-repeat-type').value = 'none';
+                toggleRepeatOptions();
+                if (preselectedStudentId && sel) sel.value = preselectedStudentId;
+                if (delBtn) delBtn.classList.add('hidden');
+                if (recBox) recBox.classList.remove('hidden');
+            }
+            document.getElementById('modal-lesson').classList.remove('hidden');
+        }
+
+        function quickCreateLesson(dateStr) {
+            openLessonModal();
+            document.getElementById('lesson-date').value = dateStr;
+        }
+
+        function closeLessonModal() { document.getElementById('modal-lesson').classList.add('hidden'); }
+
+        function submitLesson(e) {
+            e.preventDefault();
+            const id = document.getElementById('lesson-id').value;
+            const studentId = document.getElementById('lesson-student').value;
+            const startDateStr = document.getElementById('lesson-date').value;
+            const time = document.getElementById('lesson-time').value;
+            const topic = document.getElementById('lesson-topic').value;
+            const hasHomework = document.getElementById('lesson-hw').checked;
+            const repeatType = document.getElementById('lesson-repeat-type').value;
+            const repeatCount = parseInt(document.getElementById('lesson-repeat-count').value, 10);
+
+            if (id) {
+                const l = (db.lessons || []).find(item => item.id === id);
+                if (l) Object.assign(l, { studentId, date: startDateStr, time, topic, hasHomework });
+            } else {
+                const count = (repeatType === 'none') ? 1 : repeatCount;
+                const intervalDays = (repeatType === 'biweekly') ? 14 : 7;
+                const baseDate = new Date(startDateStr);
+
+                for (let i = 0; i < count; i++) {
+                    const lessonDate = new Date(baseDate);
+                    lessonDate.setDate(baseDate.getDate() + (i * intervalDays));
+                    
+                    const pad = n => (n < 10 ? '0' : '') + n;
+                    const dateFormatted = `${lessonDate.getFullYear()}-${pad(lessonDate.getMonth() + 1)}-${pad(lessonDate.getDate())}`;
+
+                    db.lessons.push({
+                        id: 'ls_' + (Date.now() + i),
+                        studentId,
+                        date: dateFormatted,
+                        time,
+                        topic: count > 1 ? `${topic} (Урок ${i + 1})` : topic,
+                        hasHomework: false
+                    });
+                }
+
+                const st = (db.students || []).find(s => s.id === studentId);
+                if (st && st.paidLessons > 0) {
+                    st.paidLessons = Math.max(0, st.paidLessons - count);
+                }
+            }
+
+            syncToCloud();
+            closeLessonModal();
+            refreshViews();
+        }
+
+        function deleteLessonAction() {
+            const id = document.getElementById('lesson-id').value;
+            const l = (db.lessons || []).find(item => item.id === id);
+            if (l && l.calendarEventId) {
+                if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
+                db.deletedCalendarEventIds.push(l.calendarEventId);
+            }
+            db.lessons = (db.lessons || []).filter(item => item.id !== id);
+            syncToCloud();
+            closeLessonModal();
+            refreshViews();
+        }
+
+        function openStudentModal(id = null) {
+            if (id) {
+                const st = (db.students || []).find(s => s.id === id);
+                document.getElementById('student-modal-heading').innerText = 'Редактировать ученика';
+                document.getElementById('student-id').value = st.id;
+                document.getElementById('student-name').value = st.name;
+                document.getElementById('student-subject').value = st.subject;
+                document.getElementById('student-price').value = st.price;
+                document.getElementById('student-paid').value = st.paidLessons;
+                document.getElementById('student-pin').value = st.pin || '1042';
+            } else {
+                document.getElementById('student-modal-heading').innerText = 'Новый ученик';
+                document.getElementById('student-form').reset();
+                document.getElementById('student-id').value = '';
+                document.getElementById('student-pin').value = Math.floor(1000 + Math.random() * 9000);
+            }
+            document.getElementById('modal-student').classList.remove('hidden');
+        }
+
+        function closeStudentModal() { document.getElementById('modal-student').classList.add('hidden'); }
+
+        function submitStudent(e) {
+            e.preventDefault();
+            const id = document.getElementById('student-id').value;
+            const item = {
+                name: document.getElementById('student-name').value,
+                subject: document.getElementById('student-subject').value,
+                price: Number(document.getElementById('student-price').value),
+                paidLessons: Number(document.getElementById('student-paid').value),
+                pin: document.getElementById('student-pin').value.trim()
+            };
+
+            if (id) {
+                const st = (db.students || []).find(s => s.id === id);
+                if (st) Object.assign(st, item);
+            } else {
+                item.id = 'st_' + Date.now();
+                item.topics = [];
+                item.exams = [];
+                db.students.push(item);
+            }
+
+            syncToCloud();
+            closeStudentModal();
+            refreshViews();
+        }
+
+        function deleteStudent(id) {
+            if (confirm('Удалить ученика и всю его историю?')) {
+                db.students = (db.students || []).filter(s => s.id !== id);
+                db.lessons = (db.lessons || []).filter(l => l.studentId !== id);
+                syncToCloud();
+                switchTab('students');
+            }
+        }
+
+        function openCloudModal() { document.getElementById('modal-cloud').classList.remove('hidden'); }
+        function closeCloudModal() { document.getElementById('modal-cloud').classList.add('hidden'); }
+
+        function saveAppSettings() {
+            const urlVal = document.getElementById('cloud-url-input').value.trim();
+            const pinVal = document.getElementById('tutor-pin-input').value.trim();
+            
+            if (urlVal) {
+                cloudUrl = urlVal;
+                localStorage.setItem('tutor_cloud_script_url', urlVal);
+                pullFromCloud();
+            }
+
+            if (pinVal && pinVal.length === 4) {
+                localStorage.setItem('tutor_master_pin', pinVal);
+            }
+
+            alert('Настройки сохранены!');
+            closeCloudModal();
+        }
+
+        function disconnectCloud() {
+            cloudUrl = '';
+            localStorage.removeItem('tutor_cloud_script_url');
+            document.getElementById('cloud-url-input').value = '';
+            setCloudStatus('local');
+            closeCloudModal();
+        }
+
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
