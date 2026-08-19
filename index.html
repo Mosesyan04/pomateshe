@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TutorPro — Кабинет репетитора и учеников</title>
+    <title>TutorPro — Кабинет репетитора</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -16,31 +16,31 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased select-none">
 
-    <!-- ==================== 1. ЭКРАН ВХОДА (PIN-КОД) ==================== -->
-    <div id="view-login" class="fixed inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-indigo-950 z-50 flex items-center justify-center p-4">
+    <!-- ==================== 1. ЭКРАН ВХОДА (БЕЗ ПОДСКАЗОК И ПАРОЛЕЙ) ==================== -->
+    <div id="view-login" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center">
             
             <div class="w-14 h-14 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl text-white flex items-center justify-center mx-auto shadow-lg mb-4">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
 
-            <h2 class="text-xl font-black text-slate-900">Вход в TutorPro</h2>
-            <p class="text-xs text-slate-500 mt-1 mb-6">Введите ваш 4-значный PIN-код</p>
+            <h2 class="text-xl font-black text-slate-900">TutorPro</h2>
+            <p class="text-xs text-slate-500 mt-1 mb-6">Введите 4-значный PIN-код для входа</p>
 
-            <form onsubmit="handlePinLogin(event)" class="space-y-4">
+            <form onsubmit="handlePinLogin(event); return false;" class="space-y-4">
                 <div>
-                    <input type="password" id="login-pin" maxlength="4" pattern="[0-9]*" inputmode="numeric" required placeholder="••••" 
-                           class="w-full text-center tracking-[1em] text-2xl font-black bg-slate-50 border-2 border-slate-200 rounded-2xl py-3 focus:outline-none focus:border-indigo-600 transition">
+                    <input type="password" id="login-pin" maxlength="4" pattern="[0-9]*" inputmode="numeric" autocomplete="off" required placeholder="••••" 
+                           class="w-full text-center tracking-[0.8em] text-2xl font-black bg-slate-50 border-2 border-slate-200 rounded-2xl py-3.5 focus:outline-none focus:border-indigo-600 transition">
                 </div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl text-sm shadow-md shadow-indigo-200 transition">
-                    Войти в кабинет →
+                <div id="login-error-msg" class="hidden text-xs font-bold text-rose-500 bg-rose-50 py-2 rounded-xl border border-rose-100">
+                    Неверный PIN-код!
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-sm shadow-md shadow-indigo-200 transition">
+                    Войти →
                 </button>
             </form>
-
-            <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-400">
-                <span>🔑 Пароль репетитора по умолчанию: <b>7777</b></span>
-            </div>
         </div>
     </div>
 
@@ -72,9 +72,9 @@
             <!-- Кнопки справа -->
             <div class="flex items-center space-x-2">
                 <button onclick="pullFromCloud()" title="Синхронизировать" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">🔄</button>
-                <button onclick="openCloudModal()" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">☁️ Google</button>
+                <button onclick="openCloudModal()" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">☁️ Настройки</button>
                 <button onclick="openLessonModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">+ Урок</button>
-                <button onclick="logout()" title="Выйти" class="p-2 text-slate-400 hover:text-rose-600 transition">🚪</button>
+                <button onclick="logout()" title="Выйти из кабинета" class="p-2 text-slate-400 hover:text-rose-600 transition">🚪</button>
             </div>
 
         </div>
@@ -214,21 +214,21 @@
 
             <!-- Геймификация -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-2xl" id="portal-level-icon">🏆</div>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-slate-400">Уровень</span>
                         <h4 class="font-extrabold text-slate-900 text-base" id="portal-level-title">Профи</h4>
                     </div>
                 </div>
-                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center text-2xl">🔥</div>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-slate-400">Серия уроков</span>
                         <h4 class="font-extrabold text-slate-900 text-base" id="portal-streak-val">0 зан. подряд</h4>
                     </div>
                 </div>
-                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">⚡</div>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-slate-400">Опыт (XP)</span>
@@ -359,7 +359,7 @@
         </div>
     </div>
 
-    <!-- Модалка: Ученик (С PIN-КОДОМ) -->
+    <!-- Модалка: Ученик -->
     <div id="modal-student" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100">
             <div class="flex justify-between items-center mb-4">
@@ -392,7 +392,6 @@
                 <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
                     <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1">Личный PIN-код для входа (4 цифры) *</label>
                     <input type="text" id="student-pin" maxlength="4" pattern="[0-9]{4}" required placeholder="1042" class="w-full bg-white border border-indigo-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700">
-                    <span class="text-[10px] text-slate-500 mt-1 block">Ученик введет этот PIN со своего телефона для входа в свой кабинет</span>
                 </div>
 
                 <div class="flex justify-end space-x-2 pt-2">
@@ -460,31 +459,39 @@
         </div>
     </div>
 
-    <!-- Модалка: Google URL -->
+    <!-- Модалка: Google URL + Смена пароля -->
     <div id="modal-cloud" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100">
             <div class="flex justify-between items-center mb-3">
-                <h3 class="text-base font-bold text-slate-900">☁️ Настройка Google Синхронизации</h3>
+                <h3 class="text-base font-bold text-slate-900">☁️ Настройки и Синхронизация</h3>
                 <button onclick="closeCloudModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
             </div>
-            <p class="text-xs text-slate-500 mb-4">Вставьте ссылку на веб-приложение Google Apps Script (/exec):</p>
-            <div class="space-y-3">
-                <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">URL веб-приложения Google Apps Script</label>
+                    <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Сменить Мастер-PIN репетитора</label>
+                    <input type="text" id="tutor-pin-input" maxlength="4" placeholder="7777" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700">
+                    <span class="text-[10px] text-slate-400 mt-1 block">Пароль по умолчанию: 7777</span>
+                </div>
+
                 <div class="flex gap-2 pt-1">
-                    <button onclick="saveCloudUrl()" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs font-semibold">Сохранить</button>
-                    <button onclick="disconnectCloud()" class="px-3 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отключить</button>
+                    <button onclick="saveAppSettings()" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs font-semibold">Сохранить всё</button>
+                    <button onclick="disconnectCloud()" class="px-3 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отключить облако</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
+    <!-- ==================== СИСТЕМНЫЙ СКРИПТ ==================== -->
     <script>
-        const TUTOR_MASTER_PIN = "7777"; // Пароль репетитора
-
         let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [] };
         let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || '';
-        let currentAuth = localStorage.getItem('tutor_current_auth') || null; // 'tutor' или ID ученика
+        let currentAuth = localStorage.getItem('tutor_current_auth') || null;
         let currentTab = 'calendar';
         let activeStudentId = null;
         let calDate = new Date();
@@ -500,36 +507,52 @@
             return data;
         }
 
-        // ВХОД ПО PIN-КОДУ
+        // ВХОД ПО PIN-КОДУ (БЕЗ ПЕРЕЗАГРУЗОК)
         function handlePinLogin(e) {
-            e.preventDefault();
-            const pin = document.getElementById('login-pin').value.trim();
+            if (e) e.preventDefault();
+            
+            const input = document.getElementById('login-pin');
+            const errorMsg = document.getElementById('login-error-msg');
+            const pin = (input ? input.value : '').trim();
 
-            // 1. Вход репетитора
-            if (pin === TUTOR_MASTER_PIN) {
+            if (errorMsg) errorMsg.classList.add('hidden');
+
+            const masterPin = localStorage.getItem('tutor_master_pin') || '7777';
+
+            // 1. Проверка репетитора
+            if (pin === masterPin) {
                 currentAuth = 'tutor';
                 localStorage.setItem('tutor_current_auth', 'tutor');
                 applyAuthSession();
-                return;
+                return false;
             }
 
-            // 2. Вход ученика по личному PIN
-            const student = (db.students || []).find(s => s.pin === pin);
+            // 2. Проверка ученика
+            const student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
             if (student) {
                 currentAuth = student.id;
                 localStorage.setItem('tutor_current_auth', student.id);
                 applyAuthSession();
-                return;
+                return false;
             }
 
-            alert('Неверный PIN-код! Попробуйте снова.');
-            document.getElementById('login-pin').value = '';
+            // 3. Неверный PIN
+            if (errorMsg) errorMsg.classList.remove('hidden');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            return false;
         }
 
         function logout() {
             currentAuth = null;
             localStorage.removeItem('tutor_current_auth');
-            document.getElementById('login-pin').value = '';
+            const inp = document.getElementById('login-pin');
+            if (inp) inp.value = '';
+            const errorMsg = document.getElementById('login-error-msg');
+            if (errorMsg) errorMsg.classList.add('hidden');
+            
             document.getElementById('view-login').classList.remove('hidden');
             document.getElementById('tutor-header').classList.add('hidden');
             document.getElementById('student-header').classList.add('hidden');
@@ -538,36 +561,45 @@
         }
 
         function applyAuthSession() {
+            const loginView = document.getElementById('view-login');
+            const mainContent = document.getElementById('main-content');
+            const tutorHeader = document.getElementById('tutor-header');
+            const studentHeader = document.getElementById('student-header');
+            const mobileNav = document.getElementById('mobile-nav');
+
             if (!currentAuth) {
-                document.getElementById('view-login').classList.remove('hidden');
+                if (loginView) loginView.classList.remove('hidden');
+                if (mainContent) mainContent.classList.add('hidden');
+                if (tutorHeader) tutorHeader.classList.add('hidden');
+                if (studentHeader) studentHeader.classList.add('hidden');
+                if (mobileNav) mobileNav.classList.add('hidden');
                 return;
             }
 
-            document.getElementById('view-login').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
+            if (loginView) loginView.classList.add('hidden');
+            if (mainContent) mainContent.classList.remove('hidden');
 
             if (currentAuth === 'tutor') {
-                // Показываем кабинет репетитора
-                document.getElementById('tutor-header').classList.remove('hidden');
-                document.getElementById('mobile-nav').classList.remove('hidden');
-                document.getElementById('student-header').classList.add('hidden');
-                document.getElementById('view-student-portal').classList.add('hidden');
+                if (tutorHeader) tutorHeader.classList.remove('hidden');
+                if (mobileNav) mobileNav.classList.remove('hidden');
+                if (studentHeader) studentHeader.classList.add('hidden');
+                const portal = document.getElementById('view-student-portal');
+                if (portal) portal.classList.add('hidden');
                 switchTab('calendar');
             } else {
-                // Показываем изолированный кабинет ученика
-                document.getElementById('tutor-header').classList.add('hidden');
-                document.getElementById('mobile-nav').classList.add('hidden');
-                document.getElementById('student-header').classList.remove('hidden');
+                if (tutorHeader) tutorHeader.classList.add('hidden');
+                if (mobileNav) mobileNav.classList.add('hidden');
+                if (studentHeader) studentHeader.classList.remove('hidden');
                 ['calendar', 'students', 'billing', 'materials', 'student-profile'].forEach(v => {
                     const el = document.getElementById(`view-${v}`);
                     if (el) el.classList.add('hidden');
                 });
-                document.getElementById('view-student-portal').classList.remove('hidden');
+                const portal = document.getElementById('view-student-portal');
+                if (portal) portal.classList.remove('hidden');
                 renderStudentPortal(currentAuth);
             }
         }
 
-        // РАСЧЕТ УРОВНЯ
         function calculateStudentGamification(studentId) {
             const lessons = (db.lessons || []).filter(l => l.studentId === studentId);
             const student = (db.students || []).find(s => s.id === studentId) || {};
@@ -591,7 +623,6 @@
             return { xp, level, icon, streak };
         }
 
-        // ИНИЦИАЛИЗАЦИЯ
         function initApp() {
             try {
                 const local = localStorage.getItem('tutor_local_db');
@@ -620,6 +651,10 @@
                 } else {
                     setCloudStatus('local');
                 }
+
+                const tutorPin = localStorage.getItem('tutor_master_pin') || '7777';
+                const tutorPinInp = document.getElementById('tutor-pin-input');
+                if (tutorPinInp) tutorPinInp.value = tutorPin;
 
                 applyAuthSession();
             } catch (err) {
@@ -807,7 +842,7 @@
 
                             <div class="bg-indigo-50/60 p-2.5 rounded-2xl flex items-center justify-between text-xs my-3 border border-indigo-100">
                                 <div>
-                                    <span class="text-[10px] text-slate-400 block">PIN-код для входа:</span>
+                                    <span class="text-[10px] text-slate-400 block">PIN для входа:</span>
                                     <span class="font-black text-indigo-700 tracking-widest text-sm">${st.pin || '1042'}</span>
                                 </div>
                                 <div class="text-right">
@@ -826,7 +861,7 @@
                             <button onclick="openProfile('${st.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-2 rounded-xl text-xs font-bold text-slate-800 transition">
                                 Профиль
                             </button>
-                            <button onclick="copyStudentInstructions('${st.id}')" title="Скопировать инструкцию для ученика" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition">
+                            <button onclick="copyStudentInstructions('${st.id}')" title="Скопировать данные для ученика" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition">
                                 📋 Доступ
                             </button>
                         </div>
@@ -841,7 +876,7 @@
             const text = `👋 Привет, ${st.name.split(' ')[0]}!\n\nТвой личный кабинет репетитора доступен по ссылке:\n${window.location.href.split('#')[0]}\n\n🔑 Твой личный PIN-код для входа: ${st.pin || '1042'}\n\nТам ты сможешь смотреть даты занятий, домашку, темы и график пробников!`;
             
             navigator.clipboard.writeText(text).then(() => {
-                alert(`Инструкция для ${st.name} скопирована!\n\nОтправьте её ученику в мессенджер.`);
+                alert(`Инструкция для ${st.name} скопирована в буфер обмена!\n\nОтправьте её ученику в мессенджер.`);
             }).catch(() => {
                 prompt('Скопируйте текст сообщения для ученика:', text);
             });
@@ -897,7 +932,6 @@
                             </div>
                         </div>
 
-                        <!-- Пройденные темы -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Пройденные темы</h4>
                             <form onsubmit="addTopic(event, '${st.id}')" class="flex gap-1.5 mb-3">
@@ -916,7 +950,6 @@
                     </div>
 
                     <div class="lg:col-span-2 space-y-4">
-                        <!-- Пробники -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <div class="flex justify-between items-center mb-3">
                                 <div>
@@ -941,7 +974,6 @@
                             </div>
                         </div>
 
-                        <!-- Таблица уроков -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <h3 class="font-bold text-sm text-slate-900 mb-3">Даты занятий и домашние задания</h3>
                             <div class="overflow-x-auto">
@@ -1340,4 +1372,131 @@
 
                 for (let i = 0; i < count; i++) {
                     const lessonDate = new Date(baseDate);
-                    lessonDate.set
+                    lessonDate.setDate(baseDate.getDate() + (i * intervalDays));
+                    
+                    const pad = n => (n < 10 ? '0' : '') + n;
+                    const dateFormatted = `${lessonDate.getFullYear()}-${pad(lessonDate.getMonth() + 1)}-${pad(lessonDate.getDate())}`;
+
+                    db.lessons.push({
+                        id: 'ls_' + (Date.now() + i),
+                        studentId,
+                        date: dateFormatted,
+                        time,
+                        topic: count > 1 ? `${topic} (Урок ${i + 1})` : topic,
+                        hasHomework: false
+                    });
+                }
+
+                const st = (db.students || []).find(s => s.id === studentId);
+                if (st && st.paidLessons > 0) {
+                    st.paidLessons = Math.max(0, st.paidLessons - count);
+                }
+            }
+
+            syncToCloud();
+            closeLessonModal();
+            refreshViews();
+        }
+
+        function deleteLessonAction() {
+            const id = document.getElementById('lesson-id').value;
+            const l = (db.lessons || []).find(item => item.id === id);
+            if (l && l.calendarEventId) {
+                if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
+                db.deletedCalendarEventIds.push(l.calendarEventId);
+            }
+            db.lessons = (db.lessons || []).filter(item => item.id !== id);
+            syncToCloud();
+            closeLessonModal();
+            refreshViews();
+        }
+
+        function openStudentModal(id = null) {
+            if (id) {
+                const st = (db.students || []).find(s => s.id === id);
+                document.getElementById('student-modal-heading').innerText = 'Редактировать ученика';
+                document.getElementById('student-id').value = st.id;
+                document.getElementById('student-name').value = st.name;
+                document.getElementById('student-subject').value = st.subject;
+                document.getElementById('student-price').value = st.price;
+                document.getElementById('student-paid').value = st.paidLessons;
+                document.getElementById('student-pin').value = st.pin || '1042';
+            } else {
+                document.getElementById('student-modal-heading').innerText = 'Новый ученик';
+                document.getElementById('student-form').reset();
+                document.getElementById('student-id').value = '';
+                document.getElementById('student-pin').value = Math.floor(1000 + Math.random() * 9000);
+            }
+            document.getElementById('modal-student').classList.remove('hidden');
+        }
+
+        function closeStudentModal() { document.getElementById('modal-student').classList.add('hidden'); }
+
+        function submitStudent(e) {
+            e.preventDefault();
+            const id = document.getElementById('student-id').value;
+            const item = {
+                name: document.getElementById('student-name').value,
+                subject: document.getElementById('student-subject').value,
+                price: Number(document.getElementById('student-price').value),
+                paidLessons: Number(document.getElementById('student-paid').value),
+                pin: document.getElementById('student-pin').value.trim()
+            };
+
+            if (id) {
+                const st = (db.students || []).find(s => s.id === id);
+                if (st) Object.assign(st, item);
+            } else {
+                item.id = 'st_' + Date.now();
+                item.topics = [];
+                item.exams = [];
+                db.students.push(item);
+            }
+
+            syncToCloud();
+            closeStudentModal();
+            refreshViews();
+        }
+
+        function deleteStudent(id) {
+            if (confirm('Удалить ученика и всю его историю?')) {
+                db.students = (db.students || []).filter(s => s.id !== id);
+                db.lessons = (db.lessons || []).filter(l => l.studentId !== id);
+                syncToCloud();
+                switchTab('students');
+            }
+        }
+
+        function openCloudModal() { document.getElementById('modal-cloud').classList.remove('hidden'); }
+        function closeCloudModal() { document.getElementById('modal-cloud').classList.add('hidden'); }
+
+        function saveAppSettings() {
+            const urlVal = document.getElementById('cloud-url-input').value.trim();
+            const pinVal = document.getElementById('tutor-pin-input').value.trim();
+            
+            if (urlVal) {
+                cloudUrl = urlVal;
+                localStorage.setItem('tutor_cloud_script_url', urlVal);
+                pullFromCloud();
+            }
+
+            if (pinVal && pinVal.length === 4) {
+                localStorage.setItem('tutor_master_pin', pinVal);
+            }
+
+            alert('Настройки успешно сохранены!');
+            closeCloudModal();
+        }
+
+        function disconnectCloud() {
+            cloudUrl = '';
+            localStorage.removeItem('tutor_cloud_script_url');
+            document.getElementById('cloud-url-input').value = '';
+            setCloudStatus('local');
+            closeCloudModal();
+        }
+
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
