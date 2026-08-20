@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TutorPro — Кабинет репетитора</title>
+    <title>Уроки с Артёмом | pomateshe</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -16,7 +16,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased select-none">
 
-    <!-- ==================== 1. ЭКРАН ВХОДА (ТОЛЬКО PIN) ==================== -->
+    <!-- ==================== 1. ЭКРАН ВХОДА (PIN) ==================== -->
     <div id="view-login" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center">
             
@@ -24,8 +24,9 @@
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             </div>
 
-            <h2 class="text-xl font-black text-slate-900">TutorPro</h2>
-            <p class="text-xs text-slate-500 mt-1 mb-6">Введите 4-значный PIN-код для входа</p>
+            <h2 class="text-xl font-black text-slate-900">Уроки с Артёмом</h2>
+            <p class="text-xs text-indigo-600 font-semibold mt-0.5">pomateshe</p>
+            <p class="text-xs text-slate-400 mt-1 mb-6">Введите ваш 4-значный PIN-код</p>
 
             <div class="space-y-4">
                 <div>
@@ -54,17 +55,17 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
                 <div>
-                    <h1 class="text-base font-extrabold text-slate-900 leading-none">TutorPro</h1>
+                    <h1 class="text-base font-extrabold text-slate-900 leading-none">Уроки с Артёмом</h1>
                     <div class="flex items-center gap-1.5 mt-1">
                         <span id="cloud-indicator" class="w-2 h-2 rounded-full bg-slate-400"></span>
-                        <span id="cloud-status" class="text-[11px] text-slate-500 font-medium">Облако</span>
+                        <span id="cloud-status" class="text-[11px] text-slate-500 font-medium">pomateshe</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Десктопные вкладки -->
+            <!-- Вкладки десктоп -->
             <div class="hidden md:flex bg-slate-100 p-1 rounded-xl space-x-1">
-                <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition">📅 Календарь</button>
+                <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition">📅 Неделя</button>
                 <button onclick="switchTab('students')" id="tab-btn-students" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">👥 Ученики</button>
                 <button onclick="switchTab('billing')" id="tab-btn-billing" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">💳 Оплаты (Вс)</button>
                 <button onclick="switchTab('materials')" id="tab-btn-materials" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">📚 База знаний</button>
@@ -75,7 +76,7 @@
                 <button onclick="pullFromCloud()" title="Синхронизировать" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">🔄</button>
                 <button onclick="openCloudModal()" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">☁️ Настройки</button>
                 <button onclick="openLessonModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">+ Урок</button>
-                <button onclick="logout()" title="Выйти из кабинета" class="p-2 text-slate-400 hover:text-rose-600 transition">🚪</button>
+                <button onclick="logout()" title="Выйти" class="p-2 text-slate-400 hover:text-rose-600 transition">🚪</button>
             </div>
 
         </div>
@@ -83,12 +84,12 @@
 
     <!-- ==================== 3. ШАПКА УЧЕНИКА ==================== -->
     <header id="student-header" class="hidden bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-4xl mx-auto px-4 flex justify-between items-center h-16">
+        <div class="max-w-5xl mx-auto px-4 flex justify-between items-center h-16">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-sm" id="student-avatar">У</div>
                 <div>
                     <h2 class="text-sm font-bold text-slate-900" id="student-portal-name">Личный кабинет</h2>
-                    <p class="text-xs text-indigo-600 font-medium" id="student-portal-subject">Предмет</p>
+                    <p class="text-xs text-indigo-600 font-medium" id="student-portal-subject">Уроки с Артёмом</p>
                 </div>
             </div>
             <div class="flex items-center space-x-2">
@@ -103,29 +104,26 @@
     <!-- ==================== ОСНОВНОЙ КОНТЕНТ ==================== -->
     <main id="main-content" class="hidden max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full pb-safe md:pb-6">
 
-        <!-- 1. КАЛЕНДАРЬ -->
+        <!-- 1. НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА -->
         <section id="view-calendar" class="space-y-4">
             <div class="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center space-x-2">
-                    <h2 id="cal-month-year" class="text-base sm:text-lg font-bold text-slate-900 capitalize">Август 2026</h2>
+                    <h2 id="cal-week-range" class="text-base sm:text-lg font-bold text-slate-900 capitalize">Неделя</h2>
                     <div class="flex items-center bg-slate-100 rounded-lg p-0.5">
-                        <button onclick="changeMonth(-1)" class="p-1 hover:bg-white rounded-md text-slate-600 font-bold transition">◀</button>
-                        <button onclick="goToCurrentMonth()" class="px-2 py-0.5 text-xs font-medium text-slate-700 hover:bg-white rounded-md transition">Сегодня</button>
-                        <button onclick="changeMonth(1)" class="p-1 hover:bg-white rounded-md text-slate-600 font-bold transition">▶</button>
+                        <button onclick="changeWeek(-1)" class="p-1.5 hover:bg-white rounded-md text-slate-600 font-bold transition">◀</button>
+                        <button onclick="goToCurrentWeek()" class="px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-white rounded-md transition">Текущая неделя</button>
+                        <button onclick="changeWeek(1)" class="p-1.5 hover:bg-white rounded-md text-slate-600 font-bold transition">▶</button>
                     </div>
                 </div>
                 <div class="flex items-center space-x-3 text-xs">
-                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> ДЗ задано</span>
-                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Без ДЗ</span>
+                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> 1 ученик</span>
+                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span> 👥 Группа</span>
+                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> ДЗ ✓</span>
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center text-[11px] font-semibold text-slate-500 py-2">
-                    <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
-                </div>
-                <div id="calendar-grid" class="grid grid-cols-7 auto-rows-fr bg-slate-200 gap-[1px]"></div>
-            </div>
+            <!-- Недельная сетка 7 дней -->
+            <div id="tutor-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2.5"></div>
         </section>
 
         <!-- 2. УЧЕНИКИ -->
@@ -133,10 +131,10 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold text-slate-900">Ученики</h2>
-                    <p class="text-xs text-slate-500">Профили, PIN-коды для входа, уровни и прогресс</p>
+                    <p class="text-xs text-slate-500">Профили, PIN-коды для входа, балансы и прогресс</p>
                 </div>
                 <button onclick="openStudentModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">
-                    + Добавить
+                    + Добавить ученика
                 </button>
             </div>
             <div id="students-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"></div>
@@ -154,25 +152,24 @@
         <section id="view-billing" class="hidden space-y-4">
             <div class="bg-gradient-to-r from-indigo-700 to-violet-700 text-white p-5 rounded-3xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <span class="bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide">Расчет на неделю вперед</span>
-                    <h2 class="text-xl font-extrabold mt-2">Оплаты в это воскресенье</h2>
+                    <span class="bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide">Оплаты за неделю вперед</span>
+                    <h2 class="text-xl font-extrabold mt-2">Расчёт на следующее воскресенье</h2>
                     <p class="text-xs text-indigo-100 mt-0.5" id="billing-week-dates">Период: следующий понедельник — воскресенье</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/20 w-full md:w-auto text-center md:text-right">
-                    <span class="text-xs text-indigo-100 block">Ожидается к получению:</span>
+                    <span class="text-xs text-indigo-100 block">Осталось получить с учетом баланса:</span>
                     <span class="text-2xl font-black text-white" id="billing-total-sum">0 ₽</span>
                 </div>
             </div>
 
             <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-4 sm:p-5">
-                <h3 class="text-sm font-bold text-slate-800 mb-3">Список учеников и уроков на следующую неделю</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
                         <thead>
                             <tr class="border-b text-slate-400 font-semibold uppercase text-[10px]">
                                 <th class="py-2.5">Ученик</th>
                                 <th class="py-2.5">Уроков на след. неделе</th>
-                                <th class="py-2.5">Ставка</th>
+                                <th class="py-2.5">Оплачено уроков</th>
                                 <th class="py-2.5">К оплате</th>
                                 <th class="py-2.5 text-right">Действие</th>
                             </tr>
@@ -188,7 +185,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold text-slate-900">База знаний и материалы</h2>
-                    <p class="text-xs text-slate-500">Шпаргалки, формулы и ссылки, доступные ученикам</p>
+                    <p class="text-xs text-slate-500">Шпаргалки, формулы и файлы, доступные ученикам</p>
                 </div>
                 <button onclick="openMaterialModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">
                     + Добавить материал
@@ -198,7 +195,8 @@
         </section>
 
         <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА -->
-        <section id="view-student-portal" class="hidden max-w-4xl mx-auto space-y-5">
+        <section id="view-student-portal" class="hidden max-w-5xl mx-auto space-y-5">
+            <!-- Плашка: Ближайший урок -->
             <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
                 <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
@@ -206,11 +204,12 @@
                             ⏰ Ближайшее занятие
                         </span>
                         <h3 class="text-xl sm:text-2xl font-black mt-2.5" id="portal-next-date">Нет уроков</h3>
-                        <p class="text-xs sm:text-sm text-indigo-100 mt-1" id="portal-next-topic">Репетитор скоро назначит дату</p>
+                        <p class="text-xs sm:text-sm text-indigo-100 mt-1" id="portal-next-topic">Тема занятия</p>
                     </div>
                     <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/20 text-left md:text-right w-full md:w-auto">
                         <span class="text-[11px] text-indigo-200 block">Домашнее задание:</span>
-                        <span class="text-sm font-bold" id="portal-next-hw">—</span>
+                        <span class="text-sm font-bold block" id="portal-next-hw">—</span>
+                        <div id="portal-hw-details-btn" class="mt-1"></div>
                     </div>
                 </div>
             </div>
@@ -253,15 +252,32 @@
                 <div id="portal-exams-labels" class="flex justify-between text-[11px] text-slate-400 mt-2 px-2"></div>
             </div>
 
-            <!-- Вкладки ученика -->
+            <!-- Вкладки ученика: Недельный календарь / Темы / База знаний -->
             <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                <div class="flex border-b border-slate-100 pb-3 gap-2 overflow-x-auto">
-                    <button onclick="switchStudentSubTab('schedule')" id="st-tab-schedule" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600">📅 Все уроки</button>
-                    <button onclick="switchStudentSubTab('topics')" id="st-tab-topics" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">✅ Пройденные темы</button>
-                    <button onclick="switchStudentSubTab('materials')" id="st-tab-materials" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">📚 Материалы</button>
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3 flex-wrap gap-2">
+                    <div class="flex gap-2">
+                        <button onclick="switchStudentSubTab('calendar')" id="st-tab-calendar" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600">📅 Мой календарь на неделю</button>
+                        <button onclick="switchStudentSubTab('topics')" id="st-tab-topics" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">✅ Пройденные темы</button>
+                        <button onclick="switchStudentSubTab('materials')" id="st-tab-materials" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">📚 Материалы</button>
+                    </div>
+                    <button onclick="openPersonalEventModal()" id="btn-add-personal" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-sm transition">
+                        + Добавить своё занятие
+                    </button>
                 </div>
 
-                <div id="student-subview-schedule" class="space-y-2"></div>
+                <!-- Недельный календарь ученика -->
+                <div id="student-subview-calendar" class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span id="st-cal-week-range" class="text-xs font-bold text-slate-700"></span>
+                        <div class="flex space-x-1">
+                            <button onclick="changeStudentWeek(-1)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold">◀</button>
+                            <button onclick="goToCurrentStudentWeek()" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium">Сегодня</button>
+                            <button onclick="changeStudentWeek(1)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold">▶</button>
+                        </div>
+                    </div>
+                    <div id="student-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2"></div>
+                </div>
+
                 <div id="student-subview-topics" class="hidden space-y-2"></div>
                 <div id="student-subview-materials" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
             </div>
@@ -269,11 +285,30 @@
 
     </main>
 
+    <!-- ==================== ФУТЕР С КОНТАКТАМИ ==================== -->
+    <footer id="app-footer" class="bg-white border-t border-slate-200 py-6 px-4 text-center mt-auto">
+        <div class="max-w-4xl mx-auto space-y-2">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Уроки с Артёмом | pomateshe</h4>
+            <div class="flex justify-center items-center gap-4 text-xs font-semibold pt-1">
+                <a id="footer-tg" href="https://t.me/artem_tutor" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1">
+                    <span>✈️ Telegram</span>
+                </a>
+                <a id="footer-wa" href="https://wa.me/79999999999" target="_blank" class="text-emerald-600 hover:underline flex items-center gap-1">
+                    <span>💬 WhatsApp</span>
+                </a>
+                <a id="footer-phone" href="tel:+79999999999" class="text-slate-600 hover:underline flex items-center gap-1">
+                    <span>📞 <span id="footer-phone-text">+7 (999) 999-99-99</span></span>
+                </a>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-2">Личный кабинет репетитора и онлайн-расписание</p>
+        </div>
+    </footer>
+
     <!-- НИЖНЕЕ МЕНЮ РЕПЕТИТОРА -->
     <nav id="mobile-nav" class="hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-30 px-3 py-2 flex justify-around items-center shadow-lg">
         <button onclick="switchTab('calendar')" class="flex flex-col items-center text-indigo-600" id="mob-btn-calendar">
             <span class="text-lg">📅</span>
-            <span class="text-[10px] font-bold mt-0.5">Календарь</span>
+            <span class="text-[10px] font-bold mt-0.5">Неделя</span>
         </button>
         <button onclick="switchTab('students')" class="flex flex-col items-center text-slate-400" id="mob-btn-students">
             <span class="text-lg">👥</span>
@@ -291,7 +326,7 @@
 
     <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
 
-    <!-- Модалка: Урок -->
+    <!-- Модалка: Урок (с поддержкой групп и ДЗ с файлом) -->
     <div id="modal-lesson" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-4">
@@ -301,10 +336,24 @@
             
             <form id="lesson-form" onsubmit="submitLesson(event)" class="space-y-3.5">
                 <input type="hidden" id="lesson-id">
+                <input type="hidden" id="lesson-series-id">
                 
-                <div>
+                <!-- Переключатель: 1 ученик или Группа -->
+                <div class="flex bg-slate-100 p-1 rounded-xl gap-1">
+                    <button type="button" id="btn-mode-single" onclick="setLessonMode('single')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-indigo-600">Один ученик</button>
+                    <button type="button" id="btn-mode-group" onclick="setLessonMode('group')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900">👥 Группа (2+)</button>
+                </div>
+
+                <!-- Одиночный выбор -->
+                <div id="box-select-single">
                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Ученик *</label>
-                    <select id="lesson-student" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-500"></select>
+                    <select id="lesson-student" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-500"></select>
+                </div>
+
+                <!-- Групповой выбор (чекбоксы) -->
+                <div id="box-select-group" class="hidden">
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Состав группы (выберите учеников) *</label>
+                    <div id="group-students-list" class="max-h-36 overflow-y-auto space-y-1.5 p-2 bg-slate-50 border border-slate-200 rounded-xl custom-scrollbar"></div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -323,8 +372,9 @@
                     <input type="text" id="lesson-topic" placeholder="например: Тригонометрия / Разбор варианта" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
                 </div>
 
+                <!-- Повторение -->
                 <div id="recurrence-box" class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100 space-y-2">
-                    <label class="block text-[11px] font-bold text-indigo-900 uppercase">🔁 Повторение</label>
+                    <label class="block text-[11px] font-bold text-indigo-900 uppercase">🔁 Регулярное расписание</label>
                     <div class="grid grid-cols-2 gap-2">
                         <select id="lesson-repeat-type" onchange="toggleRepeatOptions()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs">
                             <option value="none">Один урок</option>
@@ -336,27 +386,98 @@
                                 <option value="4">4 урока</option>
                                 <option value="8" selected>8 уроков</option>
                                 <option value="12">12 уроков</option>
+                                <option value="16">16 уроков</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
-                    <div>
-                        <span class="text-xs font-semibold text-slate-800 block">Домашнее задание (ДЗ)</span>
-                        <span class="text-[10px] text-slate-500">Отметьте, если выдано задание</span>
+                <!-- Блок Домашнего задания -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-semibold text-slate-800 block">Домашнее задание (ДЗ)</span>
+                            <span class="text-[10px] text-slate-500">Текст и прикреплённые файлы</span>
+                        </div>
+                        <input type="checkbox" id="lesson-hw" onchange="toggleHwFields()" class="w-5 h-5 text-indigo-600 rounded border-slate-300 cursor-pointer">
                     </div>
-                    <input type="checkbox" id="lesson-hw" class="w-5 h-5 text-indigo-600 rounded border-slate-300 cursor-pointer">
+
+                    <div id="hw-fields-box" class="hidden space-y-2 pt-1 border-t border-slate-200">
+                        <textarea id="lesson-hw-text" rows="2" placeholder="Текст домашнего задания..." class="w-full bg-white border border-slate-200 rounded-xl p-2 text-xs focus:ring-2 focus:ring-indigo-500"></textarea>
+                        <input type="url" id="lesson-hw-file" placeholder="Ссылка на файл / Google Диск / Яндекс Диск" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-between pt-2">
-                    <button type="button" id="lesson-btn-delete" onclick="deleteLessonAction()" class="text-rose-600 text-xs font-bold hidden">Удалить</button>
+                    <button type="button" id="lesson-btn-delete" onclick="promptDeleteLesson()" class="text-rose-600 text-xs font-bold hidden">Удалить урок</button>
                     <div class="flex space-x-2 ml-auto">
                         <button type="button" onclick="closeLessonModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
                         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Модалка: Выбор типа удаления серии -->
+    <div id="modal-delete-series" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100 text-center space-y-3">
+            <h3 class="text-base font-bold text-slate-900">Удаление урока из серии</h3>
+            <p class="text-xs text-slate-500">Этот урок входит в повторяющуюся серию занятий. Как вы хотите его удалить?</p>
+            <div class="space-y-2 pt-2">
+                <button onclick="executeDeleteSeries(false)" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-700 transition">
+                    Удалить ТОЛЬКО этот урок
+                </button>
+                <button onclick="executeDeleteSeries(true)" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition">
+                    Удалить этот и ВСЕ будущие уроки серии
+                </button>
+                <button onclick="closeDeleteSeriesModal()" class="text-xs text-slate-400 hover:underline pt-1 block mx-auto">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка: Своё занятие ученика (Пункт 9) -->
+    <div id="modal-personal-event" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100">
+            <h3 class="text-base font-bold text-slate-900 mb-3">Моё занятие / Репетитор</h3>
+            <form onsubmit="submitPersonalEvent(event)" class="space-y-3">
+                <input type="hidden" id="personal-event-id">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Название / Предмет *</label>
+                    <input type="text" id="personal-title" required placeholder="например: Английский / Секция" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">День недели *</label>
+                        <select id="personal-day" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs">
+                            <option value="1">Понедельник</option>
+                            <option value="2">Вторник</option>
+                            <option value="3">Среда</option>
+                            <option value="4">Четверг</option>
+                            <option value="5">Пятница</option>
+                            <option value="6">Суббота</option>
+                            <option value="0">Воскресенье</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Время *</label>
+                        <input type="time" id="personal-time" required value="17:00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closePersonalEventModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модалка: Просмотр деталей ДЗ учеником -->
+    <div id="modal-hw-view" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100 space-y-3">
+            <h3 class="text-base font-bold text-slate-900">📝 Домашнее задание</h3>
+            <div id="hw-view-content" class="bg-slate-50 p-3 rounded-2xl text-xs text-slate-700 space-y-2"></div>
+            <button onclick="closeHwViewModal()" class="w-full py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">Понятно</button>
         </div>
     </div>
 
@@ -460,35 +581,51 @@
         </div>
     </div>
 
-    <!-- Модалка: Google URL + Смена пароля -->
+    <!-- Модалка: Настройки (Google URL, Контакты, Смена PIN) -->
     <div id="modal-cloud" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100">
+        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-3">
-                <h3 class="text-base font-bold text-slate-900">☁️ Настройки и Синхронизация</h3>
+                <h3 class="text-base font-bold text-slate-900">☁️ Настройки и Контакты</h3>
                 <button onclick="closeCloudModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
             </div>
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">URL веб-приложения Google Apps Script</label>
+                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">URL веб-приложения Google Apps Script (/exec)</label>
                     <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
                 </div>
 
-                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100">
-                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Сменить Мастер-PIN репетитора</label>
-                    <input type="text" id="tutor-pin-input" maxlength="4" placeholder="7777" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700">
-                    <span class="text-[10px] text-slate-400 mt-1 block">Пароль по умолчанию: 7777</span>
+                <!-- Настройка контактов для футера -->
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase">Контакты в футере сайта</label>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">Telegram (никнейм или ссылка):</span>
+                        <input type="text" id="contact-tg" placeholder="artem_tutor" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">WhatsApp (номер телефона без +):</span>
+                        <input type="text" id="contact-wa" placeholder="79999999999" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">Номер телефона для звонка:</span>
+                        <input type="text" id="contact-phone" placeholder="+7 (999) 999-99-99" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                    </div>
                 </div>
 
-                <div class="flex gap-2 pt-1">
-                    <button onclick="saveAppSettings()" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs font-semibold">Сохранить всё</button>
-                    <button onclick="disconnectCloud()" class="px-3 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отключить облако</button>
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Мастер-PIN репетитора</label>
+                    <input type="text" id="tutor-pin-input" maxlength="4" placeholder="7777" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700">
+                </div>
+
+                <div class="pt-1 space-y-2">
+                    <button onclick="saveAppSettings()" class="w-full bg-indigo-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-md shadow-indigo-100 transition">Сохранить настройки</button>
+                    <button onclick="downloadBackupJson()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-bold transition">💾 Скачать резервную копию базы (.json)</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== СИСТЕМНЫЙ СКРИПТ ==================== -->
+    <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
     <script>
         // =========================================================================
         // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (оканчивается на /exec):
@@ -500,20 +637,58 @@
         let currentAuth = localStorage.getItem('tutor_current_auth') || null;
         let currentTab = 'calendar';
         let activeStudentId = null;
-        let calDate = new Date();
+        
+        let tutorCurrentWeekStart = getMonday(new Date());
+        let studentCurrentWeekStart = getMonday(new Date());
+        let currentDeletingLessonId = null;
 
         const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+        const dayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
+        function getMonday(d) {
+            d = new Date(d);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            d.setDate(diff);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        function formatReadableDate(dateStr, timeStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+            return `${d.getDate()} ${months[d.getMonth()]} (${dayNames[d.getDay()]}) в ${timeStr || ''}`;
+        }
+
+        // БЕЗОПАСНАЯ САМООЧИСТКА И МИГРАЦИЯ ДАННЫХ (ПУНКТ 4 и 11)
         function sanitizeDb(data) {
             if (!data || typeof data !== 'object') data = {};
             if (!Array.isArray(data.students)) data.students = [];
             if (!Array.isArray(data.lessons)) data.lessons = [];
             if (!Array.isArray(data.materials)) data.materials = [];
             if (!Array.isArray(data.deletedCalendarEventIds)) data.deletedCalendarEventIds = [];
+
+            // Миграция старых уроков (studentId -> studentIds)
+            data.lessons.forEach(l => {
+                if (!l.studentIds && l.studentId) l.studentIds = [l.studentId];
+                if (!l.studentIds) l.studentIds = [];
+            });
+
+            // Автоочистка старых файлов ДЗ (старше 7 дней, Пункт 11)
+            const now = new Date();
+            const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            data.lessons.forEach(l => {
+                if (l.date && l.date < sevenDaysAgo) {
+                    if (l.homeworkFile) l.homeworkFile = ""; // очищаем память файлов
+                }
+            });
+
             return data;
         }
 
-        // ВХОД ПО PIN-КОДУ
+        // ВХОД ПО PIN
         async function doLogin() {
             const input = document.getElementById('login-pin');
             const errorMsg = document.getElementById('login-error-msg');
@@ -524,7 +699,7 @@
 
             const masterPin = localStorage.getItem('tutor_master_pin') || '7777';
 
-            // 1. Репетитор (7777)
+            // Репетитор (7777)
             if (pin === '7777' || pin === masterPin) {
                 currentAuth = 'tutor';
                 localStorage.setItem('tutor_current_auth', 'tutor');
@@ -533,10 +708,8 @@
                 return;
             }
 
-            // 2. Ученик (ищем в локальной базе)
+            // Ученик
             let student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
-
-            // Если не нашли сразу (на телефоне база ещё не подгружена), запрашиваем из облака
             if (!student && cloudUrl) {
                 await pullFromCloud();
                 student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
@@ -550,7 +723,6 @@
                 return;
             }
 
-            // 3. Неверный PIN
             if (errorMsg) errorMsg.classList.remove('hidden');
             input.value = '';
             input.focus();
@@ -609,10 +781,11 @@
                 if (portal) portal.classList.remove('hidden');
                 renderStudentPortal(currentAuth);
             }
+            updateFooterContacts();
         }
 
         function calculateStudentGamification(studentId) {
-            const lessons = (db.lessons || []).filter(l => l.studentId === studentId);
+            const lessons = (db.lessons || []).filter(l => (l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId);
             const student = (db.students || []).find(s => s.id === studentId) || {};
             
             const completedLessons = lessons.length;
@@ -653,12 +826,33 @@
                 const tutorPinInp = document.getElementById('tutor-pin-input');
                 if (tutorPinInp) tutorPinInp.value = tutorPin;
 
+                // Загрузка контактов футера
+                document.getElementById('contact-tg').value = localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
+                document.getElementById('contact-wa').value = localStorage.getItem('tutor_contact_wa') || '79999999999';
+                document.getElementById('contact-phone').value = localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
+                updateFooterContacts();
+
                 applyAuthSession();
             } catch (err) {
                 console.error("Ошибка запуска:", err);
                 db = sanitizeDb({});
                 applyAuthSession();
             }
+        }
+
+        function updateFooterContacts() {
+            const tg = localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
+            const wa = localStorage.getItem('tutor_contact_wa') || '79999999999';
+            const phone = localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
+
+            const tgClean = tg.replace('@', '').replace('https://t.me/', '');
+            const waClean = wa.replace(/\D/g, '');
+            const phoneClean = phone.replace(/[^\d+]/g, '');
+
+            document.getElementById('footer-tg').href = `https://t.me/${tgClean}`;
+            document.getElementById('footer-wa').href = `https://wa.me/${waClean}`;
+            document.getElementById('footer-phone').href = `tel:${phoneClean}`;
+            document.getElementById('footer-phone-text').innerText = phone;
         }
 
         function setCloudStatus(status) {
@@ -673,7 +867,7 @@
                 txt.innerText = 'Синхронизация...';
             } else {
                 dot.className = 'w-2 h-2 rounded-full bg-slate-400';
-                txt.innerText = 'Локально';
+                txt.innerText = 'pomateshe';
             }
         }
 
@@ -722,7 +916,7 @@
                 renderStudentPortal(currentAuth);
                 return;
             }
-            if (currentTab === 'calendar') renderCalendar();
+            if (currentTab === 'calendar') renderTutorWeekCalendar();
             if (currentTab === 'students') renderStudents();
             if (currentTab === 'billing') renderBilling();
             if (currentTab === 'materials') renderMaterials();
@@ -755,61 +949,78 @@
             refreshViews();
         }
 
-        // ================= КАЛЕНДАРЬ =================
-        function changeMonth(d) { calDate.setMonth(calDate.getMonth() + d); renderCalendar(); }
-        function goToCurrentMonth() { calDate = new Date(); renderCalendar(); }
+        // ================= 10. НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА =================
+        function changeWeek(delta) {
+            tutorCurrentWeekStart.setDate(tutorCurrentWeekStart.getDate() + (delta * 7));
+            renderTutorWeekCalendar();
+        }
 
-        function renderCalendar() {
-            const year = calDate.getFullYear();
-            const month = calDate.getMonth();
-            const heading = document.getElementById('cal-month-year');
-            if (heading) heading.innerText = `${monthNames[month]} ${year}`;
+        function goToCurrentWeek() {
+            tutorCurrentWeekStart = getMonday(new Date());
+            renderTutorWeekCalendar();
+        }
 
-            const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const daysInPrev = new Date(year, month, 0).getDate();
-            const grid = document.getElementById('calendar-grid');
+        function renderTutorWeekCalendar() {
+            const grid = document.getElementById('tutor-week-grid');
             if (!grid) return;
             grid.innerHTML = '';
 
+            const weekEnd = new Date(tutorCurrentWeekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            const pad = n => (n < 10 ? '0' : '') + n;
+            const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+            
+            document.getElementById('cal-week-range').innerText = 
+                `${tutorCurrentWeekStart.getDate()} ${months[tutorCurrentWeekStart.getMonth()]} — ${weekEnd.getDate()} ${months[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
+
             const todayStr = new Date().toISOString().split('T')[0];
 
-            for (let i = firstDay - 1; i >= 0; i--) {
-                grid.innerHTML += `<div class="min-h-[75px] sm:min-h-[90px] bg-slate-50/50 p-1.5 text-slate-300 text-xs">${daysInPrev - i}</div>`;
-            }
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(tutorCurrentWeekStart);
+                dayDate.setDate(dayDate.getDate() + i);
+                
+                const dateStr = `${dayDate.getFullYear()}-${pad(dayDate.getMonth() + 1)}-${pad(dayDate.getDate())}`;
+                const isToday = (dateStr === todayStr);
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayLessons = (db.lessons || []).filter(l => l.date === dateStr);
-                const isToday = dateStr === todayStr;
+                const dayLessons = (db.lessons || [])
+                    .filter(l => l.date === dateStr)
+                    .sort((a, b) => (a.time || '').localeCompare(b.time || ''));
 
-                let badgeList = dayLessons.map(l => {
-                    const st = (db.students || []).find(s => s.id === l.studentId);
-                    const name = st ? st.name.split(' ')[0] : 'Ученик';
+                let lessonsHtml = dayLessons.map(l => {
+                    const ids = l.studentIds || (l.studentId ? [l.studentId] : []);
+                    const names = ids.map(id => {
+                        const st = (db.students || []).find(s => s.id === id);
+                        return st ? st.name.split(' ')[0] : 'Ученик';
+                    }).join(' & ');
+
+                    const isGroup = ids.length > 1;
+
                     return `
                         <div onclick="event.stopPropagation(); openLessonModal('${l.id}')" 
-                             class="cursor-pointer text-[10px] p-1 rounded border transition ${l.hasHomework ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-slate-100 border-slate-200 text-slate-800'}">
-                            <div class="flex items-center justify-between font-semibold">
-                                <span class="truncate">${l.time} ${name}</span>
-                                <span class="w-1.5 h-1.5 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
+                             class="p-2 rounded-2xl border cursor-pointer transition hover:scale-[1.02] ${isGroup ? 'bg-violet-50 border-violet-200 text-violet-950' : 'bg-indigo-50 border-indigo-200 text-indigo-950'}">
+                            <div class="flex items-center justify-between font-bold text-xs">
+                                <span>${l.time} ${isGroup ? '👥 ' : ''}${names}</span>
+                                <span class="w-2 h-2 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
                             </div>
+                            <p class="text-[10px] text-slate-500 truncate mt-1">${l.topic || 'Без темы'}</p>
                         </div>
                     `;
                 }).join('');
 
                 grid.innerHTML += `
                     <div onclick="quickCreateLesson('${dateStr}')" 
-                         class="min-h-[75px] sm:min-h-[90px] bg-white p-1.5 text-xs flex flex-col justify-between hover:bg-indigo-50/20 cursor-pointer ${isToday ? 'ring-2 ring-indigo-500 ring-inset' : ''}">
-                        <span class="font-bold text-[10px] sm:text-xs ${isToday ? 'bg-indigo-600 text-white w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center' : 'text-slate-600'}">${day}</span>
-                        <div class="space-y-1 overflow-y-auto max-h-[55px] custom-scrollbar flex-1 mt-0.5">${badgeList}</div>
+                         class="bg-white p-3 rounded-2xl border ${isToday ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-slate-200'} min-h-[140px] flex flex-col justify-between hover:bg-slate-50 transition cursor-pointer">
+                        <div>
+                            <div class="flex justify-between items-center mb-2 pb-1.5 border-b border-slate-100">
+                                <span class="text-xs font-black uppercase ${isToday ? 'text-indigo-600' : 'text-slate-500'}">${dayNames[dayDate.getDay()]}</span>
+                                <span class="text-xs font-bold ${isToday ? 'bg-indigo-600 text-white w-5 h-5 rounded-full flex items-center justify-center' : 'text-slate-700'}">${dayDate.getDate()}</span>
+                            </div>
+                            <div class="space-y-1.5">${lessonsHtml || '<span class="text-[10px] text-slate-300 block py-4 text-center">Свободно</span>'}</div>
+                        </div>
+                        <span class="text-[10px] text-indigo-500 font-bold opacity-0 hover:opacity-100 transition text-center block mt-2">+ Добавить</span>
                     </div>
                 `;
-            }
-
-            const total = firstDay + daysInMonth;
-            const extra = (7 - (total % 7)) % 7;
-            for (let i = 1; i <= extra; i++) {
-                grid.innerHTML += `<div class="min-h-[75px] sm:min-h-[90px] bg-slate-50/50 p-1.5 text-slate-300 text-xs">${i}</div>`;
             }
         }
 
@@ -818,7 +1029,7 @@
             const grid = document.getElementById('students-grid');
             if (!grid) return;
             if (!db.students || db.students.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white">Учеников пока нет. Нажмите «+ Добавить»!</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white">Учеников пока нет. Нажмите «+ Добавить ученика»!</div>`;
                 return;
             }
 
@@ -870,10 +1081,10 @@
         function copyStudentInstructions(studentId) {
             const st = (db.students || []).find(s => s.id === studentId);
             if (!st) return;
-            const text = `👋 Привет, ${st.name.split(' ')[0]}!\n\nТвой личный кабинет доступен по ссылке:\n${window.location.href.split('#')[0]}\n\n🔑 Твой личный PIN-код для входа: ${st.pin || '1042'}\n\nТам ты сможешь смотреть даты занятий, домашку, темы и график пробников!`;
+            const text = `👋 Привет, ${st.name.split(' ')[0]}!\n\nТвой личный кабинет доступен по ссылке:\n${window.location.href.split('#')[0]}\n\n🔑 Твой личный PIN-код для входа: ${st.pin || '1042'}\n\nТам ты сможешь смотреть даты занятий, домашку с файлами, свой календарь и график пробников!`;
             
             navigator.clipboard.writeText(text).then(() => {
-                alert(`Инструкция для ${st.name} скопирована в буфер обмена!\n\nОтправьте её ученику в мессенджер.`);
+                alert(`Инструкция для ${st.name} скопирована!\n\nОтправьте её ученику в мессенджер.`);
             }).catch(() => {
                 prompt('Скопируйте текст сообщения для ученика:', text);
             });
@@ -891,7 +1102,7 @@
         function renderStudentProfile(id) {
             const st = (db.students || []).find(s => s.id === id);
             if (!st) return;
-            const studentLessons = (db.lessons || []).filter(l => l.studentId === id).sort((a, b) => new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time));
+            const studentLessons = (db.lessons || []).filter(l => (l.studentIds && l.studentIds.includes(id)) || l.studentId === id).sort((a, b) => new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time));
 
             document.getElementById('student-profile-details').innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -929,6 +1140,7 @@
                             </div>
                         </div>
 
+                        <!-- Пройденные темы -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Пройденные темы</h4>
                             <form onsubmit="addTopic(event, '${st.id}')" class="flex gap-1.5 mb-3">
@@ -947,6 +1159,7 @@
                     </div>
 
                     <div class="lg:col-span-2 space-y-4">
+                        <!-- Пробники -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <div class="flex justify-between items-center mb-3">
                                 <div>
@@ -971,6 +1184,7 @@
                             </div>
                         </div>
 
+                        <!-- Таблица уроков -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <h3 class="font-bold text-sm text-slate-900 mb-3">Даты занятий и домашние задания</h3>
                             <div class="overflow-x-auto">
@@ -986,7 +1200,7 @@
                                     <tbody class="divide-y">
                                         ${studentLessons.map(l => `
                                             <tr class="hover:bg-slate-50 transition">
-                                                <td class="py-2.5 font-semibold text-slate-800">${l.date} <span class="text-slate-400 font-normal">(${l.time})</span></td>
+                                                <td class="py-2.5 font-semibold text-slate-800">${formatReadableDate(l.date, l.time)}</td>
                                                 <td class="py-2.5 text-slate-600">${l.topic || '<span class="text-slate-300">Без темы</span>'}</td>
                                                 <td class="py-2.5 text-center">
                                                     <input type="checkbox" ${l.hasHomework ? 'checked' : ''} onchange="toggleHw('${l.id}', this.checked)" class="w-4 h-4 text-emerald-600 rounded border-slate-300 cursor-pointer">
@@ -1006,7 +1220,7 @@
             `;
         }
 
-        // ================= ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ =================
+        // ================= 7. ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ (С УЧЕТОМ БАЛАНСА) =================
         function renderBilling() {
             const today = new Date();
             const dayOfWeek = today.getDay();
@@ -1033,19 +1247,30 @@
             tbody.innerHTML = '';
 
             (db.students || []).forEach(st => {
-                const nextWeekLessons = (db.lessons || []).filter(l => l.studentId === st.id && l.date >= startStr && l.date <= endStr);
+                const nextWeekLessons = (db.lessons || []).filter(l => 
+                    ((l.studentIds && l.studentIds.includes(st.id)) || l.studentId === st.id) && 
+                    l.date >= startStr && l.date <= endStr
+                );
+                
                 const count = nextWeekLessons.length;
-                const sum = count * st.price;
-                totalExpected += sum;
+                const paid = Number(st.paidLessons || 0);
+
+                // Если оплачено >= количества уроков, к оплате 0 руб!
+                let toPayCount = Math.max(0, count - paid);
+                let toPaySum = toPayCount * Number(st.price || 0);
+                
+                totalExpected += toPaySum;
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="py-3 font-bold text-slate-900">${st.name} <span class="text-[11px] text-slate-400 block font-normal">${st.subject}</span></td>
-                        <td class="py-3"><span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 font-bold rounded-lg">${count} зан.</span></td>
-                        <td class="py-3 text-slate-600">${st.price} ₽</td>
-                        <td class="py-3 font-extrabold text-slate-900">${sum} ₽</td>
+                        <td class="py-3"><span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 font-bold rounded-lg text-xs">${count} зан.</span></td>
+                        <td class="py-3"><span class="font-bold ${paid >= count ? 'text-emerald-600' : 'text-slate-700'}">${paid} зан.</span></td>
+                        <td class="py-3 font-extrabold ${toPaySum === 0 ? 'text-emerald-600' : 'text-slate-900'}">
+                            ${toPaySum === 0 && count > 0 ? '0 ₽ (Покрыто)' : `${toPaySum} ₽`}
+                        </td>
                         <td class="py-3 text-right">
-                            <button onclick="confirmWeeklyPayment('${st.id}', ${count})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition">
+                            <button onclick="confirmWeeklyPayment('${st.id}', ${count || 1})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition">
                                 ✓ Оплачено (+${count || 1})
                             </button>
                         </td>
@@ -1060,10 +1285,10 @@
         function confirmWeeklyPayment(studentId, count) {
             const st = (db.students || []).find(s => s.id === studentId);
             if (st) {
-                st.paidLessons += (count > 0 ? count : 1);
+                st.paidLessons = Number(st.paidLessons || 0) + (count > 0 ? count : 1);
                 syncToCloud();
                 renderBilling();
-                alert(`Оплата для ${st.name} успешно зачислена (+${count || 1} к балансу)!`);
+                alert(`Оплата для ${st.name} зачислена (+${count || 1} к балансу)!`);
             }
         }
 
@@ -1090,13 +1315,12 @@
             `).join('');
         }
 
-        // ================= ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА =================
+        // ================= 6 & 9. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА =================
         function renderStudentPortal(studentId) {
             const st = (db.students || []).find(s => s.id === studentId);
             if (!st) return;
 
             document.getElementById('student-portal-name').innerText = st.name;
-            document.getElementById('student-portal-subject').innerText = st.subject;
             document.getElementById('student-avatar').innerText = (st.name || 'У')[0];
 
             const game = calculateStudentGamification(studentId);
@@ -1105,24 +1329,160 @@
             document.getElementById('portal-streak-val').innerText = `${game.streak} зан. подряд`;
             document.getElementById('portal-xp-val').innerText = `${game.xp} XP`;
 
+            // 1. Формат даты ближайшего занятия (Пункт 1)
             const nowStr = new Date().toISOString().split('T')[0];
             const upcomingLessons = (db.lessons || [])
-                .filter(l => l.studentId === studentId && l.date >= nowStr)
+                .filter(l => ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.date >= nowStr)
                 .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+
+            const nextBtnBox = document.getElementById('portal-hw-details-btn');
+            nextBtnBox.innerHTML = '';
 
             if (upcomingLessons.length > 0) {
                 const next = upcomingLessons[0];
-                document.getElementById('portal-next-date').innerText = `📅 ${next.date} в ${next.time}`;
+                document.getElementById('portal-next-date').innerText = formatReadableDate(next.date, next.time);
                 document.getElementById('portal-next-topic').innerText = `Тема: ${next.topic || 'Без темы'}`;
-                document.getElementById('portal-next-hw').innerText = next.hasHomework ? '✓ Задано' : 'Не задано';
+                document.getElementById('portal-next-hw').innerText = next.hasHomework ? '✓ Задано ДЗ' : 'Не задано';
+                
+                if (next.hasHomework) {
+                    nextBtnBox.innerHTML = `
+                        <button onclick="openHwViewModal('${next.id}')" class="text-xs bg-white/20 hover:bg-white/30 text-white font-bold px-3 py-1 rounded-xl transition">
+                            Посмотреть задание ↗
+                        </button>
+                    `;
+                }
             } else {
                 document.getElementById('portal-next-date').innerText = 'Нет запланированных уроков';
-                document.getElementById('portal-next-topic').innerText = 'Репетитор скоро назначит занятие';
+                document.getElementById('portal-next-topic').innerText = 'Артём скоро назначит дату занятия';
                 document.getElementById('portal-next-hw').innerText = '—';
             }
 
             renderExamsChart(st.exams || []);
-            renderStudentPortalSubviews(studentId);
+            renderStudentWeekCalendar(studentId);
+            renderStudentTopicsAndMaterials(studentId);
+        }
+
+        // Недельный календарь ученика (Пункт 9)
+        function changeStudentWeek(delta) {
+            studentCurrentWeekStart.setDate(studentCurrentWeekStart.getDate() + (delta * 7));
+            if (currentAuth) renderStudentWeekCalendar(currentAuth);
+        }
+
+        function goToCurrentStudentWeek() {
+            studentCurrentWeekStart = getMonday(new Date());
+            if (currentAuth) renderStudentWeekCalendar(currentAuth);
+        }
+
+        function renderStudentWeekCalendar(studentId) {
+            const grid = document.getElementById('student-week-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const st = (db.students || []).find(s => s.id === studentId);
+            if (!st) return;
+
+            const weekEnd = new Date(studentCurrentWeekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+            const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+            const pad = n => (n < 10 ? '0' : '') + n;
+
+            document.getElementById('st-cal-week-range').innerText = 
+                `Неделя: ${studentCurrentWeekStart.getDate()} ${months[studentCurrentWeekStart.getMonth()]} — ${weekEnd.getDate()} ${months[weekEnd.getMonth()]}`;
+
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            for (let i = 0; i < 7; i++) {
+                const dayDate = new Date(studentCurrentWeekStart);
+                dayDate.setDate(dayDate.getDate() + i);
+                const dateStr = `${dayDate.getFullYear()}-${pad(dayDate.getMonth() + 1)}-${pad(dayDate.getDate())}`;
+                const dayOfWeek = dayDate.getDay();
+                const isToday = (dateStr === todayStr);
+
+                // Уроки с Артёмом
+                const artemLessons = (db.lessons || []).filter(l => 
+                    ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.date === dateStr
+                );
+
+                // Личные занятия ученика (другие репетиторы)
+                const personalEvents = (st.personalEvents || []).filter(pe => Number(pe.day) === dayOfWeek);
+
+                let cardsHtml = '';
+
+                artemLessons.forEach(l => {
+                    cardsHtml += `
+                        <div class="p-2 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-950 text-[11px] font-bold">
+                            <div class="flex justify-between items-center">
+                                <span>📚 ${l.time} Артём</span>
+                                <span class="w-1.5 h-1.5 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
+                            </div>
+                            <span class="text-[9px] font-normal text-slate-500 block truncate">${l.topic || 'Урок'}</span>
+                        </div>
+                    `;
+                });
+
+                personalEvents.forEach((pe, pIdx) => {
+                    cardsHtml += `
+                        <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-[11px] font-bold flex justify-between items-center">
+                            <div>
+                                <span>⚡ ${pe.time} ${pe.title}</span>
+                                <span class="text-[9px] font-normal text-emerald-700 block">Моё расписание</span>
+                            </div>
+                            <button onclick="deletePersonalEvent('${studentId}', ${pIdx})" class="text-rose-400 hover:text-rose-600 text-xs">✕</button>
+                        </div>
+                    `;
+                });
+
+                grid.innerHTML += `
+                    <div class="bg-slate-50 p-2.5 rounded-2xl border ${isToday ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-white' : 'border-slate-200'} min-h-[110px] flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-1.5 pb-1 border-b border-slate-200">
+                                <span class="text-[10px] font-black uppercase text-slate-500">${dayNames[dayOfWeek]}</span>
+                                <span class="text-xs font-bold ${isToday ? 'text-indigo-600 font-black' : 'text-slate-700'}">${dayDate.getDate()}</span>
+                            </div>
+                            <div class="space-y-1">${cardsHtml || '<span class="text-[9px] text-slate-300 block text-center py-2">Свободно</span>'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function openPersonalEventModal() {
+            document.getElementById('personal-title').value = '';
+            document.getElementById('modal-personal-event').classList.remove('hidden');
+        }
+
+        function closePersonalEventModal() {
+            document.getElementById('modal-personal-event').classList.add('hidden');
+        }
+
+        function submitPersonalEvent(e) {
+            e.preventDefault();
+            if (!currentAuth) return;
+
+            const st = (db.students || []).find(s => s.id === currentAuth);
+            if (!st) return;
+
+            if (!st.personalEvents) st.personalEvents = [];
+            
+            st.personalEvents.push({
+                id: 'pe_' + Date.now(),
+                title: document.getElementById('personal-title').value.trim(),
+                day: document.getElementById('personal-day').value,
+                time: document.getElementById('personal-time').value
+            });
+
+            syncToCloud();
+            closePersonalEventModal();
+            renderStudentWeekCalendar(currentAuth);
+        }
+
+        function deletePersonalEvent(studentId, idx) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            if (st && st.personalEvents) {
+                st.personalEvents.splice(idx, 1);
+                syncToCloud();
+                renderStudentWeekCalendar(studentId);
+            }
         }
 
         function renderExamsChart(exams) {
@@ -1155,22 +1515,9 @@
             });
         }
 
-        function renderStudentPortalSubviews(studentId) {
+        function renderStudentTopicsAndMaterials(studentId) {
             const st = (db.students || []).find(s => s.id === studentId);
-            const studentLessons = (db.lessons || []).filter(l => l.studentId === studentId).sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            document.getElementById('student-subview-schedule').innerHTML = studentLessons.map(l => `
-                <div class="p-3 bg-slate-50 rounded-2xl flex justify-between items-center border border-slate-100">
-                    <div>
-                        <span class="font-bold text-xs text-slate-800">${l.date} (${l.time})</span>
-                        <p class="text-xs text-slate-500 mt-0.5">${l.topic || 'Без темы'}</p>
-                    </div>
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${l.hasHomework ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">
-                        ${l.hasHomework ? 'ДЗ ✓' : 'Без ДЗ'}
-                    </span>
-                </div>
-            `).join('') || '<p class="text-xs text-slate-400 py-4 text-center">Уроков пока нет</p>';
-
+            
             document.getElementById('student-subview-topics').innerHTML = (st.topics || []).map(t => `
                 <div class="p-2.5 bg-slate-50 rounded-2xl text-xs font-medium text-slate-700 flex items-center gap-2 border border-slate-100">
                     <span class="text-emerald-500 font-bold">✓</span> ${t}
@@ -1189,7 +1536,7 @@
         }
 
         function switchStudentSubTab(tab) {
-            ['schedule', 'topics', 'materials'].forEach(t => {
+            ['calendar', 'topics', 'materials'].forEach(t => {
                 document.getElementById(`student-subview-${t}`).classList.toggle('hidden', t !== tab);
                 const btn = document.getElementById(`st-tab-${t}`);
                 if (btn) {
@@ -1198,13 +1545,271 @@
                         : 'px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800';
                 }
             });
+            document.getElementById('btn-add-personal').classList.toggle('hidden', tab !== 'calendar');
         }
 
-        // ================= ОПЕРАЦИИ С ДАННЫМИ =================
+        function openHwViewModal(lessonId) {
+            const l = (db.lessons || []).find(item => item.id === lessonId);
+            if (!l) return;
+
+            let html = `<p class="font-medium whitespace-pre-wrap">${l.homeworkText || 'Задание не расписано текстом'}</p>`;
+            if (l.homeworkFile) {
+                html += `<div class="pt-2 border-t border-slate-200 mt-2"><a href="${l.homeworkFile}" target="_blank" class="text-indigo-600 font-bold hover:underline flex items-center gap-1">📎 Открыть прикрепленный файл / задание ↗</a></div>`;
+            }
+
+            document.getElementById('hw-view-content').innerHTML = html;
+            document.getElementById('modal-hw-view').classList.remove('hidden');
+        }
+
+        function closeHwViewModal() {
+            document.getElementById('modal-hw-view').classList.add('hidden');
+        }
+
+        // ================= ОПЕРАЦИИ С УРОКАМИ И ГРУППАМИ (ПУНКТ 2, 3, 11) =================
+        let currentLessonMode = 'single';
+
+        function setLessonMode(mode) {
+            currentLessonMode = mode;
+            document.getElementById('btn-mode-single').className = (mode === 'single') 
+                ? 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-indigo-600'
+                : 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900';
+
+            document.getElementById('btn-mode-group').className = (mode === 'group') 
+                ? 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-indigo-600'
+                : 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900';
+
+            document.getElementById('box-select-single').classList.toggle('hidden', mode !== 'single');
+            document.getElementById('box-select-group').classList.toggle('hidden', mode !== 'group');
+        }
+
+        function toggleHwFields() {
+            const isChecked = document.getElementById('lesson-hw').checked;
+            document.getElementById('hw-fields-box').classList.toggle('hidden', !isChecked);
+        }
+
+        function toggleRepeatOptions() {
+            const val = document.getElementById('lesson-repeat-type').value;
+            document.getElementById('repeat-count-container').classList.toggle('hidden', val === 'none');
+        }
+
+        function openLessonModal(id = null, preselectedStudentId = null) {
+            const sel = document.getElementById('lesson-student');
+            const groupList = document.getElementById('group-students-list');
+            
+            sel.innerHTML = (db.students || []).map(s => `<option value="${s.id}">${s.name} (${s.subject})</option>`).join('');
+            
+            groupList.innerHTML = (db.students || []).map(s => `
+                <label class="flex items-center gap-2 p-1.5 hover:bg-white rounded-lg cursor-pointer text-xs">
+                    <input type="checkbox" value="${s.id}" class="group-student-checkbox w-4 h-4 text-indigo-600 rounded">
+                    <span class="font-medium text-slate-800">${s.name}</span>
+                </label>
+            `).join('');
+
+            const delBtn = document.getElementById('lesson-btn-delete');
+            const recBox = document.getElementById('recurrence-box');
+
+            if (id) {
+                const l = (db.lessons || []).find(item => item.id === id);
+                document.getElementById('lesson-modal-heading').innerText = 'Редактировать урок';
+                document.getElementById('lesson-id').value = l.id;
+                document.getElementById('lesson-series-id').value = l.seriesId || '';
+
+                const ids = l.studentIds || (l.studentId ? [l.studentId] : []);
+                if (ids.length > 1) {
+                    setLessonMode('group');
+                    document.querySelectorAll('.group-student-checkbox').forEach(cb => {
+                        cb.checked = ids.includes(cb.value);
+                    });
+                } else {
+                    setLessonMode('single');
+                    if (ids[0]) sel.value = ids[0];
+                }
+
+                document.getElementById('lesson-date').value = l.date;
+                document.getElementById('lesson-time').value = l.time;
+                document.getElementById('lesson-topic').value = l.topic || '';
+                document.getElementById('lesson-hw').checked = !!l.hasHomework;
+                document.getElementById('lesson-hw-text').value = l.homeworkText || '';
+                document.getElementById('lesson-hw-file').value = l.homeworkFile || '';
+                toggleHwFields();
+
+                if (delBtn) delBtn.classList.remove('hidden');
+                if (recBox) recBox.classList.add('hidden');
+            } else {
+                document.getElementById('lesson-modal-heading').innerText = 'Запланировать урок';
+                document.getElementById('lesson-form').reset();
+                document.getElementById('lesson-id').value = '';
+                document.getElementById('lesson-series-id').value = '';
+                setLessonMode('single');
+                document.getElementById('lesson-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('lesson-time').value = '14:00';
+                document.getElementById('lesson-repeat-type').value = 'none';
+                toggleRepeatOptions();
+                toggleHwFields();
+                if (preselectedStudentId && sel) sel.value = preselectedStudentId;
+                if (delBtn) delBtn.classList.add('hidden');
+                if (recBox) recBox.classList.remove('hidden');
+            }
+            document.getElementById('modal-lesson').classList.remove('hidden');
+        }
+
+        function quickCreateLesson(dateStr) {
+            openLessonModal();
+            document.getElementById('lesson-date').value = dateStr;
+        }
+
+        function closeLessonModal() { document.getElementById('modal-lesson').classList.add('hidden'); }
+
+        function submitLesson(e) {
+            e.preventDefault();
+            const id = document.getElementById('lesson-id').value;
+            const existingSeriesId = document.getElementById('lesson-series-id').value;
+            const startDateStr = document.getElementById('lesson-date').value;
+            const time = document.getElementById('lesson-time').value;
+            const topic = document.getElementById('lesson-topic').value;
+            const hasHomework = document.getElementById('lesson-hw').checked;
+            const homeworkText = document.getElementById('lesson-hw-text').value.trim();
+            const homeworkFile = document.getElementById('lesson-hw-file').value.trim();
+
+            let studentIds = [];
+            if (currentLessonMode === 'single') {
+                studentIds = [document.getElementById('lesson-student').value];
+            } else {
+                document.querySelectorAll('.group-student-checkbox:checked').forEach(cb => {
+                    studentIds.push(cb.value);
+                });
+                if (studentIds.length === 0) {
+                    return alert('Выберите хотя бы одного ученика для группы!');
+                }
+            }
+
+            const repeatType = document.getElementById('lesson-repeat-type').value;
+            const repeatCount = parseInt(document.getElementById('lesson-repeat-count').value, 10);
+
+            if (id) {
+                const l = (db.lessons || []).find(item => item.id === id);
+                if (l) {
+                    Object.assign(l, { 
+                        studentIds, 
+                        studentId: studentIds[0], 
+                        date: startDateStr, 
+                        time, 
+                        topic, 
+                        hasHomework, 
+                        homeworkText, 
+                        homeworkFile 
+                    });
+                }
+            } else {
+                const count = (repeatType === 'none') ? 1 : repeatCount;
+                const intervalDays = (repeatType === 'biweekly') ? 14 : 7;
+                const baseDate = new Date(startDateStr);
+                const seriesId = count > 1 ? ('ser_' + Date.now()) : null;
+
+                for (let i = 0; i < count; i++) {
+                    const lessonDate = new Date(baseDate);
+                    lessonDate.setDate(baseDate.getDate() + (i * intervalDays));
+                    
+                    const pad = n => (n < 10 ? '0' : '') + n;
+                    const dateFormatted = `${lessonDate.getFullYear()}-${pad(lessonDate.getMonth() + 1)}-${pad(lessonDate.getDate())}`;
+
+                    db.lessons.push({
+                        id: 'ls_' + (Date.now() + i),
+                        seriesId: seriesId,
+                        studentIds,
+                        studentId: studentIds[0],
+                        date: dateFormatted,
+                        time,
+                        topic: count > 1 ? `${topic} (Урок ${i + 1})` : topic,
+                        hasHomework: i === 0 ? hasHomework : false,
+                        homeworkText: i === 0 ? homeworkText : '',
+                        homeworkFile: i === 0 ? homeworkFile : ''
+                    });
+                }
+
+                // Списание баланса для каждого участника урока
+                studentIds.forEach(stId => {
+                    const st = (db.students || []).find(s => s.id === stId);
+                    if (st && st.paidLessons > 0) {
+                        st.paidLessons = Math.max(0, Number(st.paidLessons) - count);
+                    }
+                });
+            }
+
+            syncToCloud();
+            closeLessonModal();
+            refreshViews();
+        }
+
+        // ================= 3. УДАЛЕНИЕ СЕРИИ УРОКОВ (ПУНКТ 3) =================
+        function promptDeleteLesson() {
+            const id = document.getElementById('lesson-id').value;
+            const l = (db.lessons || []).find(item => item.id === id);
+            if (!l) return;
+
+            currentDeletingLessonId = id;
+
+            if (l.seriesId) {
+                // Если это часть зацикленной серии -> предлагаем выбор
+                document.getElementById('modal-delete-series').classList.remove('hidden');
+            } else {
+                if (confirm('Удалить этот урок?')) {
+                    executeDeleteSingleLesson(id);
+                }
+            }
+        }
+
+        function closeDeleteSeriesModal() {
+            document.getElementById('modal-delete-series').classList.add('hidden');
+        }
+
+        function executeDeleteSeries(deleteAllFuture) {
+            const l = (db.lessons || []).find(item => item.id === currentDeletingLessonId);
+            if (!l) return closeDeleteSeriesModal();
+
+            if (!deleteAllFuture) {
+                executeDeleteSingleLesson(l.id);
+            } else {
+                // Удаляем только текущий и будущие уроки этой серии, прошедшие остаются!
+                const lessonsToDelete = (db.lessons || []).filter(item => 
+                    item.seriesId === l.seriesId && item.date >= l.date
+                );
+
+                lessonsToDelete.forEach(delItem => {
+                    if (delItem.calendarEventId) {
+                        if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
+                        db.deletedCalendarEventIds.push(delItem.calendarEventId);
+                    }
+                });
+
+                const deleteIds = lessonsToDelete.map(item => item.id);
+                db.lessons = (db.lessons || []).filter(item => !deleteIds.includes(item.id));
+                
+                syncToCloud();
+                closeDeleteSeriesModal();
+                closeLessonModal();
+                refreshViews();
+            }
+        }
+
+        function executeDeleteSingleLesson(lessonId) {
+            const l = (db.lessons || []).find(item => item.id === lessonId);
+            if (l && l.calendarEventId) {
+                if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
+                db.deletedCalendarEventIds.push(l.calendarEventId);
+            }
+            db.lessons = (db.lessons || []).filter(item => item.id !== lessonId);
+            syncToCloud();
+            closeDeleteSeriesModal();
+            closeLessonModal();
+            refreshViews();
+        }
+
+        // ================= ДЕЙСТВИЯ С УЧЕНИКАМИ, БАЛАНСАМИ И ТЕМАМИ =================
         function updateBalance(id, delta) {
             const st = (db.students || []).find(s => s.id === id);
             if (st) {
-                st.paidLessons = Math.max(0, st.paidLessons + delta);
+                st.paidLessons = Math.max(0, Number(st.paidLessons || 0) + delta);
                 syncToCloud();
                 renderStudentProfile(id);
             }
@@ -1302,112 +1907,6 @@
             }
         }
 
-        function toggleRepeatOptions() {
-            const val = document.getElementById('lesson-repeat-type').value;
-            document.getElementById('repeat-count-container').classList.toggle('hidden', val === 'none');
-        }
-
-        function openLessonModal(id = null, preselectedStudentId = null) {
-            const sel = document.getElementById('lesson-student');
-            if (sel) {
-                sel.innerHTML = (db.students || []).map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            }
-            const delBtn = document.getElementById('lesson-btn-delete');
-            const recBox = document.getElementById('recurrence-box');
-
-            if (id) {
-                const l = (db.lessons || []).find(item => item.id === id);
-                document.getElementById('lesson-modal-heading').innerText = 'Редактировать урок';
-                document.getElementById('lesson-id').value = l.id;
-                document.getElementById('lesson-student').value = l.studentId;
-                document.getElementById('lesson-date').value = l.date;
-                document.getElementById('lesson-time').value = l.time;
-                document.getElementById('lesson-topic').value = l.topic || '';
-                document.getElementById('lesson-hw').checked = !!l.hasHomework;
-                if (delBtn) delBtn.classList.remove('hidden');
-                if (recBox) recBox.classList.add('hidden');
-            } else {
-                document.getElementById('lesson-modal-heading').innerText = 'Запланировать урок';
-                document.getElementById('lesson-form').reset();
-                document.getElementById('lesson-id').value = '';
-                document.getElementById('lesson-date').value = new Date().toISOString().split('T')[0];
-                document.getElementById('lesson-time').value = '14:00';
-                document.getElementById('lesson-repeat-type').value = 'none';
-                toggleRepeatOptions();
-                if (preselectedStudentId && sel) sel.value = preselectedStudentId;
-                if (delBtn) delBtn.classList.add('hidden');
-                if (recBox) recBox.classList.remove('hidden');
-            }
-            document.getElementById('modal-lesson').classList.remove('hidden');
-        }
-
-        function quickCreateLesson(dateStr) {
-            openLessonModal();
-            document.getElementById('lesson-date').value = dateStr;
-        }
-
-        function closeLessonModal() { document.getElementById('modal-lesson').classList.add('hidden'); }
-
-        function submitLesson(e) {
-            e.preventDefault();
-            const id = document.getElementById('lesson-id').value;
-            const studentId = document.getElementById('lesson-student').value;
-            const startDateStr = document.getElementById('lesson-date').value;
-            const time = document.getElementById('lesson-time').value;
-            const topic = document.getElementById('lesson-topic').value;
-            const hasHomework = document.getElementById('lesson-hw').checked;
-            const repeatType = document.getElementById('lesson-repeat-type').value;
-            const repeatCount = parseInt(document.getElementById('lesson-repeat-count').value, 10);
-
-            if (id) {
-                const l = (db.lessons || []).find(item => item.id === id);
-                if (l) Object.assign(l, { studentId, date: startDateStr, time, topic, hasHomework });
-            } else {
-                const count = (repeatType === 'none') ? 1 : repeatCount;
-                const intervalDays = (repeatType === 'biweekly') ? 14 : 7;
-                const baseDate = new Date(startDateStr);
-
-                for (let i = 0; i < count; i++) {
-                    const lessonDate = new Date(baseDate);
-                    lessonDate.setDate(baseDate.getDate() + (i * intervalDays));
-                    
-                    const pad = n => (n < 10 ? '0' : '') + n;
-                    const dateFormatted = `${lessonDate.getFullYear()}-${pad(lessonDate.getMonth() + 1)}-${pad(lessonDate.getDate())}`;
-
-                    db.lessons.push({
-                        id: 'ls_' + (Date.now() + i),
-                        studentId,
-                        date: dateFormatted,
-                        time,
-                        topic: count > 1 ? `${topic} (Урок ${i + 1})` : topic,
-                        hasHomework: false
-                    });
-                }
-
-                const st = (db.students || []).find(s => s.id === studentId);
-                if (st && st.paidLessons > 0) {
-                    st.paidLessons = Math.max(0, st.paidLessons - count);
-                }
-            }
-
-            syncToCloud();
-            closeLessonModal();
-            refreshViews();
-        }
-
-        function deleteLessonAction() {
-            const id = document.getElementById('lesson-id').value;
-            const l = (db.lessons || []).find(item => item.id === id);
-            if (l && l.calendarEventId) {
-                if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
-                db.deletedCalendarEventIds.push(l.calendarEventId);
-            }
-            db.lessons = (db.lessons || []).filter(item => item.id !== id);
-            syncToCloud();
-            closeLessonModal();
-            refreshViews();
-        }
-
         function openStudentModal(id = null) {
             if (id) {
                 const st = (db.students || []).find(s => s.id === id);
@@ -1447,6 +1946,7 @@
                 item.id = 'st_' + Date.now();
                 item.topics = [];
                 item.exams = [];
+                item.personalEvents = [];
                 db.students.push(item);
             }
 
@@ -1458,12 +1958,13 @@
         function deleteStudent(id) {
             if (confirm('Удалить ученика и всю его историю?')) {
                 db.students = (db.students || []).filter(s => s.id !== id);
-                db.lessons = (db.lessons || []).filter(l => l.studentId !== id);
+                db.lessons = (db.lessons || []).filter(l => !(l.studentIds && l.studentIds.includes(id)) && l.studentId !== id);
                 syncToCloud();
                 switchTab('students');
             }
         }
 
+        // ================= НАСТРОЙКИ, БЭКАП И КОНТАКТЫ =================
         function openCloudModal() { document.getElementById('modal-cloud').classList.remove('hidden'); }
         function closeCloudModal() { document.getElementById('modal-cloud').classList.add('hidden'); }
 
@@ -1471,6 +1972,10 @@
             const urlVal = document.getElementById('cloud-url-input').value.trim();
             const pinVal = document.getElementById('tutor-pin-input').value.trim();
             
+            const tgVal = document.getElementById('contact-tg').value.trim();
+            const waVal = document.getElementById('contact-wa').value.trim();
+            const phoneVal = document.getElementById('contact-phone').value.trim();
+
             if (urlVal) {
                 cloudUrl = urlVal;
                 localStorage.setItem('tutor_cloud_script_url', urlVal);
@@ -1481,16 +1986,23 @@
                 localStorage.setItem('tutor_master_pin', pinVal);
             }
 
-            alert('Настройки сохранены!');
+            if (tgVal) localStorage.setItem('tutor_contact_tg', tgVal);
+            if (waVal) localStorage.setItem('tutor_contact_wa', waVal);
+            if (phoneVal) localStorage.setItem('tutor_contact_phone', phoneVal);
+
+            updateFooterContacts();
+            alert('Настройки и контакты сохранены!');
             closeCloudModal();
         }
 
-        function disconnectCloud() {
-            cloudUrl = '';
-            localStorage.removeItem('tutor_cloud_script_url');
-            document.getElementById('cloud-url-input').value = '';
-            setCloudStatus('local');
-            closeCloudModal();
+        function downloadBackupJson() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `tutor_backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
         }
 
         window.addEventListener('DOMContentLoaded', initApp);
