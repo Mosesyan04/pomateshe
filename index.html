@@ -1,127 +1,255 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Уроки с Артёмом | pomateshe</title>
+    
+    <!-- PWA Мета-теги для мобильных устройств -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="pomateshe">
+    <meta name="theme-color" content="#4f46e5">
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#eef2ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
         .pb-safe { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased select-none">
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col antialiased transition-colors duration-200">
 
-    <!-- ==================== 1. ЭКРАН ВХОДА (PIN) ==================== -->
-    <div id="view-login" class="fixed inset-0 bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center">
-            
-            <div class="w-14 h-14 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl text-white flex items-center justify-center mx-auto shadow-lg mb-4">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+    <!-- ==================== 1. ПУБЛИЧНЫЙ ЛЕНДИНГ-ВИЗИТКА ==================== -->
+    <div id="view-landing" class="flex-1 flex flex-col">
+        <!-- Шапка лендинга -->
+        <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40">
+            <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 bg-indigo-600 rounded-xl text-white flex items-center justify-center font-black text-lg shadow-md shadow-indigo-200 dark:shadow-none">А</div>
+                    <div>
+                        <h1 class="text-sm font-black text-slate-900 dark:text-white leading-none">Уроки с Артёмом</h1>
+                        <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">pomateshe</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-sm transition" title="Сменить тему">
+                        <span id="theme-toggle-icon">🌙</span>
+                    </button>
+                    <button onclick="openPinModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm shadow-md shadow-indigo-200 dark:shadow-none transition flex items-center gap-1.5">
+                        <span>🔐 Вход по PIN</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Главный экран лендинга (Hero) -->
+        <section class="max-w-6xl mx-auto px-4 py-12 sm:py-20 flex flex-col lg:flex-row items-center gap-10">
+            <div class="flex-1 space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-3.5 py-1.5 rounded-full text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                    <span>🚀 Набор на 2026/2027 учебный год</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">
+                    Подготовка к ЕГЭ и ОГЭ по математике на <span class="text-indigo-600 dark:text-indigo-400">80+ баллов</span>
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                    Понятное объяснение сложной математики без зубрежки. Индивидуальный интерактивный личный кабинет, онлайн-доска, отслеживание динамики баллов и системная подготовка к экзаменам.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2">
+                    <a href="#trial-form" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-lg shadow-indigo-200 dark:shadow-none transition transform hover:-translate-y-0.5">
+                        Записаться на пробный урок →
+                    </a>
+                    <button onclick="openPinModal()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold px-6 py-3.5 rounded-2xl text-sm transition">
+                        Кабинет ученика
+                    </button>
+                </div>
             </div>
 
-            <h2 class="text-xl font-black text-slate-900">Уроки с Артёмом</h2>
-            <p class="text-xs text-indigo-600 font-semibold mt-0.5">pomateshe</p>
-            <p class="text-xs text-slate-400 mt-1 mb-6">Введите ваш 4-значный PIN-код</p>
-
-            <div class="space-y-4">
-                <div>
-                    <input type="password" id="login-pin" maxlength="4" inputmode="numeric" placeholder="••••" 
-                           onkeydown="if(event.key==='Enter') doLogin()"
-                           class="w-full text-center tracking-[0.8em] text-2xl font-black bg-slate-50 border-2 border-slate-200 rounded-2xl py-3.5 focus:outline-none focus:border-indigo-600 transition">
+            <!-- Карточка с преимуществами и статистикой -->
+            <div class="w-full max-w-md bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+                <h3 class="text-base font-extrabold text-slate-900 dark:text-white text-center">Почему выбирают занятия со мной:</h3>
+                
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-700/60">
+                        <span class="text-2xl font-black text-indigo-600 dark:text-indigo-400">84.2</span>
+                        <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mt-0.5">Средний балл ЕГЭ</span>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-700/60">
+                        <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400">100%</span>
+                        <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mt-0.5">Сдали ОГЭ на 4 и 5</span>
+                    </div>
                 </div>
 
-                <div id="login-error-msg" class="hidden text-xs font-bold text-rose-500 bg-rose-50 py-2 rounded-xl border border-rose-100">
+                <div class="space-y-3 text-xs text-slate-600 dark:text-slate-300">
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
+                        <span><b>Личный онлайн-кабинет:</b> расписание, ДЗ с файлами, трекинг тем и график баллов.</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
+                        <span><b>Формат:</b> Zoom с интерактивной онлайн-доской (записи всех уроков сохраняются).</span>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
+                        <span><b>Ежемесячные отчёты для родителей</b> с прозрачным графиком роста результатов.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Форма заявки на пробный урок -->
+        <section id="trial-form" class="bg-slate-100 dark:bg-slate-900/60 py-12 sm:py-16 border-y border-slate-200 dark:border-slate-800">
+            <div class="max-w-xl mx-auto px-4 text-center space-y-6">
+                <div class="space-y-2">
+                    <h3 class="text-2xl font-black text-slate-900 dark:text-white">Запишитесь на бесплатную диагностику</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Определим текущий уровень знаний, разберем пробелы и составим личный план подготовки на нужный балл.</p>
+                </div>
+
+                <form onsubmit="handleLeadSubmit(event)" class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md space-y-3.5 text-left">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Имя ученика или родителя *</label>
+                        <input type="text" id="lead-name" required placeholder="например: Михаил" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Телефон или Telegram *</label>
+                        <input type="text" id="lead-contact" required placeholder="+7 (999) 000-00-00 или @username" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Цель и класс *</label>
+                        <select id="lead-goal" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100">
+                            <option value="ЕГЭ Профиль 11 класс">ЕГЭ Профиль (11 класс)</option>
+                            <option value="ОГЭ Математика 9 класс">ОГЭ Математика (9 класс)</option>
+                            <option value="10 класс подготовка к ЕГЭ">10 класс (база для ЕГЭ)</option>
+                            <option value="Повышение успеваемости 5-8 класс">Повышение успеваемости (5–8 класс)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-3.5 rounded-2xl text-xs sm:text-sm shadow-md transition">
+                        Отправить заявку Артёму →
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== МОДАЛКА ВХОДА ПО PIN (ДЛЯ УЧЕНИКОВ И РЕПЕТИТОРА) ==================== -->
+    <div id="modal-pin-login" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 text-center relative">
+            <button onclick="closePinModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold p-1">✕</button>
+            
+            <div class="w-12 h-12 bg-indigo-600 rounded-2xl text-white flex items-center justify-center mx-auto shadow-md mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+
+            <h3 class="text-lg font-black text-slate-900 dark:text-white">Вход в личный кабинет</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5">Введите ваш 4-значный PIN-код</p>
+
+            <div class="space-y-4">
+                <input type="password" id="login-pin" maxlength="4" inputmode="numeric" placeholder="••••" 
+                       onkeydown="if(event.key==='Enter') doLogin()"
+                       class="w-full text-center tracking-[0.8em] text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl py-3 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600">
+
+                <div id="login-error-msg" class="hidden text-xs font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/40 py-2 rounded-xl border border-rose-200 dark:border-rose-800">
                     Неверный PIN-код!
                 </div>
 
-                <button type="button" onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-sm shadow-md shadow-indigo-200 transition">
-                    Войти →
+                <button type="button" onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-2xl text-xs sm:text-sm shadow-md transition">
+                    Войти в систему →
                 </button>
             </div>
         </div>
     </div>
 
     <!-- ==================== 2. ШАПКА РЕПЕТИТОРА ==================== -->
-    <header id="tutor-header" class="hidden bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <header id="tutor-header" class="hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-            
             <div class="flex items-center space-x-3">
                 <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
                 <div>
-                    <h1 class="text-base font-extrabold text-slate-900 leading-none">Уроки с Артёмом</h1>
+                    <h1 class="text-base font-extrabold text-slate-900 dark:text-white leading-none">Уроки с Артёмом</h1>
                     <div class="flex items-center gap-1.5 mt-1">
                         <span id="cloud-indicator" class="w-2 h-2 rounded-full bg-slate-400"></span>
-                        <span id="cloud-status" class="text-[11px] text-slate-500 font-medium">pomateshe</span>
+                        <span id="cloud-status" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">pomateshe</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Десктопные вкладки -->
-            <div class="hidden md:flex bg-slate-100 p-1 rounded-xl space-x-1">
-                <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition">📅 Неделя</button>
-                <button onclick="switchTab('students')" id="tab-btn-students" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">👥 Ученики</button>
-                <button onclick="switchTab('billing')" id="tab-btn-billing" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">💳 Оплаты (Вс)</button>
-                <button onclick="switchTab('materials')" id="tab-btn-materials" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">📚 База знаний</button>
+            <!-- Вкладки десктоп -->
+            <div class="hidden md:flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl space-x-1">
+                <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm transition">📅 Неделя</button>
+                <button onclick="switchTab('students')" id="tab-btn-students" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 transition">👥 Ученики</button>
+                <button onclick="switchTab('billing')" id="tab-btn-billing" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 transition">💳 Оплаты (Вс)</button>
+                <button onclick="switchTab('materials')" id="tab-btn-materials" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 transition">📚 База знаний</button>
             </div>
 
-            <!-- Кнопки справа -->
             <div class="flex items-center space-x-2">
-                <button onclick="pullFromCloud()" title="Синхронизировать" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">🔄</button>
-                <button onclick="openCloudModal()" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">☁️ Настройки</button>
+                <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-bold transition">🌙</button>
+                <button onclick="pullFromCloud()" title="Синхронизировать" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">🔄</button>
+                <button onclick="openCloudModal()" class="bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">⚙️ Настройки</button>
                 <button onclick="openLessonModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">+ Урок</button>
                 <button onclick="logout()" title="Выйти" class="p-2 text-slate-400 hover:text-rose-600 transition">🚪</button>
             </div>
-
         </div>
     </header>
 
     <!-- ==================== 3. ШАПКА УЧЕНИКА ==================== -->
-    <header id="student-header" class="hidden bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <header id="student-header" class="hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
         <div class="max-w-5xl mx-auto px-4 flex justify-between items-center h-16">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-sm" id="student-avatar">У</div>
                 <div>
-                    <h2 class="text-sm font-bold text-slate-900" id="student-portal-name">Личный кабинет</h2>
-                    <p class="text-xs text-indigo-600 font-medium" id="student-portal-subject">Уроки с Артёмом</p>
+                    <h2 class="text-sm font-bold text-slate-900 dark:text-white" id="student-portal-name">Личный кабинет</h2>
+                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">Уроки с Артёмом</p>
                 </div>
             </div>
             <div class="flex items-center space-x-2">
-                <button onclick="pullFromCloud()" title="Обновить" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">🔄</button>
-                <button onclick="logout()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-bold transition flex items-center gap-1">
+                <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-bold transition">🌙</button>
+                <button onclick="pullFromCloud()" title="Обновить" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">🔄</button>
+                <button onclick="logout()" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-xl font-bold transition flex items-center gap-1">
                     <span>Выйти</span> 🚪
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- ==================== ОСНОВНОЙ КОНТЕНТ ==================== -->
+    <!-- ==================== ОСНОВНАЯ РАБОЧАЯ ЗОНА (РЕПЕТИТОР / УЧЕНИК) ==================== -->
     <main id="main-content" class="hidden max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full pb-safe md:pb-6">
 
         <!-- 1. НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА -->
         <section id="view-calendar" class="space-y-4">
-            <div class="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <div class="bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center space-x-2">
-                    <h2 id="cal-week-range" class="text-base sm:text-lg font-bold text-slate-900 capitalize">Неделя</h2>
-                    <div class="flex items-center bg-slate-100 rounded-lg p-0.5">
-                        <button onclick="changeWeek(-1)" class="p-1.5 hover:bg-white rounded-md text-slate-600 font-bold transition">◀</button>
-                        <button onclick="goToCurrentWeek()" class="px-2.5 py-1 text-xs font-medium text-slate-700 hover:bg-white rounded-md transition">Текущая неделя</button>
-                        <button onclick="changeWeek(1)" class="p-1.5 hover:bg-white rounded-md text-slate-600 font-bold transition">▶</button>
+                    <h2 id="cal-week-range" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white capitalize">Неделя</h2>
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-0.5">
+                        <button onclick="changeWeek(-1)" class="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-md text-slate-600 dark:text-slate-300 font-bold transition">◀</button>
+                        <button onclick="goToCurrentWeek()" class="px-2.5 py-1 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 rounded-md transition">Текущая неделя</button>
+                        <button onclick="changeWeek(1)" class="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-md text-slate-600 dark:text-slate-300 font-bold transition">▶</button>
                     </div>
                 </div>
                 <div class="flex items-center space-x-3 text-xs">
-                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> 1 ученик</span>
-                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span> 👥 Группа</span>
-                    <span class="flex items-center gap-1 text-slate-500"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> ДЗ ✓</span>
+                    <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Индивидуально</span>
+                    <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span> 👥 Группа</span>
+                    <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> ДЗ ✓</span>
                 </div>
             </div>
 
+            <!-- Недельная сетка 7 дней -->
             <div id="tutor-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2.5"></div>
         </section>
 
@@ -129,8 +257,8 @@
         <section id="view-students" class="hidden space-y-4">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-900">Ученики</h2>
-                    <p class="text-xs text-slate-500">Профили, PIN-коды для входа, балансы и прогресс</p>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Ученики</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Профили, PIN-коды, отчёты для родителей и балансы</p>
                 </div>
                 <button onclick="openStudentModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">
                     + Добавить ученика
@@ -141,7 +269,7 @@
 
         <!-- 3. ПРОФИЛЬ УЧЕНИКА ДЕТАЛЬНО -->
         <section id="view-student-profile" class="hidden space-y-4">
-            <button onclick="switchTab('students')" class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+            <button onclick="switchTab('students')" class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline transition">
                 ← Назад ко всем ученикам
             </button>
             <div id="student-profile-details"></div>
@@ -161,11 +289,11 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-4 sm:p-5">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden p-4 sm:p-5">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
                         <thead>
-                            <tr class="border-b text-slate-400 font-semibold uppercase text-[10px]">
+                            <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-400 font-semibold uppercase text-[10px]">
                                 <th class="py-2.5">Ученик</th>
                                 <th class="py-2.5">Уроков на след. неделе</th>
                                 <th class="py-2.5">Оплачено уроков</th>
@@ -173,7 +301,7 @@
                                 <th class="py-2.5 text-right">Действие</th>
                             </tr>
                         </thead>
-                        <tbody id="billing-table-body" class="divide-y"></tbody>
+                        <tbody id="billing-table-body" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
                     </table>
                 </div>
             </div>
@@ -183,8 +311,8 @@
         <section id="view-materials" class="hidden space-y-4">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-900">База знаний и материалы</h2>
-                    <p class="text-xs text-slate-500">Шпаргалки, формулы и файлы, доступные ученикам</p>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">База знаний и материалы</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Шпаргалки, формулы и файлы, доступные ученикам</p>
                 </div>
                 <button onclick="openMaterialModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">
                     + Добавить материал
@@ -195,68 +323,81 @@
 
         <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА -->
         <section id="view-student-portal" class="hidden max-w-5xl mx-auto space-y-5">
-            <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
-                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <span class="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide inline-flex items-center gap-1">
-                            ⏰ Ближайшее занятие
-                        </span>
-                        <h3 class="text-xl sm:text-2xl font-black mt-2.5" id="portal-next-date">Нет уроков</h3>
-                        <p class="text-xs sm:text-sm text-indigo-100 mt-1" id="portal-next-topic">Тема занятия</p>
+            <!-- Плашка: Ближайший урок с кнопками ZOOM и ОНЛАЙН-ДОСКИ -->
+            <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-7 rounded-3xl shadow-xl relative overflow-hidden">
+                <div class="relative z-10 space-y-4">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <span class="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide inline-flex items-center gap-1">
+                                ⏰ Ближайшее занятие
+                            </span>
+                            <h3 class="text-xl sm:text-2xl font-black mt-2" id="portal-next-date">Нет уроков</h3>
+                            <p class="text-xs sm:text-sm text-indigo-100 mt-1" id="portal-next-topic">Тема занятия</p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/20 text-left md:text-right w-full md:w-auto">
+                            <span class="text-[11px] text-indigo-200 block">Домашнее задание:</span>
+                            <span class="text-sm font-bold block" id="portal-next-hw">—</span>
+                            <div id="portal-hw-details-btn" class="mt-1"></div>
+                        </div>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/20 text-left md:text-right w-full md:w-auto">
-                        <span class="text-[11px] text-indigo-200 block">Домашнее задание:</span>
-                        <span class="text-sm font-bold block" id="portal-next-hw">—</span>
-                        <div id="portal-hw-details-btn" class="mt-1"></div>
+
+                    <!-- КНОПКИ ВХОДА В ZOOM И ОНЛАЙН-ДОСКУ -->
+                    <div class="flex flex-wrap gap-2.5 pt-2 border-t border-white/20" id="portal-lesson-links">
+                        <a id="btn-zoom-link" href="#" target="_blank" class="bg-white hover:bg-slate-100 text-indigo-900 font-extrabold px-4 py-2.5 rounded-2xl text-xs shadow-md transition flex items-center gap-2">
+                            <span>🎥 Войти в Zoom</span>
+                        </a>
+                        <a id="btn-board-link" href="#" target="_blank" class="bg-indigo-950/40 hover:bg-indigo-950/60 border border-white/30 text-white font-bold px-4 py-2.5 rounded-2xl text-xs transition flex items-center gap-2">
+                            <span>✏️ Онлайн-доска</span>
+                        </a>
                     </div>
                 </div>
             </div>
 
             <!-- Геймификация -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-2xl" id="portal-level-icon">🏆</div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center text-2xl" id="portal-level-icon">🏆</div>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-slate-400">Уровень</span>
-                        <h4 class="font-extrabold text-slate-900 text-base" id="portal-level-title">Профи</h4>
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-base" id="portal-level-title">Профи</h4>
                     </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center text-2xl">🔥</div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-500 flex items-center justify-center text-2xl">🔥</div>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-slate-400">Серия уроков</span>
-                        <h4 class="font-extrabold text-slate-900 text-base" id="portal-streak-val">0 зан. подряд</h4>
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-base" id="portal-streak-val">0 зан. подряд</h4>
                     </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">⚡</div>
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 flex items-center justify-center text-2xl">⚡</div>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-slate-400">Опыт (XP)</span>
-                        <h4 class="font-extrabold text-slate-900 text-base" id="portal-xp-val">0 XP</h4>
+                        <h4 class="font-extrabold text-slate-900 dark:text-white text-base" id="portal-xp-val">0 XP</h4>
                     </div>
                 </div>
             </div>
 
             <!-- График пробников -->
-            <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm">
+            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <div>
-                        <h3 class="font-bold text-slate-900 text-base">📈 График прогресса (Пробники)</h3>
-                        <p class="text-xs text-slate-500">Динамика баллов за курс обучения</p>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">📈 График прогресса (Пробники)</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Динамика баллов за курс обучения</p>
                     </div>
-                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg" id="portal-score-growth">+0 баллов</span>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg" id="portal-score-growth">+0 баллов</span>
                 </div>
-                <div id="portal-exams-chart" class="h-40 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-slate-100"></div>
+                <div id="portal-exams-chart" class="h-40 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-slate-100 dark:border-slate-800"></div>
                 <div id="portal-exams-labels" class="flex justify-between text-[11px] text-slate-400 mt-2 px-2"></div>
             </div>
 
             <!-- Вкладки ученика -->
-            <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                <div class="flex justify-between items-center border-b border-slate-100 pb-3 flex-wrap gap-2">
+            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3 flex-wrap gap-2">
                     <div class="flex gap-2">
-                        <button onclick="switchStudentSubTab('calendar')" id="st-tab-calendar" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600">📅 Мой календарь на неделю</button>
-                        <button onclick="switchStudentSubTab('topics')" id="st-tab-topics" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">✅ Пройденные темы</button>
-                        <button onclick="switchStudentSubTab('materials')" id="st-tab-materials" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800">📚 Материалы</button>
+                        <button onclick="switchStudentSubTab('calendar')" id="st-tab-calendar" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">📅 Мой календарь на неделю</button>
+                        <button onclick="switchStudentSubTab('topics')" id="st-tab-topics" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">✅ Пройденные темы</button>
+                        <button onclick="switchStudentSubTab('materials')" id="st-tab-materials" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">📚 Материалы</button>
                     </div>
                     <button onclick="openPersonalEventModal()" id="btn-add-personal" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-sm transition">
                         + Добавить своё занятие
@@ -265,11 +406,11 @@
 
                 <div id="student-subview-calendar" class="space-y-3">
                     <div class="flex justify-between items-center">
-                        <span id="st-cal-week-range" class="text-xs font-bold text-slate-700"></span>
+                        <span id="st-cal-week-range" class="text-xs font-bold text-slate-700 dark:text-slate-300"></span>
                         <div class="flex space-x-1">
-                            <button onclick="changeStudentWeek(-1)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold">◀</button>
-                            <button onclick="goToCurrentStudentWeek()" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium">Сегодня</button>
-                            <button onclick="changeStudentWeek(1)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold">▶</button>
+                            <button onclick="changeStudentWeek(-1)" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-bold">◀</button>
+                            <button onclick="goToCurrentStudentWeek()" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-medium">Сегодня</button>
+                            <button onclick="changeStudentWeek(1)" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-bold">▶</button>
                         </div>
                     </div>
                     <div id="student-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2"></div>
@@ -283,27 +424,27 @@
     </main>
 
     <!-- ==================== ФУТЕР С КОНТАКТАМИ ==================== -->
-    <footer id="app-footer" class="bg-white border-t border-slate-200 py-6 px-4 text-center mt-auto">
+    <footer id="app-footer" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 px-4 text-center mt-auto">
         <div class="max-w-4xl mx-auto space-y-2">
-            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Уроки с Артёмом | pomateshe</h4>
+            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Уроки с Артёмом | pomateshe</h4>
             <div class="flex justify-center items-center gap-4 text-xs font-semibold pt-1">
-                <a id="footer-tg" href="https://t.me/artem_tutor" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1">
+                <a id="footer-tg" href="https://t.me/artem_tutor" target="_blank" class="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
                     <span>✈️ Telegram</span>
                 </a>
-                <a id="footer-wa" href="https://wa.me/79999999999" target="_blank" class="text-emerald-600 hover:underline flex items-center gap-1">
+                <a id="footer-wa" href="https://wa.me/79999999999" target="_blank" class="text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1">
                     <span>💬 WhatsApp</span>
                 </a>
-                <a id="footer-phone" href="tel:+79999999999" class="text-slate-600 hover:underline flex items-center gap-1">
+                <a id="footer-phone" href="tel:+79999999999" class="text-slate-600 dark:text-slate-300 hover:underline flex items-center gap-1">
                     <span>📞 <span id="footer-phone-text">+7 (999) 999-99-99</span></span>
                 </a>
             </div>
-            <p class="text-[10px] text-slate-400 mt-2">Личный кабинет репетитора и онлайн-расписание</p>
+            <p class="text-[10px] text-slate-400 mt-2">Онлайн-платформа подготовки к экзаменам</p>
         </div>
     </footer>
 
     <!-- НИЖНЕЕ МЕНЮ РЕПЕТИТОРА -->
-    <nav id="mobile-nav" class="hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-30 px-3 py-2 flex justify-around items-center shadow-lg">
-        <button onclick="switchTab('calendar')" class="flex flex-col items-center text-indigo-600" id="mob-btn-calendar">
+    <nav id="mobile-nav" class="hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-30 px-3 py-2 flex justify-around items-center shadow-lg">
+        <button onclick="switchTab('calendar')" class="flex flex-col items-center text-indigo-600 dark:text-indigo-400" id="mob-btn-calendar">
             <span class="text-lg">📅</span>
             <span class="text-[10px] font-bold mt-0.5">Неделя</span>
         </button>
@@ -323,11 +464,42 @@
 
     <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
 
+    <!-- МОДАЛКА: ОТЧЁТ ДЛЯ РОДИТЕЛЕЙ (НОВАЯ ФИЧА) -->
+    <div id="modal-parent-report" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">📄 Отчёт об успехах для родителей</h3>
+                <button onclick="closeParentReportModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Личный комментарий репетитора к отчёту:</label>
+                    <textarea id="report-custom-comment" rows="2" placeholder="Например: Иван отлично усвоил тему логарифмов и показывает уверенный прогресс!" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Готовый текст сообщения (WhatsApp / Telegram):</label>
+                    <div id="parent-report-text" class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap font-mono border border-slate-200 dark:border-slate-700 max-h-60 overflow-y-auto custom-scrollbar"></div>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+                <button onclick="copyParentReportText()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                    <span>📋 Скопировать отчёт для WhatsApp/TG</span>
+                </button>
+                <button onclick="closeParentReportModal()" class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Модалка: Урок -->
-    <div id="modal-lesson" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <div id="modal-lesson" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-4">
-                <h3 id="lesson-modal-heading" class="text-base font-bold text-slate-900">Запланировать урок</h3>
+                <h3 id="lesson-modal-heading" class="text-base font-bold text-slate-900 dark:text-white">Запланировать урок</h3>
                 <button onclick="closeLessonModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
             </div>
             
@@ -335,47 +507,47 @@
                 <input type="hidden" id="lesson-id">
                 <input type="hidden" id="lesson-series-id">
                 
-                <div class="flex bg-slate-100 p-1 rounded-xl gap-1">
-                    <button type="button" id="btn-mode-single" onclick="setLessonMode('single')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-indigo-600">Один ученик</button>
-                    <button type="button" id="btn-mode-group" onclick="setLessonMode('group')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900">👥 Группа (2+)</button>
+                <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl gap-1">
+                    <button type="button" id="btn-mode-single" onclick="setLessonMode('single')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 shadow-sm text-indigo-600 dark:text-indigo-400">Один ученик</button>
+                    <button type="button" id="btn-mode-group" onclick="setLessonMode('group')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900">👥 Группа (2+)</button>
                 </div>
 
                 <div id="box-select-single">
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Ученик *</label>
-                    <select id="lesson-student" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-500"></select>
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Ученик *</label>
+                    <select id="lesson-student" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100"></select>
                 </div>
 
                 <div id="box-select-group" class="hidden">
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Состав группы (выберите учеников) *</label>
-                    <div id="group-students-list" class="max-h-36 overflow-y-auto space-y-1.5 p-2 bg-slate-50 border border-slate-200 rounded-xl custom-scrollbar"></div>
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Состав группы *</label>
+                    <div id="group-students-list" class="max-h-36 overflow-y-auto space-y-1.5 p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl custom-scrollbar"></div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Дата *</label>
-                        <input type="date" id="lesson-date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Дата *</label>
+                        <input type="date" id="lesson-date" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Время *</label>
-                        <input type="time" id="lesson-time" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Время *</label>
+                        <input type="time" id="lesson-time" required class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Тема занятия</label>
-                    <input type="text" id="lesson-topic" placeholder="например: Тригонометрия / Разбор варианта" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Тема занятия</label>
+                    <input type="text" id="lesson-topic" placeholder="например: Тригонометрия / Разбор варианта" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
 
-                <div id="recurrence-box" class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100 space-y-2">
-                    <label class="block text-[11px] font-bold text-indigo-900 uppercase">🔁 Регулярное расписание</label>
+                <div id="recurrence-box" class="bg-indigo-50/70 dark:bg-indigo-950/40 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800 space-y-2">
+                    <label class="block text-[11px] font-bold text-indigo-900 dark:text-indigo-300 uppercase">🔁 Регулярное расписание</label>
                     <div class="grid grid-cols-2 gap-2">
-                        <select id="lesson-repeat-type" onchange="toggleRepeatOptions()" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs">
+                        <select id="lesson-repeat-type" onchange="toggleRepeatOptions()" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                             <option value="none">Один урок</option>
                             <option value="weekly">Раз в неделю</option>
                             <option value="biweekly">Раз в 2 недели</option>
                         </select>
                         <div id="repeat-count-container" class="hidden">
-                            <select id="lesson-repeat-count" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1.5 text-xs">
+                            <select id="lesson-repeat-count" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                                 <option value="4">4 урока</option>
                                 <option value="8" selected>8 уроков</option>
                                 <option value="12">12 уроков</option>
@@ -384,25 +556,25 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="text-xs font-semibold text-slate-800 block">Домашнее задание (ДЗ)</span>
-                            <span class="text-[10px] text-slate-500">Текст и прикреплённые файлы</span>
+                            <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 block">Домашнее задание (ДЗ)</span>
+                            <span class="text-[10px] text-slate-500">Текст и ссылка на файл</span>
                         </div>
-                        <input type="checkbox" id="lesson-hw" onchange="toggleHwFields()" class="w-5 h-5 text-indigo-600 rounded border-slate-300 cursor-pointer">
+                        <input type="checkbox" id="lesson-hw" onchange="toggleHwFields()" class="w-5 h-5 text-indigo-600 rounded">
                     </div>
 
-                    <div id="hw-fields-box" class="hidden space-y-2 pt-1 border-t border-slate-200">
-                        <textarea id="lesson-hw-text" rows="2" placeholder="Текст домашнего задания..." class="w-full bg-white border border-slate-200 rounded-xl p-2 text-xs focus:ring-2 focus:ring-indigo-500"></textarea>
-                        <input type="url" id="lesson-hw-file" placeholder="Ссылка на файл / Google Диск" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                    <div id="hw-fields-box" class="hidden space-y-2 pt-1 border-t border-slate-200 dark:border-slate-700">
+                        <textarea id="lesson-hw-text" rows="2" placeholder="Текст домашнего задания..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100"></textarea>
+                        <input type="url" id="lesson-hw-file" placeholder="Ссылка на файл / Google Диск" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between pt-2">
                     <button type="button" id="lesson-btn-delete" onclick="promptDeleteLesson()" class="text-rose-600 text-xs font-bold hidden">Удалить урок</button>
                     <div class="flex space-x-2 ml-auto">
-                        <button type="button" onclick="closeLessonModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                        <button type="button" onclick="closeLessonModal()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">Отмена</button>
                         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                     </div>
                 </div>
@@ -411,15 +583,15 @@
     </div>
 
     <!-- Модалка: Выбор типа удаления серии -->
-    <div id="modal-delete-series" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100 text-center space-y-3">
-            <h3 class="text-base font-bold text-slate-900">Удаление урока из серии</h3>
-            <p class="text-xs text-slate-500">Этот урок входит в повторяющуюся серию занятий. Как вы хотите его удалить?</p>
+    <div id="modal-delete-series" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800 text-center space-y-3">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Удаление серии уроков</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Этот урок входит в повторяющуюся цепочку занятий:</p>
             <div class="space-y-2 pt-2">
-                <button onclick="executeDeleteSeries(false)" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-700 transition">
+                <button onclick="executeDeleteSeries(false)" class="w-full py-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200">
                     Удалить ТОЛЬКО этот урок
                 </button>
-                <button onclick="executeDeleteSeries(true)" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition">
+                <button onclick="executeDeleteSeries(true)" class="w-full py-2.5 bg-rose-600 text-white rounded-xl text-xs font-bold">
                     Удалить этот и ВСЕ будущие уроки серии
                 </button>
                 <button onclick="closeDeleteSeriesModal()" class="text-xs text-slate-400 hover:underline pt-1 block mx-auto">Отмена</button>
@@ -428,18 +600,18 @@
     </div>
 
     <!-- Модалка: Своё занятие ученика -->
-    <div id="modal-personal-event" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100">
-            <h3 class="text-base font-bold text-slate-900 mb-3">Моё занятие / Репетитор</h3>
+    <div id="modal-personal-event" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white mb-3">Моё занятие / Репетитор</h3>
             <form onsubmit="submitPersonalEvent(event)" class="space-y-3">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Название / Предмет *</label>
-                    <input type="text" id="personal-title" required placeholder="например: Английский / Секция" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Название *</label>
+                    <input type="text" id="personal-title" required placeholder="например: Английский / Секция" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">День недели *</label>
-                        <select id="personal-day" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs">
+                        <select id="personal-day" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs text-slate-800 dark:text-slate-100">
                             <option value="1">Понедельник</option>
                             <option value="2">Вторник</option>
                             <option value="3">Среда</option>
@@ -451,11 +623,11 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Время *</label>
-                        <input type="time" id="personal-time" required value="17:00" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2 text-xs">
+                        <input type="time" id="personal-time" required value="17:00" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closePersonalEventModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="button" onclick="closePersonalEventModal()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">Отмена</button>
                     <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                 </div>
             </form>
@@ -463,19 +635,19 @@
     </div>
 
     <!-- Модалка: Просмотр ДЗ учеником -->
-    <div id="modal-hw-view" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100 space-y-3">
-            <h3 class="text-base font-bold text-slate-900">📝 Домашнее задание</h3>
-            <div id="hw-view-content" class="bg-slate-50 p-3 rounded-2xl text-xs text-slate-700 space-y-2"></div>
-            <button onclick="closeHwViewModal()" class="w-full py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">Понятно</button>
+    <div id="modal-hw-view" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">📝 Домашнее задание</h3>
+            <div id="hw-view-content" class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 space-y-2"></div>
+            <button onclick="closeHwViewModal()" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold">Понятно</button>
         </div>
     </div>
 
     <!-- Модалка: Ученик -->
-    <div id="modal-student" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100">
+    <div id="modal-student" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800">
             <div class="flex justify-between items-center mb-4">
-                <h3 id="student-modal-heading" class="text-base font-bold text-slate-900">Новый ученик</h3>
+                <h3 id="student-modal-heading" class="text-base font-bold text-slate-900 dark:text-white">Новый ученик</h3>
                 <button onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
             </div>
             
@@ -483,31 +655,31 @@
                 <input type="hidden" id="student-id">
                 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Имя и фамилия *</label>
-                    <input type="text" id="student-name" required placeholder="например: Анна Смирнова" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Имя и фамилия *</label>
+                    <input type="text" id="student-name" required placeholder="например: Анна Смирнова" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Предмет *</label>
-                    <input type="text" id="student-subject" required placeholder="например: Профильная математика" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Предмет *</label>
+                    <input type="text" id="student-subject" required placeholder="например: Профильная математика" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Стоимость (₽/урок) *</label>
-                        <input type="number" id="student-price" required min="0" step="50" placeholder="1500" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Стоимость (₽/урок) *</label>
+                        <input type="number" id="student-price" required min="0" step="50" placeholder="1500" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Оплачено уроков</label>
-                        <input type="number" id="student-paid" required min="0" value="0" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Оплачено уроков</label>
+                        <input type="number" id="student-paid" required min="0" value="0" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
                 
-                <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100">
-                    <label class="block text-[11px] font-bold text-indigo-900 uppercase mb-1">Личный PIN-код для входа (4 цифры) *</label>
-                    <input type="text" id="student-pin" maxlength="4" pattern="[0-9]{4}" required placeholder="1042" class="w-full bg-white border border-indigo-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700">
+                <div class="bg-indigo-50/70 dark:bg-indigo-950/40 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800">
+                    <label class="block text-[11px] font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-1">Личный PIN-код для входа (4 цифры) *</label>
+                    <input type="text" id="student-pin" maxlength="4" pattern="[0-9]{4}" required placeholder="1042" class="w-full bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700 dark:text-indigo-300">
                 </div>
 
                 <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeStudentModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="button" onclick="closeStudentModal()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">Отмена</button>
                     <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                 </div>
             </form>
@@ -515,14 +687,14 @@
     </div>
 
     <!-- Модалка: Пробник -->
-    <div id="modal-exam" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-xs w-full p-5 shadow-xl border border-slate-100">
-            <h3 class="text-sm font-bold text-slate-900 mb-3">Результат пробника</h3>
+    <div id="modal-exam" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-xs w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3">Результат пробника</h3>
             <form onsubmit="submitExamScore(event)" class="space-y-3">
                 <input type="hidden" id="exam-student-id">
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Месяц</label>
-                    <select id="exam-month" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                    <select id="exam-month" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                         <option value="Сентябрь">Сентябрь</option>
                         <option value="Октябрь">Октябрь</option>
                         <option value="Ноябрь">Ноябрь</option>
@@ -536,10 +708,10 @@
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Балл (из 100)</label>
-                    <input type="number" id="exam-score" min="0" max="100" required placeholder="например: 68" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                    <input type="number" id="exam-score" min="0" max="100" required placeholder="например: 68" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                 </div>
                 <div class="flex justify-end gap-2 pt-1">
-                    <button type="button" onclick="closeExamModal()" class="px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="button" onclick="closeExamModal()" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">Отмена</button>
                     <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                 </div>
             </form>
@@ -547,68 +719,82 @@
     </div>
 
     <!-- Модалка: Материал -->
-    <div id="modal-material" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 shadow-xl border border-slate-100">
-            <h3 class="text-base font-bold text-slate-900 mb-3">Новый полезный материал</h3>
+    <div id="modal-material" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white mb-3">Новый полезный материал</h3>
             <form onsubmit="submitMaterial(event)" class="space-y-3">
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Название *</label>
-                    <input type="text" id="mat-title" required placeholder="например: Шпаргалка по стереометрии" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <input type="text" id="mat-title" required placeholder="например: Шпаргалка по стереометрии" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Категория</label>
-                    <input type="text" id="mat-cat" placeholder="Математика / Формулы" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <input type="text" id="mat-cat" placeholder="Математика / Формулы" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ссылка на файл / сайт *</label>
-                    <input type="url" id="mat-url" required placeholder="https://drive.google.com/..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <input type="url" id="mat-url" required placeholder="https://drive.google.com/..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeMaterialModal()" class="px-3.5 py-2 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
+                    <button type="button" onclick="closeMaterialModal()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">Отмена</button>
                     <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Добавить</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Модалка: Настройки (Google URL, Контакты, Смена PIN) -->
-    <div id="modal-cloud" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
+    <!-- Модалка: Настройки (Google URL, Zoom, Доска, Контакты, Смена PIN) -->
+    <div id="modal-cloud" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-3">
-                <h3 class="text-base font-bold text-slate-900">☁️ Настройки и Контакты</h3>
-                <button onclick="closeCloudModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">⚙️ Настройки платформы</h3>
+                <button onclick="closeCloudModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
             </div>
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">URL веб-приложения Google Apps Script (/exec)</label>
-                    <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">URL веб-приложения Google Apps Script (/exec)</label>
+                    <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
 
-                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
-                    <label class="block text-[11px] font-bold text-slate-700 uppercase">Контакты в футере сайта</label>
+                <!-- Ссылки на Zoom и Онлайн-доску -->
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                    <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">Ссылки для уроков (Zoom и Доска)</label>
                     <div>
-                        <span class="text-[10px] text-slate-400 block">Telegram (никнейм без @ или ссылка):</span>
-                        <input type="text" id="contact-tg" placeholder="artem_tutor" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                        <span class="text-[10px] text-slate-400 block">Постоянная ссылка на Zoom:</span>
+                        <input type="url" id="setting-zoom-url" placeholder="https://us02web.zoom.us/j/..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">Ссылка на онлайн-доску (Miro / sBoard):</span>
+                        <input type="url" id="setting-board-url" placeholder="https://sboard.online/..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                </div>
+
+                <!-- Контакты для футера -->
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                    <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">Контакты в футере сайта</label>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">Telegram (никнейм без @):</span>
+                        <input type="text" id="contact-tg" placeholder="artem_tutor" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
                         <span class="text-[10px] text-slate-400 block">WhatsApp (номер без +):</span>
-                        <input type="text" id="contact-wa" placeholder="79999999999" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                        <input type="text" id="contact-wa" placeholder="79999999999" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
                         <span class="text-[10px] text-slate-400 block">Номер телефона для звонка:</span>
-                        <input type="text" id="contact-phone" placeholder="+7 (999) 999-99-99" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                        <input type="text" id="contact-phone" placeholder="+7 (999) 999-99-99" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
 
-                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100">
-                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Мастер-PIN репетитора</label>
-                    <input type="text" id="tutor-pin-input" maxlength="4" placeholder="7777" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700">
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Мастер-PIN репетитора</label>
+                    <input type="text" id="tutor-pin-input" maxlength="4" placeholder="7777" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-indigo-600">
                 </div>
 
                 <div class="pt-1 space-y-2">
-                    <button onclick="saveAppSettings()" class="w-full bg-indigo-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-md shadow-indigo-100 transition">Сохранить настройки</button>
-                    <button onclick="downloadBackupJson()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-bold transition">💾 Скачать резервную копию базы (.json)</button>
+                    <button onclick="saveAppSettings()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-md transition">Сохранить настройки</button>
+                    <button onclick="downloadBackupJson()" class="w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2 rounded-xl text-xs font-bold transition">💾 Скачать резервную копию базы (.json)</button>
                 </div>
             </div>
         </div>
@@ -617,13 +803,14 @@
     <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
     <script>
         // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT:
-        const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
+        const DEFAULT_CLOUD_URL = "";
 
         let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [], deletedLessonIds: [], settings: {} };
         let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
         let currentAuth = localStorage.getItem('tutor_current_auth') || null;
         let currentTab = 'calendar';
         let activeStudentId = null;
+        let activeReportingStudentId = null;
         
         let tutorCurrentWeekStart = getMonday(new Date());
         let studentCurrentWeekStart = getMonday(new Date());
@@ -632,6 +819,21 @@
 
         const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
         const dayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+
+        // ТЁМНАЯ ТЕМА
+        function initTheme() {
+            const isDark = localStorage.getItem('tutor_dark_mode') === 'true';
+            document.documentElement.classList.toggle('dark', isDark);
+            const icon = document.getElementById('theme-toggle-icon');
+            if (icon) icon.innerText = isDark ? '☀️' : '🌙';
+        }
+
+        function toggleDarkMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('tutor_dark_mode', isDark);
+            const icon = document.getElementById('theme-toggle-icon');
+            if (icon) icon.innerText = isDark ? '☀️' : '🌙';
+        }
 
         function getMonday(d) {
             d = new Date(d);
@@ -675,6 +877,32 @@
             return data;
         }
 
+        // ОТПРАВКА ЗАЯВКИ С ЛЕНДИНГА
+        function handleLeadSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('lead-name').value.trim();
+            const contact = document.getElementById('lead-contact').value.trim();
+            const goal = document.getElementById('lead-goal').value;
+
+            if (!db.settings.leads) db.settings.leads = [];
+            db.settings.leads.push({ id: 'lead_' + Date.now(), date: new Date().toISOString(), name, contact, goal });
+            syncToCloud();
+
+            alert(`Спасибо, ${name}! Заявка принята. Артём свяжется с вами в ближайшее время.`);
+            document.getElementById('lead-name').value = '';
+            document.getElementById('lead-contact').value = '';
+        }
+
+        // МОДАЛКА PIN
+        function openPinModal() {
+            document.getElementById('modal-pin-login').classList.remove('hidden');
+            const inp = document.getElementById('login-pin');
+            if (inp) { inp.value = ''; inp.focus(); }
+        }
+        function closePinModal() {
+            document.getElementById('modal-pin-login').classList.add('hidden');
+        }
+
         // ВХОД
         async function doLogin() {
             const input = document.getElementById('login-pin');
@@ -689,6 +917,7 @@
             if (pin === '7777' || pin === masterPin) {
                 currentAuth = 'tutor';
                 localStorage.setItem('tutor_current_auth', 'tutor');
+                closePinModal();
                 applyAuthSession();
                 if (cloudUrl) pullFromCloud();
                 return;
@@ -703,6 +932,7 @@
             if (student) {
                 currentAuth = student.id;
                 localStorage.setItem('tutor_current_auth', student.id);
+                closePinModal();
                 applyAuthSession();
                 if (cloudUrl) pullFromCloud();
                 return;
@@ -716,27 +946,18 @@
         function logout() {
             currentAuth = null;
             localStorage.removeItem('tutor_current_auth');
-            const inp = document.getElementById('login-pin');
-            if (inp) inp.value = '';
-            const errorMsg = document.getElementById('login-error-msg');
-            if (errorMsg) errorMsg.classList.add('hidden');
-            
-            document.getElementById('view-login').classList.remove('hidden');
-            document.getElementById('tutor-header').classList.add('hidden');
-            document.getElementById('student-header').classList.add('hidden');
-            document.getElementById('mobile-nav').classList.add('hidden');
-            document.getElementById('main-content').classList.add('hidden');
+            applyAuthSession();
         }
 
         function applyAuthSession() {
-            const loginView = document.getElementById('view-login');
+            const landingView = document.getElementById('view-landing');
             const mainContent = document.getElementById('main-content');
             const tutorHeader = document.getElementById('tutor-header');
             const studentHeader = document.getElementById('student-header');
             const mobileNav = document.getElementById('mobile-nav');
 
             if (!currentAuth) {
-                if (loginView) loginView.classList.remove('hidden');
+                if (landingView) landingView.classList.remove('hidden');
                 if (mainContent) mainContent.classList.add('hidden');
                 if (tutorHeader) tutorHeader.classList.add('hidden');
                 if (studentHeader) studentHeader.classList.add('hidden');
@@ -744,7 +965,7 @@
                 return;
             }
 
-            if (loginView) loginView.classList.add('hidden');
+            if (landingView) landingView.classList.add('hidden');
             if (mainContent) mainContent.classList.remove('hidden');
 
             if (currentAuth === 'tutor') {
@@ -793,6 +1014,7 @@
         }
 
         async function initApp() {
+            initTheme();
             try {
                 const local = localStorage.getItem('tutor_local_db');
                 if (local) {
@@ -807,12 +1029,13 @@
                     setCloudStatus('local');
                 }
 
-                // Загрузка сохраненных настроек в форму
                 const settings = db.settings || {};
                 const tutorPin = settings.masterPin || localStorage.getItem('tutor_master_pin') || '7777';
                 const tutorPinInp = document.getElementById('tutor-pin-input');
                 if (tutorPinInp) tutorPinInp.value = tutorPin;
 
+                document.getElementById('setting-zoom-url').value = settings.zoomUrl || '';
+                document.getElementById('setting-board-url').value = settings.boardUrl || '';
                 document.getElementById('contact-tg').value = settings.tg || localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
                 document.getElementById('contact-wa').value = settings.wa || localStorage.getItem('tutor_contact_wa') || '79999999999';
                 document.getElementById('contact-phone').value = settings.phone || localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
@@ -926,14 +1149,14 @@
                 const dBtn = document.getElementById(`tab-btn-${t}`);
                 if (dBtn) {
                     dBtn.className = (t === tab)
-                        ? 'tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition'
-                        : 'tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition';
+                        ? 'tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm transition'
+                        : 'tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 transition';
                 }
 
                 const mBtn = document.getElementById(`mob-btn-${t}`);
                 if (mBtn) {
                     mBtn.className = (t === tab)
-                        ? 'flex flex-col items-center text-indigo-600'
+                        ? 'flex flex-col items-center text-indigo-600 dark:text-indigo-400'
                         : 'flex flex-col items-center text-slate-400';
                 }
             });
@@ -992,25 +1215,25 @@
 
                     return `
                         <div onclick="event.stopPropagation(); openLessonModal('${l.id}')" 
-                             class="p-2 rounded-2xl border cursor-pointer transition hover:scale-[1.02] ${isGroup ? 'bg-violet-50 border-violet-200 text-violet-950' : 'bg-indigo-50 border-indigo-200 text-indigo-950'}">
+                             class="p-2 rounded-2xl border cursor-pointer transition hover:scale-[1.02] ${isGroup ? 'bg-violet-50 dark:bg-violet-950/40 border-violet-200 dark:border-violet-800 text-violet-950 dark:text-violet-200' : 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200'}">
                             <div class="flex items-center justify-between font-bold text-xs">
                                 <span>${l.time} ${isGroup ? '👥 ' : ''}${names}</span>
                                 <span class="w-2 h-2 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
                             </div>
-                            <p class="text-[10px] text-slate-500 truncate mt-1">${l.topic || 'Без темы'}</p>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-1">${l.topic || 'Без темы'}</p>
                         </div>
                     `;
                 }).join('');
 
                 grid.innerHTML += `
                     <div onclick="quickCreateLesson('${dateStr}')" 
-                         class="bg-white p-3 rounded-2xl border ${isToday ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-slate-200'} min-h-[140px] flex flex-col justify-between hover:bg-slate-50 transition cursor-pointer">
+                         class="bg-white dark:bg-slate-900 p-3 rounded-2xl border ${isToday ? 'border-indigo-500 ring-2 ring-indigo-500/20' : 'border-slate-200 dark:border-slate-800'} min-h-[140px] flex flex-col justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition cursor-pointer">
                         <div>
-                            <div class="flex justify-between items-center mb-2 pb-1.5 border-b border-slate-100">
-                                <span class="text-xs font-black uppercase ${isToday ? 'text-indigo-600' : 'text-slate-500'}">${dayNames[dayDate.getDay()]}</span>
-                                <span class="text-xs font-bold ${isToday ? 'bg-indigo-600 text-white w-5 h-5 rounded-full flex items-center justify-center' : 'text-slate-700'}">${dayDate.getDate()}</span>
+                            <div class="flex justify-between items-center mb-2 pb-1.5 border-b border-slate-100 dark:border-slate-800">
+                                <span class="text-xs font-black uppercase ${isToday ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}">${dayNames[dayDate.getDay()]}</span>
+                                <span class="text-xs font-bold ${isToday ? 'bg-indigo-600 text-white w-5 h-5 rounded-full flex items-center justify-center' : 'text-slate-700 dark:text-slate-300'}">${dayDate.getDate()}</span>
                             </div>
-                            <div class="space-y-1.5">${lessonsHtml || '<span class="text-[10px] text-slate-300 block py-4 text-center">Свободно</span>'}</div>
+                            <div class="space-y-1.5">${lessonsHtml || '<span class="text-[10px] text-slate-300 dark:text-slate-600 block py-4 text-center">Свободно</span>'}</div>
                         </div>
                         <span class="text-[10px] text-indigo-500 font-bold opacity-0 hover:opacity-100 transition text-center block mt-2">+ Добавить</span>
                     </div>
@@ -1023,47 +1246,50 @@
             const grid = document.getElementById('students-grid');
             if (!grid) return;
             if (!db.students || db.students.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white">Учеников пока нет. Нажмите «+ Добавить ученика»!</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-800">Учеников пока нет. Нажмите «+ Добавить ученика»!</div>`;
                 return;
             }
 
             grid.innerHTML = db.students.map(st => {
                 const game = calculateStudentGamification(st.id);
                 return `
-                    <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                         <div>
                             <div class="flex justify-between items-start mb-2">
                                 <div>
-                                    <h3 class="font-bold text-slate-900 text-base">${st.name}</h3>
-                                    <span class="text-xs bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-lg font-semibold">${st.subject}</span>
+                                    <h3 class="font-bold text-slate-900 dark:text-white text-base">${st.name}</h3>
+                                    <span class="text-xs bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 px-2.5 py-0.5 rounded-lg font-semibold">${st.subject}</span>
                                 </div>
-                                <span class="text-xs font-bold px-2.5 py-1 rounded-full ${st.paidLessons > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-full ${st.paidLessons > 0 ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300' : 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300'}">
                                     Оплачено: ${st.paidLessons}
                                 </span>
                             </div>
 
-                            <div class="bg-indigo-50/60 p-2.5 rounded-2xl flex items-center justify-between text-xs my-3 border border-indigo-100">
+                            <div class="bg-indigo-50/60 dark:bg-indigo-950/40 p-2.5 rounded-2xl flex items-center justify-between text-xs my-3 border border-indigo-100 dark:border-indigo-800">
                                 <div>
                                     <span class="text-[10px] text-slate-400 block">PIN для входа:</span>
-                                    <span class="font-black text-indigo-700 tracking-widest text-sm">${st.pin || '1042'}</span>
+                                    <span class="font-black text-indigo-700 dark:text-indigo-300 tracking-widest text-sm">${st.pin || '1042'}</span>
                                 </div>
                                 <div class="text-right">
                                     <span class="text-[10px] text-slate-400 block">${game.icon} ${game.level}</span>
-                                    <span class="font-bold text-slate-700">${game.xp} XP</span>
+                                    <span class="font-bold text-slate-700 dark:text-slate-200">${game.xp} XP</span>
                                 </div>
                             </div>
 
-                            <div class="text-xs text-slate-500 space-y-1">
+                            <div class="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                                 <p>Ставка: <b>${st.price} ₽</b> за урок</p>
                                 <p>Пройденных тем: <b>${(st.topics || []).length}</b></p>
                             </div>
                         </div>
 
-                        <div class="pt-4 border-t border-slate-100 flex gap-2 mt-3">
-                            <button onclick="openProfile('${st.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-2 rounded-xl text-xs font-bold text-slate-800 transition">
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2 mt-3 flex-wrap">
+                            <button onclick="openProfile('${st.id}')" class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 transition">
                                 Профиль
                             </button>
-                            <button onclick="copyStudentInstructions('${st.id}')" title="Скопировать данные для ученика" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition">
+                            <button onclick="openParentReportModal('${st.id}')" title="Сформировать отчёт для родителей" class="px-3 py-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 rounded-xl text-xs font-bold transition">
+                                📄 Отчёт
+                            </button>
+                            <button onclick="copyStudentInstructions('${st.id}')" title="Скопировать данные для ученика" class="px-3 py-2 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 rounded-xl text-xs font-bold transition">
                                 📋 Доступ
                             </button>
                         </div>
@@ -1075,12 +1301,69 @@
         function copyStudentInstructions(studentId) {
             const st = (db.students || []).find(s => s.id === studentId);
             if (!st) return;
-            const text = `👋 Привет, ${st.name.split(' ')[0]}!\n\nТвой личный кабинет доступен по ссылке:\n${window.location.href.split('#')[0]}\n\n🔑 Твой личный PIN-код для входа: ${st.pin || '1042'}\n\nТам ты сможешь смотреть даты занятий, домашку с файлами, свой календарь и график пробников!`;
+            const text = `👋 Привет, ${st.name.split(' ')[0]}!\n\nТвой личный кабинет доступен по ссылке:\n${window.location.origin}${window.location.pathname}\n\n🔑 Твой личный PIN-код для входа: ${st.pin || '1042'}\n\nТам ты сможешь заходить на уроки в Zoom в 1 клик, смотреть ДЗ с файлами, свой календарь и график пробников!`;
             
             navigator.clipboard.writeText(text).then(() => {
                 alert(`Инструкция для ${st.name} скопирована!\n\nОтправьте её ученику в мессенджер.`);
             }).catch(() => {
                 prompt('Скопируйте текст сообщения для ученика:', text);
+            });
+        }
+
+        // ================= ОТЧЁТ ДЛЯ РОДИТЕЛЕЙ (НОВАЯ ФИЧА) =================
+        function openParentReportModal(studentId) {
+            activeReportingStudentId = studentId;
+            generateParentReportText();
+            document.getElementById('modal-parent-report').classList.remove('hidden');
+        }
+
+        function closeParentReportModal() {
+            document.getElementById('modal-parent-report').classList.add('hidden');
+        }
+
+        function generateParentReportText() {
+            const st = (db.students || []).find(s => s.id === activeReportingStudentId);
+            if (!st) return;
+
+            const studentLessons = (db.lessons || []).filter(l => (l.studentIds && l.studentIds.includes(st.id)) || l.studentId === st.id);
+            const totalLessons = studentLessons.length;
+            const completedHwCount = studentLessons.filter(l => l.hasHomework).length;
+            const game = calculateStudentGamification(st.id);
+
+            // Пробники
+            let examsText = '—';
+            if (st.exams && st.exams.length > 0) {
+                examsText = st.exams.map(e => `${e.month}: ${e.score} б.`).join(' ➔ ');
+            }
+
+            // Темы
+            let topicsText = (st.topics && st.topics.length > 0) ? st.topics.slice(-4).join(', ') : 'Базовые разделы курса';
+            
+            const comment = document.getElementById('report-custom-comment').value.trim() || 'Ученик занимается регулярно и показывает уверенную динамику. Продолжаем системную работу!';
+
+            const report = `📋 *ОТЧЁТ ОБ УСПЕХАХ ПО МАТЕМАТИКЕ*\n` +
+                           `👤 *Ученик:* ${st.name}\n` +
+                           `📚 *Предмет:* ${st.subject}\n` +
+                           `👨‍🏫 *Преподаватель:* Артём (pomateshe.ru)\n\n` +
+                           `✅ *Посещаемость:* ${totalLessons} занятий\n` +
+                           `📝 *Домашние задания:* сдано ${completedHwCount} из ${totalLessons}\n` +
+                           `📈 *Результаты пробников:* ${examsText}\n` +
+                           `🧠 *Изученные темы:* ${topicsText}\n` +
+                           `🏆 *Уровень на платформе:* ${game.icon} ${game.level} (${game.xp} XP, 🔥 ${game.streak} зан. подряд)\n\n` +
+                           `💬 *Комментарий преподавателя:*\n${comment}\n\n` +
+                           `_С уважением, Артём_ ✨`;
+
+            document.getElementById('parent-report-text').innerText = report;
+        }
+
+        document.getElementById('report-custom-comment')?.addEventListener('input', generateParentReportText);
+
+        function copyParentReportText() {
+            const text = document.getElementById('parent-report-text').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Отчёт для родителей скопирован в буфер обмена!\n\nОтправьте его родителям в WhatsApp или Telegram.');
+            }).catch(() => {
+                prompt('Скопируйте текст отчёта вручную:', text);
             });
         }
 
@@ -1102,49 +1385,50 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                     
                     <div class="space-y-4">
-                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
-                                    <h2 class="text-lg font-bold text-slate-900">${st.name}</h2>
-                                    <p class="text-xs text-indigo-600 font-semibold">${st.subject}</p>
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">${st.name}</h2>
+                                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold">${st.subject}</p>
                                 </div>
-                                <button onclick="openStudentModal('${st.id}')" class="text-xs text-indigo-600 font-bold hover:underline">Изм.</button>
+                                <button onclick="openStudentModal('${st.id}')" class="text-xs text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Изм.</button>
                             </div>
                             
-                            <div class="p-3 bg-slate-50 rounded-2xl flex justify-between items-center mb-3">
+                            <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl flex justify-between items-center mb-3">
                                 <div>
                                     <span class="text-[10px] text-slate-400 block font-bold uppercase">Оплачено уроков</span>
                                     <span class="text-base font-bold ${st.paidLessons > 0 ? 'text-emerald-600' : 'text-rose-600'}">${st.paidLessons} зан.</span>
                                 </div>
                                 <div class="space-x-1">
-                                    <button onclick="updateBalance('${st.id}', -1)" class="px-2.5 py-1 bg-white border rounded-lg font-bold text-xs">-</button>
+                                    <button onclick="updateBalance('${st.id}', -1)" class="px-2.5 py-1 bg-white dark:bg-slate-700 border rounded-lg font-bold text-xs">-</button>
                                     <button onclick="updateBalance('${st.id}', 1)" class="px-2.5 py-1 bg-indigo-600 text-white rounded-lg font-bold text-xs">+</button>
                                 </div>
                             </div>
 
-                            <div class="p-2.5 bg-indigo-50 rounded-2xl flex justify-between items-center mb-3 text-xs border border-indigo-100">
-                                <span class="text-slate-500">PIN для входа:</span>
-                                <span class="font-black text-indigo-700 tracking-wider">${st.pin || '1042'}</span>
+                            <div class="p-2.5 bg-indigo-50 dark:bg-indigo-950/40 rounded-2xl flex justify-between items-center mb-3 text-xs border border-indigo-100 dark:border-indigo-800">
+                                <span class="text-slate-500 dark:text-slate-400">PIN для входа:</span>
+                                <span class="font-black text-indigo-700 dark:text-indigo-300 tracking-wider">${st.pin || '1042'}</span>
                             </div>
 
-                            <div class="flex gap-2 pt-2">
+                            <div class="flex gap-2 pt-2 flex-wrap">
                                 <button onclick="openLessonModal(null, '${st.id}')" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs font-bold">+ Урок</button>
-                                <button onclick="copyStudentInstructions('${st.id}')" class="px-3 py-2 bg-indigo-50 text-indigo-700 rounded-xl text-xs font-bold">📋 Доступ</button>
-                                <button onclick="deleteStudent('${st.id}')" class="px-3 py-2 bg-rose-50 text-rose-600 rounded-xl text-xs font-bold">✕</button>
+                                <button onclick="openParentReportModal('${st.id}')" class="px-3 py-2 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 rounded-xl text-xs font-bold">📄 Отчёт</button>
+                                <button onclick="copyStudentInstructions('${st.id}')" class="px-3 py-2 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 rounded-xl text-xs font-bold">📋 Доступ</button>
+                                <button onclick="deleteStudent('${st.id}')" class="px-3 py-2 bg-rose-50 dark:bg-rose-950/40 text-rose-600 rounded-xl text-xs font-bold">✕</button>
                             </div>
                         </div>
 
                         <!-- Пройденные темы -->
-                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-                            <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Пройденные темы</h4>
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-2">Пройденные темы</h4>
                             <form onsubmit="addTopic(event, '${st.id}')" class="flex gap-1.5 mb-3">
-                                <input type="text" id="topic-input" placeholder="Новая тема..." required class="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 bg-slate-50">
-                                <button class="text-xs bg-slate-900 text-white px-3 py-2 rounded-xl font-bold">Добавить</button>
+                                <input type="text" id="topic-input" placeholder="Новая тема..." required class="flex-1 text-xs border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100">
+                                <button class="text-xs bg-slate-900 dark:bg-slate-700 text-white px-3 py-2 rounded-xl font-bold">Добавить</button>
                             </form>
                             <div class="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
                                 ${(st.topics || []).map((t, idx) => `
-                                    <div class="text-xs bg-slate-50 p-2 rounded-xl flex justify-between items-center border border-slate-100">
-                                        <span class="text-slate-700">${t}</span>
+                                    <div class="text-xs bg-slate-50 dark:bg-slate-800/60 p-2 rounded-xl flex justify-between items-center border border-slate-100 dark:border-slate-700">
+                                        <span class="text-slate-700 dark:text-slate-300">${t}</span>
                                         <button onclick="removeTopic('${st.id}', ${idx})" class="text-slate-400 hover:text-rose-600">✕</button>
                                     </div>
                                 `).join('') || '<span class="text-xs text-slate-400">Тем пока нет</span>'}
@@ -1153,23 +1437,23 @@
                     </div>
 
                     <div class="lg:col-span-2 space-y-4">
-                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
                             <div class="flex justify-between items-center mb-3">
                                 <div>
-                                    <h4 class="text-xs font-bold text-slate-800 uppercase">📊 Результаты пробников</h4>
+                                    <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase">📊 Результаты пробников</h4>
                                     <p class="text-[11px] text-slate-500">Отображаются в графике ученика</p>
                                 </div>
-                                <button onclick="openExamModal('${st.id}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl text-xs font-bold transition">
+                                <button onclick="openExamModal('${st.id}')" class="bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-xl text-xs font-bold transition">
                                     + Выставить балл
                                 </button>
                             </div>
 
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                 ${(st.exams || []).map((ex, idx) => `
-                                    <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-100 flex justify-between items-center">
+                                    <div class="bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-2xl border border-slate-100 dark:border-slate-700 flex justify-between items-center">
                                         <div>
                                             <span class="text-[10px] text-slate-400 block">${ex.month}</span>
-                                            <span class="text-sm font-black text-indigo-600">${ex.score} б.</span>
+                                            <span class="text-sm font-black text-indigo-600 dark:text-indigo-400">${ex.score} б.</span>
                                         </div>
                                         <button onclick="removeExam('${st.id}', ${idx})" class="text-slate-300 hover:text-rose-500 text-xs">✕</button>
                                     </div>
@@ -1177,28 +1461,28 @@
                             </div>
                         </div>
 
-                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
-                            <h3 class="font-bold text-sm text-slate-900 mb-3">Даты занятий и домашние задания</h3>
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-white mb-3">Даты занятий и домашние задания</h3>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left text-xs">
                                     <thead>
-                                        <tr class="border-b text-slate-400 font-semibold uppercase text-[10px]">
+                                        <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-400 font-semibold uppercase text-[10px]">
                                             <th class="py-2">Дата и время</th>
                                             <th class="py-2">Тема</th>
                                             <th class="py-2 text-center">Задано ДЗ</th>
                                             <th class="py-2 text-right">Действие</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y">
+                                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                                         ${studentLessons.map(l => `
-                                            <tr class="hover:bg-slate-50 transition">
-                                                <td class="py-2.5 font-semibold text-slate-800">${formatReadableDate(l.date, l.time)}</td>
-                                                <td class="py-2.5 text-slate-600">${l.topic || '<span class="text-slate-300">Без темы</span>'}</td>
+                                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                                                <td class="py-2.5 font-semibold text-slate-800 dark:text-slate-200">${formatReadableDate(l.date, l.time)}</td>
+                                                <td class="py-2.5 text-slate-600 dark:text-slate-300">${l.topic || '<span class="text-slate-300">Без темы</span>'}</td>
                                                 <td class="py-2.5 text-center">
-                                                    <input type="checkbox" ${l.hasHomework ? 'checked' : ''} onchange="toggleHw('${l.id}', this.checked)" class="w-4 h-4 text-emerald-600 rounded border-slate-300 cursor-pointer">
+                                                    <input type="checkbox" ${l.hasHomework ? 'checked' : ''} onchange="toggleHw('${l.id}', this.checked)" class="w-4 h-4 text-emerald-600 rounded">
                                                 </td>
                                                 <td class="py-2.5 text-right">
-                                                    <button onclick="openLessonModal('${l.id}')" class="text-indigo-600 font-semibold hover:underline">Изм.</button>
+                                                    <button onclick="openLessonModal('${l.id}')" class="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Изм.</button>
                                                 </td>
                                             </tr>
                                         `).join('') || '<tr><td colspan="4" class="text-center py-6 text-slate-400">Уроков еще не было</td></tr>'}
@@ -1253,11 +1537,11 @@
                 totalExpected += toPaySum;
 
                 tbody.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="py-3 font-bold text-slate-900">${st.name} <span class="text-[11px] text-slate-400 block font-normal">${st.subject}</span></td>
-                        <td class="py-3"><span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 font-bold rounded-lg text-xs">${count} зан.</span></td>
-                        <td class="py-3"><span class="font-bold ${paid >= count ? 'text-emerald-600' : 'text-slate-700'}">${paid} зан.</span></td>
-                        <td class="py-3 font-extrabold ${toPaySum === 0 ? 'text-emerald-600' : 'text-slate-900'}">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                        <td class="py-3 font-bold text-slate-900 dark:text-white">${st.name} <span class="text-[11px] text-slate-400 block font-normal">${st.subject}</span></td>
+                        <td class="py-3"><span class="px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold rounded-lg text-xs">${count} зан.</span></td>
+                        <td class="py-3"><span class="font-bold ${paid >= count ? 'text-emerald-600' : 'text-slate-700 dark:text-slate-300'}">${paid} зан.</span></td>
+                        <td class="py-3 font-extrabold ${toPaySum === 0 ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}">
                             ${toPaySum === 0 && count > 0 ? '0 ₽ (Покрыто)' : `${toPaySum} ₽`}
                         </td>
                         <td class="py-3 text-right">
@@ -1288,18 +1572,18 @@
             const grid = document.getElementById('materials-grid');
             if (!grid) return;
             if (!db.materials || db.materials.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white">Материалов пока нет. Нажмите «+ Добавить материал»!</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 border border-dashed rounded-3xl bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-800">Материалов пока нет. Нажмите «+ Добавить материал»!</div>`;
                 return;
             }
 
             grid.innerHTML = db.materials.map((m, idx) => `
-                <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                     <div>
-                        <span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold uppercase">${m.category || 'Материал'}</span>
-                        <h4 class="font-bold text-slate-900 text-sm mt-2">${m.title}</h4>
+                        <span class="text-[10px] bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-md font-bold uppercase">${m.category || 'Материал'}</span>
+                        <h4 class="font-bold text-slate-900 dark:text-white text-sm mt-2">${m.title}</h4>
                     </div>
-                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
-                        <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">Открыть материал ↗</a>
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                        <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Открыть материал ↗</a>
                         <button onclick="removeMaterial(${idx})" class="text-slate-300 hover:text-rose-500 text-xs">✕</button>
                     </div>
                 </div>
@@ -1319,6 +1603,25 @@
             document.getElementById('portal-level-icon').innerText = game.icon;
             document.getElementById('portal-streak-val').innerText = `${game.streak} зан. подряд`;
             document.getElementById('portal-xp-val').innerText = `${game.xp} XP`;
+
+            // Установка ссылок на Zoom и онлайн-доску
+            const settings = db.settings || {};
+            const zoomBtn = document.getElementById('btn-zoom-link');
+            const boardBtn = document.getElementById('btn-board-link');
+
+            if (settings.zoomUrl) {
+                zoomBtn.href = settings.zoomUrl;
+                zoomBtn.classList.remove('hidden');
+            } else {
+                zoomBtn.classList.add('hidden');
+            }
+
+            if (settings.boardUrl) {
+                boardBtn.href = settings.boardUrl;
+                boardBtn.classList.remove('hidden');
+            } else {
+                boardBtn.classList.add('hidden');
+            }
 
             const nowStr = new Date().toISOString().split('T')[0];
             const upcomingLessons = (db.lessons || [])
@@ -1397,22 +1700,22 @@
 
                 artemLessons.forEach(l => {
                     cardsHtml += `
-                        <div class="p-2 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-950 text-[11px] font-bold">
+                        <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200 text-[11px] font-bold">
                             <div class="flex justify-between items-center">
                                 <span>📚 ${l.time} Артём</span>
                                 <span class="w-1.5 h-1.5 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
                             </div>
-                            <span class="text-[9px] font-normal text-slate-500 block truncate">${l.topic || 'Урок'}</span>
+                            <span class="text-[9px] font-normal text-slate-500 dark:text-slate-400 block truncate">${l.topic || 'Урок'}</span>
                         </div>
                     `;
                 });
 
                 personalEvents.forEach((pe, pIdx) => {
                     cardsHtml += `
-                        <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 text-[11px] font-bold flex justify-between items-center">
+                        <div class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-950 dark:text-emerald-200 text-[11px] font-bold flex justify-between items-center">
                             <div>
                                 <span>⚡ ${pe.time} ${pe.title}</span>
-                                <span class="text-[9px] font-normal text-emerald-700 block">Моё расписание</span>
+                                <span class="text-[9px] font-normal text-emerald-700 dark:text-emerald-400 block">Моё расписание</span>
                             </div>
                             <button onclick="deletePersonalEvent('${studentId}', ${pIdx})" class="text-rose-400 hover:text-rose-600 text-xs">✕</button>
                         </div>
@@ -1420,13 +1723,13 @@
                 });
 
                 grid.innerHTML += `
-                    <div class="bg-slate-50 p-2.5 rounded-2xl border ${isToday ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-white' : 'border-slate-200'} min-h-[110px] flex flex-col justify-between">
+                    <div class="bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-2xl border ${isToday ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-white dark:bg-slate-900' : 'border-slate-200 dark:border-slate-700/60'} min-h-[110px] flex flex-col justify-between">
                         <div>
-                            <div class="flex justify-between items-center mb-1.5 pb-1 border-b border-slate-200">
-                                <span class="text-[10px] font-black uppercase text-slate-500">${dayNames[dayOfWeek]}</span>
-                                <span class="text-xs font-bold ${isToday ? 'text-indigo-600 font-black' : 'text-slate-700'}">${dayDate.getDate()}</span>
+                            <div class="flex justify-between items-center mb-1.5 pb-1 border-b border-slate-200 dark:border-slate-700">
+                                <span class="text-[10px] font-black uppercase text-slate-500 dark:text-slate-400">${dayNames[dayOfWeek]}</span>
+                                <span class="text-xs font-bold ${isToday ? 'text-indigo-600 dark:text-indigo-400 font-black' : 'text-slate-700 dark:text-slate-300'}">${dayDate.getDate()}</span>
                             </div>
-                            <div class="space-y-1">${cardsHtml || '<span class="text-[9px] text-slate-300 block text-center py-2">Свободно</span>'}</div>
+                            <div class="space-y-1">${cardsHtml || '<span class="text-[9px] text-slate-300 dark:text-slate-600 block text-center py-2">Свободно</span>'}</div>
                         </div>
                     </div>
                 `;
@@ -1494,7 +1797,7 @@
                 const heightPercent = Math.max(10, Math.min(100, ex.score));
                 chart.innerHTML += `
                     <div class="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
-                        <span class="text-[11px] font-black text-indigo-600">${ex.score}</span>
+                        <span class="text-[11px] font-black text-indigo-600 dark:text-indigo-400">${ex.score}</span>
                         <div class="w-full max-w-[40px] bg-gradient-to-t from-indigo-600 to-violet-500 rounded-t-xl transition-all" style="height: ${heightPercent}%"></div>
                     </div>
                 `;
@@ -1506,18 +1809,18 @@
             const st = (db.students || []).find(s => s.id === studentId);
             
             document.getElementById('student-subview-topics').innerHTML = (st.topics || []).map(t => `
-                <div class="p-2.5 bg-slate-50 rounded-2xl text-xs font-medium text-slate-700 flex items-center gap-2 border border-slate-100">
+                <div class="p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-xs font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2 border border-slate-100 dark:border-slate-700">
                     <span class="text-emerald-500 font-bold">✓</span> ${t}
                 </div>
             `).join('') || '<p class="text-xs text-slate-400 py-4 text-center">Список тем пуст</p>';
 
             document.getElementById('student-subview-materials').innerHTML = (db.materials || []).map(m => `
-                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between items-center">
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-700 flex justify-between items-center">
                     <div>
-                        <span class="text-[9px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold uppercase">${m.category}</span>
-                        <h5 class="text-xs font-bold text-slate-800 mt-1">${m.title}</h5>
+                        <span class="text-[9px] bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded font-bold uppercase">${m.category}</span>
+                        <h5 class="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">${m.title}</h5>
                     </div>
-                    <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 hover:underline">Открыть ↗</a>
+                    <a href="${m.url}" target="_blank" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Открыть ↗</a>
                 </div>
             `).join('') || '<p class="text-xs text-slate-400 py-4 col-span-full text-center">Материалов пока нет</p>';
         }
@@ -1528,8 +1831,8 @@
                 const btn = document.getElementById(`st-tab-${t}`);
                 if (btn) {
                     btn.className = (t === tab)
-                        ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-600'
-                        : 'px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800';
+                        ? 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400'
+                        : 'px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200';
                 }
             });
             document.getElementById('btn-add-personal').classList.toggle('hidden', tab !== 'calendar');
@@ -1541,7 +1844,7 @@
 
             let html = `<p class="font-medium whitespace-pre-wrap">${l.homeworkText || 'Задание не расписано текстом'}</p>`;
             if (l.homeworkFile) {
-                html += `<div class="pt-2 border-t border-slate-200 mt-2"><a href="${l.homeworkFile}" target="_blank" class="text-indigo-600 font-bold hover:underline flex items-center gap-1">📎 Открыть прикрепленный файл / задание ↗</a></div>`;
+                html += `<div class="pt-2 border-t border-slate-200 dark:border-slate-700 mt-2"><a href="${l.homeworkFile}" target="_blank" class="text-indigo-600 dark:text-indigo-400 font-bold hover:underline flex items-center gap-1">📎 Открыть прикрепленный файл / задание ↗</a></div>`;
             }
 
             document.getElementById('hw-view-content').innerHTML = html;
@@ -1558,12 +1861,12 @@
         function setLessonMode(mode) {
             currentLessonMode = mode;
             document.getElementById('btn-mode-single').className = (mode === 'single') 
-                ? 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-indigo-600'
-                : 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900';
+                ? 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 shadow-sm text-indigo-600 dark:text-indigo-400'
+                : 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900';
 
             document.getElementById('btn-mode-group').className = (mode === 'group') 
-                ? 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-indigo-600'
-                : 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900';
+                ? 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-white dark:bg-slate-900 shadow-sm text-indigo-600 dark:text-indigo-400'
+                : 'flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900';
 
             document.getElementById('box-select-single').classList.toggle('hidden', mode !== 'single');
             document.getElementById('box-select-group').classList.toggle('hidden', mode !== 'group');
@@ -1586,9 +1889,9 @@
             sel.innerHTML = (db.students || []).map(s => `<option value="${s.id}">${s.name} (${s.subject})</option>`).join('');
             
             groupList.innerHTML = (db.students || []).map(s => `
-                <label class="flex items-center gap-2 p-1.5 hover:bg-white rounded-lg cursor-pointer text-xs">
+                <label class="flex items-center gap-2 p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-lg cursor-pointer text-xs">
                     <input type="checkbox" value="${s.id}" class="group-student-checkbox w-4 h-4 text-indigo-600 rounded">
-                    <span class="font-medium text-slate-800">${s.name}</span>
+                    <span class="font-medium text-slate-800 dark:text-slate-200">${s.name}</span>
                 </label>
             `).join('');
 
@@ -1793,7 +2096,7 @@
             refreshViews();
         }
 
-        // ================= ДЕЙСТВИЯ С УЧЕНИКАМИ, БАЛАНСАМИ И ТЕМАМИ =================
+        // ================= ДЕЙСТВИЯ С УЧЕНИКАМИ =================
         function updateBalance(id, delta) {
             const st = (db.students || []).find(s => s.id === id);
             if (st) {
@@ -1957,6 +2260,8 @@
             const settings = db.settings || {};
             document.getElementById('cloud-url-input').value = cloudUrl || '';
             document.getElementById('tutor-pin-input').value = settings.masterPin || localStorage.getItem('tutor_master_pin') || '7777';
+            document.getElementById('setting-zoom-url').value = settings.zoomUrl || '';
+            document.getElementById('setting-board-url').value = settings.boardUrl || '';
             document.getElementById('contact-tg').value = settings.tg || localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
             document.getElementById('contact-wa').value = settings.wa || localStorage.getItem('tutor_contact_wa') || '79999999999';
             document.getElementById('contact-phone').value = settings.phone || localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
@@ -1969,13 +2274,17 @@
             const urlVal = document.getElementById('cloud-url-input').value.trim();
             const pinVal = document.getElementById('tutor-pin-input').value.trim();
             
+            const zoomVal = document.getElementById('setting-zoom-url').value.trim();
+            const boardVal = document.getElementById('setting-board-url').value.trim();
+
             const tgVal = document.getElementById('contact-tg').value.trim();
             const waVal = document.getElementById('contact-wa').value.trim();
             const phoneVal = document.getElementById('contact-phone').value.trim();
 
             if (!db.settings) db.settings = {};
 
-            // Сохраняем контакты в общую базу данных для всех устройств!
+            db.settings.zoomUrl = zoomVal;
+            db.settings.boardUrl = boardVal;
             db.settings.tg = tgVal;
             db.settings.wa = waVal;
             db.settings.phone = phoneVal;
@@ -1994,11 +2303,10 @@
             localStorage.setItem('tutor_contact_wa', waVal);
             localStorage.setItem('tutor_contact_phone', phoneVal);
 
-            // Мгновенно отправляем новые контакты на Google Диск
             syncToCloud();
             updateFooterContacts();
 
-            alert('Настройки и контакты успешно сохранены и синхронизированы!');
+            alert('Настройки успешно сохранены и синхронизированы!');
             closeCloudModal();
         }
 
