@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Уроки с Артёмом | pomateshe</title>
     
-    <!-- Встроенный PWA Manifest для установки приложения на телефон -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="pomateshe">
@@ -115,7 +114,7 @@
             </div>
         </section>
 
-        <!-- Форма записи на бесплатную диагностику -->
+        <!-- Форма записи на диагностику -->
         <section id="trial-form" class="bg-slate-100 dark:bg-slate-900/60 py-12 sm:py-16 border-y border-slate-200 dark:border-slate-800">
             <div class="max-w-xl mx-auto px-4 text-center space-y-6">
                 <div class="space-y-2">
@@ -149,7 +148,7 @@
         </section>
     </div>
 
-    <!-- ==================== МОДАЛКА ВХОДА ПО PIN ==================== -->
+    <!-- ==================== МОДАЛКА ВХОДА ПО PIN С ДИАГНОСТИКОЙ ==================== -->
     <div id="modal-pin-login" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 text-center relative">
             <button onclick="closePinModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold p-1">✕</button>
@@ -161,8 +160,8 @@
             <h3 class="text-lg font-black text-slate-900 dark:text-white">Вход в личный кабинет</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5">Введите ваш 4-значный PIN-код</p>
 
-            <div class="space-y-4">
-                <input type="password" id="login-pin" maxlength="4" inputmode="numeric" placeholder="••••" 
+            <div class="space-y-3.5">
+                <input type="password" id="login-pin" maxlength="6" placeholder="••••" 
                        onkeydown="if(event.key==='Enter') doLogin()"
                        class="w-full text-center tracking-[0.8em] text-2xl font-black bg-slate-50 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-2xl py-3 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-600">
 
@@ -172,6 +171,11 @@
 
                 <button type="button" onclick="doLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-2xl text-xs sm:text-sm shadow-md transition">
                     Войти в систему →
+                </button>
+
+                <!-- КНОПКА ДИАГНОСТИКИ СВЯЗИ -->
+                <button type="button" onclick="runDiagnostic()" class="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline pt-2 block mx-auto font-medium">
+                    🔍 Проверить связь с базой (Диагностика)
                 </button>
             </div>
         </div>
@@ -202,7 +206,6 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <!-- Кнопка Заявок с сайта -->
                 <button onclick="openLeadsModal()" class="relative bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                     <span>📥 Заявки</span>
                     <span id="leads-count-badge" class="hidden bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-extrabold">0</span>
@@ -255,7 +258,7 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-3 text-xs">
-                    <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> 1 ученик</span>
+                    <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Индивидуально</span>
                     <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span> 👥 Группа</span>
                     <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> ДЗ ✓</span>
                 </div>
@@ -418,7 +421,7 @@
                 <div id="student-subview-materials" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
             </div>
 
-            <!-- 2. ГРАФИК ПРОБНИКОВ (ОПУЩЕН В САМЫЙ НИЗ СТРАНИЦЫ) -->
+            <!-- 2. ГРАФИК ПРОБНИКОВ (ВНИЗУ СТРАНИЦЫ) -->
             <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <div>
@@ -475,7 +478,7 @@
 
     <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
 
-    <!-- МОДАЛКА: ЗАЯВКИ С ЛЕНДИНГА (НОВОЕ) -->
+    <!-- МОДАЛКА: ЗАЯВКИ С ЛЕНДИНГА -->
     <div id="modal-leads" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -491,7 +494,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА: ИНСТРУКЦИЯ ПО УСТАНОВКЕ ПРИЛОЖЕНИЯ (PWA) -->
+    <!-- МОДАЛКА: PWA УСТАНОВКА -->
     <div id="modal-install-app" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4">
             <div class="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-black">📲</div>
@@ -719,7 +722,7 @@
                 
                 <div class="bg-indigo-50/70 dark:bg-indigo-950/40 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800">
                     <label class="block text-[11px] font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-1">Личный PIN-код для входа (4 цифры) *</label>
-                    <input type="text" id="student-pin" maxlength="4" pattern="[0-9]{4}" required placeholder="1042" class="w-full bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700 dark:text-indigo-300">
+                    <input type="text" id="student-pin" maxlength="6" required placeholder="1042" class="w-full bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-700 rounded-xl px-3 py-2 text-xs font-bold text-indigo-700 dark:text-indigo-300">
                 </div>
 
                 <div class="flex justify-end space-x-2 pt-2">
@@ -827,7 +830,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] text-slate-400 block">Номер телефона для звонка:</span>
-                        <input type="text" id="contact-phone" placeholder="+7 (999) 999-99-99" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
+                        <input type="text" id="contact-phone" placeholder="+7 (999) 999-99-99" class="w-full bg-white border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
 
@@ -837,7 +840,7 @@
                 </div>
 
                 <div class="pt-1 space-y-2">
-                    <button onclick="saveAppSettings()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-md transition">Сохранить настройки</button>
+                    <button onclick="saveAppSettings()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-md transition">Сохранить настройки и отправить в облако</button>
                     <button onclick="downloadBackupJson()" class="w-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2 rounded-xl text-xs font-bold transition">💾 Скачать резервную копию базы (.json)</button>
                 </div>
             </div>
@@ -846,8 +849,10 @@
 
     <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
     <script>
-        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT:
+        // =========================================================================
+        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (оканчивается на /exec):
         const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
+        // =========================================================================
 
         let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [], deletedLessonIds: [], settings: {} };
         let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
@@ -864,7 +869,6 @@
         const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
         const dayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
-        // ТЁМНАЯ ТЕМА
         function initTheme() {
             const isDark = localStorage.getItem('tutor_dark_mode') === 'true';
             document.documentElement.classList.toggle('dark', isDark);
@@ -922,7 +926,39 @@
             return data;
         }
 
-        // МОДАЛКА УСТАНОВКИ ПРИЛОЖЕНИЯ
+        // ДИАГНОСТИКА ПОДКЛЮЧЕНИЯ
+        async function runDiagnostic() {
+            const activeUrl = cloudUrl || DEFAULT_CLOUD_URL;
+            if (!activeUrl || activeUrl.indexOf("ВСТАВЬТЕ") !== -1) {
+                alert("❌ ОШИБКА: Ссылка на Google Apps Script НЕ вставлена в код!\n\nОткройте index.html на GitHub и вставьте вашу ссылку в строчку DEFAULT_CLOUD_URL.");
+                return;
+            }
+
+            alert(`⏳ Проверяем связь с Google Диском...\nURL: ${activeUrl.substring(0, 45)}...`);
+
+            try {
+                const res = await fetch(`${activeUrl}?action=load`);
+                const data = await res.json();
+                
+                if (data && typeof data === 'object') {
+                    const studentsCount = (data.students || []).length;
+                    const pins = (data.students || []).map(s => `${s.name}: ${s.pin || 'нет'}`).join('\n');
+
+                    alert(`✅ СВЯЗЬ С ОБЛАКОМ ЕСТЬ!\n\n` +
+                          `👥 Загружено учеников: ${studentsCount} чел.\n\n` +
+                          `🔑 Список PIN-кодов в базе Google:\n${pins || 'База пустая (добавьте учеников)'}\n\n` +
+                          `💡 Если учеников 0: зайдите под 7777 на компьютере и нажмите «Сохранить настройки».`);
+                    
+                    db = sanitizeDb(data);
+                    persistLocal();
+                } else {
+                    alert("⚠️ Ответ от Google получен, но данные имеют неверный формат.");
+                }
+            } catch (err) {
+                alert(`❌ ОШИБКА СВЯЗИ С GOOGLE!\n\nПричина: ${err.message}\n\nПроверьте:\n1. В Google Apps Script доступ должен быть: «Все / Anyone».\n2. Ссылка должна оканчиваться на /exec.`);
+            }
+        }
+
         function openInstallModal() {
             document.getElementById('modal-install-app').classList.remove('hidden');
         }
@@ -930,7 +966,6 @@
             document.getElementById('modal-install-app').classList.add('hidden');
         }
 
-        // ОТПРАВКА ЗАЯВКИ С ЛЕНДИНГА
         function handleLeadSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('lead-name').value.trim();
@@ -954,7 +989,6 @@
             document.getElementById('lead-contact').value = '';
         }
 
-        // РАБОТА С ЗАЯВКАМИ
         function openLeadsModal() {
             renderLeadsList();
             document.getElementById('modal-leads').classList.remove('hidden');
@@ -1014,7 +1048,6 @@
             }
         }
 
-        // МОДАЛКА PIN
         function openPinModal() {
             document.getElementById('modal-pin-login').classList.remove('hidden');
             const inp = document.getElementById('login-pin');
@@ -1030,7 +1063,7 @@
             const errorMsg = document.getElementById('login-error-msg');
             if (!input) return;
 
-            const pin = input.value.replace(/\D/g, '').trim();
+            const pin = input.value.trim();
             if (errorMsg) errorMsg.classList.add('hidden');
 
             const masterPin = (db.settings && db.settings.masterPin) || localStorage.getItem('tutor_master_pin') || '7777';
@@ -1044,7 +1077,10 @@
                 return;
             }
 
+            // Поиск ученика
             let student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
+            
+            // Если не найден — принудительно опрашиваем облако прямо сейчас
             if (!student && cloudUrl) {
                 await pullFromCloud();
                 student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
@@ -1059,7 +1095,12 @@
                 return;
             }
 
-            if (errorMsg) errorMsg.classList.remove('hidden');
+            if (errorMsg) {
+                errorMsg.innerText = (db.students || []).length === 0 
+                    ? 'База не загружена. Нажмите «Диагностика» ниже.' 
+                    : 'Неверный PIN-код!';
+                errorMsg.classList.remove('hidden');
+            }
             input.value = '';
             input.focus();
         }
