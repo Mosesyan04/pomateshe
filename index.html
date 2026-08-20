@@ -63,7 +63,7 @@
                 </div>
             </div>
 
-            <!-- Вкладки десктоп -->
+            <!-- Десктопные вкладки -->
             <div class="hidden md:flex bg-slate-100 p-1 rounded-xl space-x-1">
                 <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition">📅 Неделя</button>
                 <button onclick="switchTab('students')" id="tab-btn-students" class="tab-btn px-3.5 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">👥 Ученики</button>
@@ -196,7 +196,6 @@
 
         <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА -->
         <section id="view-student-portal" class="hidden max-w-5xl mx-auto space-y-5">
-            <!-- Плашка: Ближайший урок -->
             <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-6 rounded-3xl shadow-lg relative overflow-hidden">
                 <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
@@ -265,7 +264,6 @@
                     </button>
                 </div>
 
-                <!-- Недельный календарь ученика -->
                 <div id="student-subview-calendar" class="space-y-3">
                     <div class="flex justify-between items-center">
                         <span id="st-cal-week-range" class="text-xs font-bold text-slate-700"></span>
@@ -326,7 +324,7 @@
 
     <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
 
-    <!-- Модалка: Урок (с поддержкой групп и ДЗ с файлом) -->
+    <!-- Модалка: Урок -->
     <div id="modal-lesson" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-4">
@@ -344,13 +342,11 @@
                     <button type="button" id="btn-mode-group" onclick="setLessonMode('group')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900">👥 Группа (2+)</button>
                 </div>
 
-                <!-- Одиночный выбор -->
                 <div id="box-select-single">
                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Ученик *</label>
                     <select id="lesson-student" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
 
-                <!-- Групповой выбор (чекбоксы) -->
                 <div id="box-select-group" class="hidden">
                     <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Состав группы (выберите учеников) *</label>
                     <div id="group-students-list" class="max-h-36 overflow-y-auto space-y-1.5 p-2 bg-slate-50 border border-slate-200 rounded-xl custom-scrollbar"></div>
@@ -392,7 +388,7 @@
                     </div>
                 </div>
 
-                <!-- Блок Домашнего задания -->
+                <!-- ДЗ -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <div>
@@ -404,7 +400,7 @@
 
                     <div id="hw-fields-box" class="hidden space-y-2 pt-1 border-t border-slate-200">
                         <textarea id="lesson-hw-text" rows="2" placeholder="Текст домашнего задания..." class="w-full bg-white border border-slate-200 rounded-xl p-2 text-xs focus:ring-2 focus:ring-indigo-500"></textarea>
-                        <input type="url" id="lesson-hw-file" placeholder="Ссылка на файл / Google Диск / Яндекс Диск" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+                        <input type="url" id="lesson-hw-file" placeholder="Ссылка на файл / Google Диск" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
                     </div>
                 </div>
 
@@ -436,12 +432,11 @@
         </div>
     </div>
 
-    <!-- Модалка: Своё занятие ученика (Пункт 9) -->
+    <!-- Модалка: Своё занятие ученика -->
     <div id="modal-personal-event" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100">
             <h3 class="text-base font-bold text-slate-900 mb-3">Моё занятие / Репетитор</h3>
             <form onsubmit="submitPersonalEvent(event)" class="space-y-3">
-                <input type="hidden" id="personal-event-id">
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Название / Предмет *</label>
                     <input type="text" id="personal-title" required placeholder="например: Английский / Секция" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
@@ -472,7 +467,7 @@
         </div>
     </div>
 
-    <!-- Модалка: Просмотр деталей ДЗ учеником -->
+    <!-- Модалка: Просмотр ДЗ учеником -->
     <div id="modal-hw-view" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-100 space-y-3">
             <h3 class="text-base font-bold text-slate-900">📝 Домашнее задание</h3>
@@ -550,7 +545,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-1">
                     <button type="button" onclick="closeExamModal()" class="px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
-                    <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                 </div>
             </form>
         </div>
@@ -595,7 +590,7 @@
                     <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
                 </div>
 
-                <!-- Настройка контактов для футера -->
+                <!-- Контакты для футера -->
                 <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
                     <label class="block text-[11px] font-bold text-slate-700 uppercase">Контакты в футере сайта</label>
                     <div>
@@ -603,7 +598,7 @@
                         <input type="text" id="contact-tg" placeholder="artem_tutor" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
                     </div>
                     <div>
-                        <span class="text-[10px] text-slate-400 block">WhatsApp (номер телефона без +):</span>
+                        <span class="text-[10px] text-slate-400 block">WhatsApp (номер без +):</span>
                         <input type="text" id="contact-wa" placeholder="79999999999" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
                     </div>
                     <div>
@@ -627,12 +622,10 @@
 
     <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
     <script>
-        // =========================================================================
-        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (оканчивается на /exec):
-        const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
-        // =========================================================================
+        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT:
+        const DEFAULT_CLOUD_URL = "";
 
-        let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [] };
+        let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [], deletedLessonIds: [] };
         let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
         let currentAuth = localStorage.getItem('tutor_current_auth') || null;
         let currentTab = 'calendar';
@@ -641,6 +634,7 @@
         let tutorCurrentWeekStart = getMonday(new Date());
         let studentCurrentWeekStart = getMonday(new Date());
         let currentDeletingLessonId = null;
+        let isSyncing = false;
 
         const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
         const dayNames = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
@@ -662,33 +656,31 @@
             return `${d.getDate()} ${months[d.getMonth()]} (${dayNames[d.getDay()]}) в ${timeStr || ''}`;
         }
 
-        // БЕЗОПАСНАЯ САМООЧИСТКА И МИГРАЦИЯ ДАННЫХ (ПУНКТ 4 и 11)
         function sanitizeDb(data) {
             if (!data || typeof data !== 'object') data = {};
             if (!Array.isArray(data.students)) data.students = [];
             if (!Array.isArray(data.lessons)) data.lessons = [];
             if (!Array.isArray(data.materials)) data.materials = [];
             if (!Array.isArray(data.deletedCalendarEventIds)) data.deletedCalendarEventIds = [];
+            if (!Array.isArray(data.deletedLessonIds)) data.deletedLessonIds = [];
 
-            // Миграция старых уроков (studentId -> studentIds)
             data.lessons.forEach(l => {
                 if (!l.studentIds && l.studentId) l.studentIds = [l.studentId];
                 if (!l.studentIds) l.studentIds = [];
             });
 
-            // Автоочистка старых файлов ДЗ (старше 7 дней, Пункт 11)
             const now = new Date();
             const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
             data.lessons.forEach(l => {
                 if (l.date && l.date < sevenDaysAgo) {
-                    if (l.homeworkFile) l.homeworkFile = ""; // очищаем память файлов
+                    if (l.homeworkFile) l.homeworkFile = "";
                 }
             });
 
             return data;
         }
 
-        // ВХОД ПО PIN
+        // ВХОД
         async function doLogin() {
             const input = document.getElementById('login-pin');
             const errorMsg = document.getElementById('login-error-msg');
@@ -699,7 +691,6 @@
 
             const masterPin = localStorage.getItem('tutor_master_pin') || '7777';
 
-            // Репетитор (7777)
             if (pin === '7777' || pin === masterPin) {
                 currentAuth = 'tutor';
                 localStorage.setItem('tutor_current_auth', 'tutor');
@@ -708,7 +699,6 @@
                 return;
             }
 
-            // Ученик
             let student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
             if (!student && cloudUrl) {
                 await pullFromCloud();
@@ -826,7 +816,6 @@
                 const tutorPinInp = document.getElementById('tutor-pin-input');
                 if (tutorPinInp) tutorPinInp.value = tutorPin;
 
-                // Загрузка контактов футера
                 document.getElementById('contact-tg').value = localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
                 document.getElementById('contact-wa').value = localStorage.getItem('tutor_contact_wa') || '79999999999';
                 document.getElementById('contact-phone').value = localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
@@ -877,7 +866,8 @@
 
         async function syncToCloud() {
             persistLocal();
-            if (!cloudUrl) return;
+            if (!cloudUrl || isSyncing) return;
+            isSyncing = true;
             setCloudStatus('syncing');
             try {
                 await fetch(cloudUrl, {
@@ -887,10 +877,15 @@
                     body: JSON.stringify(db)
                 });
                 db.deletedCalendarEventIds = [];
+                db.deletedLessonIds = [];
                 persistLocal();
-                setTimeout(() => setCloudStatus('connected'), 600);
+                setTimeout(() => {
+                    setCloudStatus('connected');
+                    isSyncing = false;
+                }, 600);
             } catch (err) {
                 setCloudStatus('local');
+                isSyncing = false;
             }
         }
 
@@ -949,7 +944,7 @@
             refreshViews();
         }
 
-        // ================= 10. НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА =================
+        // ================= НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА =================
         function changeWeek(delta) {
             tutorCurrentWeekStart.setDate(tutorCurrentWeekStart.getDate() + (delta * 7));
             renderTutorWeekCalendar();
@@ -1140,7 +1135,6 @@
                             </div>
                         </div>
 
-                        <!-- Пройденные темы -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Пройденные темы</h4>
                             <form onsubmit="addTopic(event, '${st.id}')" class="flex gap-1.5 mb-3">
@@ -1159,7 +1153,6 @@
                     </div>
 
                     <div class="lg:col-span-2 space-y-4">
-                        <!-- Пробники -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <div class="flex justify-between items-center mb-3">
                                 <div>
@@ -1184,7 +1177,6 @@
                             </div>
                         </div>
 
-                        <!-- Таблица уроков -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <h3 class="font-bold text-sm text-slate-900 mb-3">Даты занятий и домашние задания</h3>
                             <div class="overflow-x-auto">
@@ -1220,7 +1212,7 @@
             `;
         }
 
-        // ================= 7. ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ (С УЧЕТОМ БАЛАНСА) =================
+        // ================= ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ =================
         function renderBilling() {
             const today = new Date();
             const dayOfWeek = today.getDay();
@@ -1255,7 +1247,6 @@
                 const count = nextWeekLessons.length;
                 const paid = Number(st.paidLessons || 0);
 
-                // Если оплачено >= количества уроков, к оплате 0 руб!
                 let toPayCount = Math.max(0, count - paid);
                 let toPaySum = toPayCount * Number(st.price || 0);
                 
@@ -1315,7 +1306,7 @@
             `).join('');
         }
 
-        // ================= 6 & 9. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА =================
+        // ================= ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА =================
         function renderStudentPortal(studentId) {
             const st = (db.students || []).find(s => s.id === studentId);
             if (!st) return;
@@ -1329,7 +1320,6 @@
             document.getElementById('portal-streak-val').innerText = `${game.streak} зан. подряд`;
             document.getElementById('portal-xp-val').innerText = `${game.xp} XP`;
 
-            // 1. Формат даты ближайшего занятия (Пункт 1)
             const nowStr = new Date().toISOString().split('T')[0];
             const upcomingLessons = (db.lessons || [])
                 .filter(l => ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.date >= nowStr)
@@ -1362,7 +1352,6 @@
             renderStudentTopicsAndMaterials(studentId);
         }
 
-        // Недельный календарь ученика (Пункт 9)
         function changeStudentWeek(delta) {
             studentCurrentWeekStart.setDate(studentCurrentWeekStart.getDate() + (delta * 7));
             if (currentAuth) renderStudentWeekCalendar(currentAuth);
@@ -1398,12 +1387,10 @@
                 const dayOfWeek = dayDate.getDay();
                 const isToday = (dateStr === todayStr);
 
-                // Уроки с Артёмом
                 const artemLessons = (db.lessons || []).filter(l => 
                     ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.date === dateStr
                 );
 
-                // Личные занятия ученика (другие репетиторы)
                 const personalEvents = (st.personalEvents || []).filter(pe => Number(pe.day) === dayOfWeek);
 
                 let cardsHtml = '';
@@ -1565,7 +1552,7 @@
             document.getElementById('modal-hw-view').classList.add('hidden');
         }
 
-        // ================= ОПЕРАЦИИ С УРОКАМИ И ГРУППАМИ (ПУНКТ 2, 3, 11) =================
+        // ================= ОПЕРАЦИИ С УРОКАМИ =================
         let currentLessonMode = 'single';
 
         function setLessonMode(mode) {
@@ -1663,7 +1650,6 @@
         function submitLesson(e) {
             e.preventDefault();
             const id = document.getElementById('lesson-id').value;
-            const existingSeriesId = document.getElementById('lesson-series-id').value;
             const startDateStr = document.getElementById('lesson-date').value;
             const time = document.getElementById('lesson-time').value;
             const topic = document.getElementById('lesson-topic').value;
@@ -1727,7 +1713,6 @@
                     });
                 }
 
-                // Списание баланса для каждого участника урока
                 studentIds.forEach(stId => {
                     const st = (db.students || []).find(s => s.id === stId);
                     if (st && st.paidLessons > 0) {
@@ -1741,7 +1726,6 @@
             refreshViews();
         }
 
-        // ================= 3. УДАЛЕНИЕ СЕРИИ УРОКОВ (ПУНКТ 3) =================
         function promptDeleteLesson() {
             const id = document.getElementById('lesson-id').value;
             const l = (db.lessons || []).find(item => item.id === id);
@@ -1750,7 +1734,6 @@
             currentDeletingLessonId = id;
 
             if (l.seriesId) {
-                // Если это часть зацикленной серии -> предлагаем выбор
                 document.getElementById('modal-delete-series').classList.remove('hidden');
             } else {
                 if (confirm('Удалить этот урок?')) {
@@ -1770,7 +1753,6 @@
             if (!deleteAllFuture) {
                 executeDeleteSingleLesson(l.id);
             } else {
-                // Удаляем только текущий и будущие уроки этой серии, прошедшие остаются!
                 const lessonsToDelete = (db.lessons || []).filter(item => 
                     item.seriesId === l.seriesId && item.date >= l.date
                 );
@@ -1780,6 +1762,8 @@
                         if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
                         db.deletedCalendarEventIds.push(delItem.calendarEventId);
                     }
+                    if (!db.deletedLessonIds) db.deletedLessonIds = [];
+                    db.deletedLessonIds.push(delItem.id);
                 });
 
                 const deleteIds = lessonsToDelete.map(item => item.id);
@@ -1794,9 +1778,13 @@
 
         function executeDeleteSingleLesson(lessonId) {
             const l = (db.lessons || []).find(item => item.id === lessonId);
-            if (l && l.calendarEventId) {
-                if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
-                db.deletedCalendarEventIds.push(l.calendarEventId);
+            if (l) {
+                if (l.calendarEventId) {
+                    if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
+                    db.deletedCalendarEventIds.push(l.calendarEventId);
+                }
+                if (!db.deletedLessonIds) db.deletedLessonIds = [];
+                db.deletedLessonIds.push(l.id);
             }
             db.lessons = (db.lessons || []).filter(item => item.id !== lessonId);
             syncToCloud();
