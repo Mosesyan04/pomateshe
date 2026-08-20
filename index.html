@@ -847,7 +847,7 @@
     <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
     <script>
         // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT:
-        const DEFAULT_CLOUD_URL = "";
+        const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
 
         let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [], deletedLessonIds: [], settings: {} };
         let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
