@@ -61,16 +61,16 @@
         </header>
 
         <!-- Главный экран -->
-        <section class="max-w-6xl mx-auto px-4 py-12 sm:py-20 flex flex-col lg:flex-row items-center gap-10">
+        <section class="max-w-6xl mx-auto px-4 py-12 sm:py-16 flex flex-col lg:flex-row items-center gap-10">
             <div class="flex-1 space-y-6 text-center lg:text-left">
                 <div class="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-3.5 py-1.5 rounded-full text-xs font-bold text-indigo-700 dark:text-indigo-300">
-                    <span>🚀 Системная подготовка к экзаменам</span>
+                    <span>🚀 Индивидуальный подход и система</span>
                 </div>
                 <h2 class="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">
                     Подготовка к ЕГЭ и ОГЭ по математике на <span class="text-indigo-600 dark:text-indigo-400">80+ баллов</span>
                 </h2>
                 <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    Понятное объяснение сложной математики без зубрежки. Индивидуальный интерактивный кабинет, онлайн-доска, отслеживание динамики пробников и прозрачные отчёты для родителей.
+                    Понятное объяснение сложной математики без зубрежки. Индивидуальный интерактивный кабинет, дерево тем кодификатора ФИПИ, онлайн-доска и отслеживание динамики каждого балла.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2">
                     <a href="#trial-form" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-lg shadow-indigo-200 dark:shadow-none transition transform hover:-translate-y-0.5">
@@ -84,7 +84,7 @@
 
             <!-- Карточка со статистикой -->
             <div class="w-full max-w-md bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
-                <h3 class="text-base font-extrabold text-slate-900 dark:text-white text-center">Результаты учеников:</h3>
+                <h3 class="text-base font-extrabold text-slate-900 dark:text-white text-center">Результаты выпускников:</h3>
                 
                 <div class="grid grid-cols-2 gap-3 text-center">
                     <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-700/60">
@@ -100,22 +100,54 @@
                 <div class="space-y-3 text-xs text-slate-600 dark:text-slate-300">
                     <div class="flex items-start gap-2.5">
                         <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
-                        <span><b>Личный онлайн-кабинет:</b> расписание, вход в Zoom в 1 клик, ДЗ с файлами и темы.</span>
+                        <span><b>Интерактивное дерево тем:</b> пошаговое закрытие всех заданий кодификатора ФИПИ.</span>
                     </div>
                     <div class="flex items-start gap-2.5">
                         <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
-                        <span><b>Интерактивная доска:</b> сохранение всех записей и конспектов каждого занятия.</span>
+                        <span><b>Формат:</b> Zoom с интерактивной доской (все записи сохраняются в личном кабинете).</span>
                     </div>
                     <div class="flex items-start gap-2.5">
                         <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
-                        <span><b>Ежемесячные отчёты для родителей</b> с реальным графиком роста баллов на пробниках.</span>
+                        <span><b>Домашние задания прямо на платформе</b> с быстрой загрузкой фото решений.</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Форма записи на диагностику -->
-        <section id="trial-form" class="bg-slate-100 dark:bg-slate-900/60 py-12 sm:py-16 border-y border-slate-200 dark:border-slate-800">
+        <!-- ПУНКТ 6: КАРУСЕЛЬ ДИПЛОМОВ И СЕРТИФИКАТОВ -->
+        <section class="max-w-6xl mx-auto px-4 py-10 w-full">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Дипломы и квалификация</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Подтверждённое образование и сертификаты эксперта</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="slideCarousel('diplomas', -1)" class="w-9 h-9 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:bg-slate-100 transition flex items-center justify-center">◀</button>
+                    <button onclick="slideCarousel('diplomas', 1)" class="w-9 h-9 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:bg-slate-100 transition flex items-center justify-center">▶</button>
+                </div>
+            </div>
+
+            <div id="carousel-diplomas" class="flex gap-4 overflow-x-auto custom-scrollbar scroll-smooth pb-2"></div>
+        </section>
+
+        <!-- ПУНКТ 6: КАРУСЕЛЬ ОТЗЫВОВ -->
+        <section class="max-w-6xl mx-auto px-4 py-10 w-full">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Отзывы учеников и родителей</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Реальные истории поступления на бюджет</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="slideCarousel('reviews', -1)" class="w-9 h-9 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:bg-slate-100 transition flex items-center justify-center">◀</button>
+                    <button onclick="slideCarousel('reviews', 1)" class="w-9 h-9 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold hover:bg-slate-100 transition flex items-center justify-center">▶</button>
+                </div>
+            </div>
+
+            <div id="carousel-reviews" class="flex gap-4 overflow-x-auto custom-scrollbar scroll-smooth pb-2"></div>
+        </section>
+
+        <!-- Форма записи на бесплатную диагностику -->
+        <section id="trial-form" class="bg-slate-100 dark:bg-slate-900/60 py-12 sm:py-16 border-y border-slate-200 dark:border-slate-800 mt-6">
             <div class="max-w-xl mx-auto px-4 text-center space-y-6">
                 <div class="space-y-2">
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white">Запишитесь на бесплатную диагностику</h3>
@@ -136,8 +168,8 @@
                         <select id="lead-goal" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100">
                             <option value="ЕГЭ Профиль 11 класс">ЕГЭ Профиль (11 класс)</option>
                             <option value="ОГЭ Математика 9 класс">ОГЭ Математика (9 класс)</option>
-                            <option value="10 класс подготовка к ЕГЭ">10 класс (база для ЕГЭ)</option>
-                            <option value="Повышение успеваемости 5-8 класс">Повышение успеваемости (5–8 класс)</option>
+                            <option value="ЕГЭ База 10-11 класс">ЕГЭ База (10–11 класс)</option>
+                            <option value="Повышение успеваемости 8 класс">8 класс (подготовка к ОГЭ)</option>
                         </select>
                     </div>
                     <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-3.5 rounded-2xl text-xs sm:text-sm shadow-md transition">
@@ -148,7 +180,7 @@
         </section>
     </div>
 
-    <!-- ==================== МОДАЛКА ВХОДА ПО PIN С ДИАГНОСТИКОЙ ==================== -->
+    <!-- ==================== МОДАЛКА ВХОДА ПО PIN ==================== -->
     <div id="modal-pin-login" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 text-center relative">
             <button onclick="closePinModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold p-1">✕</button>
@@ -173,7 +205,6 @@
                     Войти в систему →
                 </button>
 
-                <!-- КНОПКА ДИАГНОСТИКИ СВЯЗИ -->
                 <button type="button" onclick="runDiagnostic()" class="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline pt-2 block mx-auto font-medium">
                     🔍 Проверить связь с базой (Диагностика)
                 </button>
@@ -227,7 +258,7 @@
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-lg shadow-sm" id="student-avatar">У</div>
                 <div>
                     <h2 class="text-sm font-bold text-slate-900 dark:text-white" id="student-portal-name">Личный кабинет</h2>
-                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">Уроки с Артёмом</p>
+                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium" id="student-portal-subject">Уроки с Артёмом</p>
                 </div>
             </div>
             <div class="flex items-center space-x-2">
@@ -272,7 +303,7 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Ученики</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Профили, PIN-коды, отчёты для родителей и балансы</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Профили, экзамены, дерево тем и отчёты для родителей</p>
                 </div>
                 <button onclick="openStudentModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">
                     + Добавить ученика
@@ -355,11 +386,11 @@
                         </div>
                     </div>
 
-                    <!-- КНОПКИ ВХОДА В ZOOM И ОНЛАЙН-ДОСКУ -->
+                    <!-- КНОПКИ ВХОДА В ZOOM И ОНЛАЙН-ДОСКУ С УМНЫМ ТАЙМЕРОМ (ПУНКТ 4) -->
                     <div class="flex flex-wrap gap-2.5 pt-2 border-t border-white/20" id="portal-lesson-links">
-                        <a id="btn-zoom-link" href="#" target="_blank" class="bg-white hover:bg-slate-100 text-indigo-900 font-extrabold px-4 py-2.5 rounded-2xl text-xs shadow-md transition flex items-center gap-2">
-                            <span>🎥 Войти в Zoom</span>
-                        </a>
+                        <button id="btn-zoom-action" onclick="handleStudentZoomClick()" class="bg-white hover:bg-slate-100 text-indigo-900 font-extrabold px-4 py-2.5 rounded-2xl text-xs shadow-md transition flex items-center gap-2">
+                            <span id="btn-zoom-text">🎥 Войти в Zoom</span>
+                        </button>
                         <a id="btn-board-link" href="#" target="_blank" class="bg-indigo-950/40 hover:bg-indigo-950/60 border border-white/30 text-white font-bold px-4 py-2.5 rounded-2xl text-xs transition flex items-center gap-2">
                             <span>✏️ Онлайн-доска</span>
                         </a>
@@ -367,37 +398,40 @@
                 </div>
             </div>
 
-            <!-- Геймификация -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center text-2xl" id="portal-level-icon">🏆</div>
-                    <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400">Уровень</span>
-                        <h4 class="font-extrabold text-slate-900 dark:text-white text-base" id="portal-level-title">Профи</h4>
+            <!-- ПУНКТ 1: КОМПАКТНАЯ И ПОНЯТНАЯ СИСТЕМА УРОВНЕЙ И XP -->
+            <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-2xl" id="portal-level-icon">🏆</span>
+                        <div>
+                            <span class="text-xs font-black text-slate-900 dark:text-white" id="portal-level-title">Профи</span>
+                            <span class="text-[11px] text-slate-400 block font-medium" id="portal-xp-val">350 XP</span>
+                        </div>
+                    </div>
+                    <div class="text-right text-[11px] text-slate-500 dark:text-slate-400">
+                        <span class="font-bold text-indigo-600 dark:text-indigo-400" id="portal-xp-next">до след. уровня 150 XP</span>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-500 flex items-center justify-center text-2xl">🔥</div>
-                    <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400">Серия уроков</span>
-                        <h4 class="font-extrabold text-slate-900 dark:text-white text-base" id="portal-streak-val">0 зан. подряд</h4>
-                    </div>
+
+                <!-- Полоса прогресса XP -->
+                <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div id="portal-xp-bar" class="bg-gradient-to-r from-indigo-500 to-violet-500 h-full rounded-full transition-all duration-500" style="width: 50%"></div>
                 </div>
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 flex items-center justify-center text-2xl">⚡</div>
-                    <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400">Опыт (XP)</span>
-                        <h4 class="font-extrabold text-slate-900 dark:text-white text-base" id="portal-xp-val">0 XP</h4>
-                    </div>
+
+                <!-- Простые и прозрачные правила получения XP -->
+                <div class="flex justify-between text-[10px] text-slate-400 dark:text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800/60">
+                    <span>📚 +50 XP за урок</span>
+                    <span>📝 +40 XP за сданное ДЗ</span>
+                    <span>📈 +1 XP за каждый балл пробника</span>
                 </div>
             </div>
 
-            <!-- Вкладки ученика: Недельный календарь / Темы / База знаний -->
+            <!-- Вкладки ученика: Недельный календарь / Дерево тем / База знаний -->
             <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3 flex-wrap gap-2">
                     <div class="flex gap-2">
                         <button onclick="switchStudentSubTab('calendar')" id="st-tab-calendar" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">📅 Мой календарь на неделю</button>
-                        <button onclick="switchStudentSubTab('topics')" id="st-tab-topics" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">✅ Пройденные темы</button>
+                        <button onclick="switchStudentSubTab('topics-tree')" id="st-tab-topics-tree" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">🌳 Дерево тем курса</button>
                         <button onclick="switchStudentSubTab('materials')" id="st-tab-materials" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">📚 Материалы</button>
                     </div>
                     <button onclick="openPersonalEventModal()" id="btn-add-personal" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-sm transition">
@@ -405,6 +439,7 @@
                     </button>
                 </div>
 
+                <!-- 1. Недельный календарь ученика -->
                 <div id="student-subview-calendar" class="space-y-3">
                     <div class="flex justify-between items-center">
                         <span id="st-cal-week-range" class="text-xs font-bold text-slate-700 dark:text-slate-300"></span>
@@ -417,11 +452,23 @@
                     <div id="student-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2"></div>
                 </div>
 
-                <div id="student-subview-topics" class="hidden space-y-2"></div>
+                <!-- 2. ПУНКТ 2: ДЕРЕВО ПРОЙДЕННЫХ ТЕМ (ОГЭ / ЕГЭ БАЗА / ЕГЭ ПРОФИЛЬ) -->
+                <div id="student-subview-topics-tree" class="hidden space-y-4">
+                    <div class="flex justify-between items-center bg-indigo-50/60 dark:bg-indigo-950/40 p-3.5 rounded-2xl border border-indigo-100 dark:border-indigo-800">
+                        <div>
+                            <span class="text-[10px] text-indigo-700 dark:text-indigo-300 font-bold uppercase block" id="tree-exam-type-badge">Программа курса</span>
+                            <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white" id="tree-student-progress-title">Освоено тем: 0 из 0 (0%)</h4>
+                        </div>
+                        <span class="text-xs font-black text-indigo-600 dark:text-indigo-400" id="tree-progress-percent">0%</span>
+                    </div>
+                    <div id="student-topics-tree-container" class="space-y-3"></div>
+                </div>
+
+                <!-- 3. Материалы -->
                 <div id="student-subview-materials" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
             </div>
 
-            <!-- 2. ГРАФИК ПРОБНИКОВ (ВНИЗУ СТРАНИЦЫ) -->
+            <!-- График пробников (внизу страницы) -->
             <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
                 <div class="flex justify-between items-center mb-4">
                     <div>
@@ -478,71 +525,7 @@
 
     <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
 
-    <!-- МОДАЛКА: ЗАЯВКИ С ЛЕНДИНГА -->
-    <div id="modal-leads" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">📥 Заявки с бесплатной диагностики</h3>
-                <button onclick="closeLeadsModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
-            </div>
-            
-            <div id="leads-list-container" class="space-y-2.5"></div>
-
-            <button onclick="closeLeadsModal()" class="w-full py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs">
-                Закрыть
-            </button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА: PWA УСТАНОВКА -->
-    <div id="modal-install-app" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4">
-            <div class="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-black">📲</div>
-            <h3 class="text-base font-black text-slate-900 dark:text-white">Установка приложения на телефон</h3>
-            
-            <div class="text-left text-xs text-slate-600 dark:text-slate-300 space-y-3 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-                <p><b>На iPhone (Safari):</b><br>1. Нажмите кнопку <b>«Поделиться»</b> (квадрат со стрелкой 📤 внизу).<br>2. Выберите <b>«На экран «Домой»»</b>.</p>
-                <p><b>На Android (Chrome):</b><br>1. Нажмите меню (три точки ⋮ вверху).<br>2. Выберите <b>«Установить приложение»</b>.</p>
-            </div>
-
-            <button onclick="closeInstallModal()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-2xl text-xs">
-                Понятно
-            </button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА: ОТЧЁТ ДЛЯ РОДИТЕЛЕЙ -->
-    <div id="modal-parent-report" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">📄 Отчёт об успехах для родителей</h3>
-                <button onclick="closeParentReportModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
-            </div>
-            
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Личный комментарий репетитора к отчёту:</label>
-                    <textarea id="report-custom-comment" rows="2" placeholder="Например: Иван отлично усвоил тему логарифмов и показывает уверенный прогресс!" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Готовый текст сообщения (WhatsApp / Telegram):</label>
-                    <div id="parent-report-text" class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap font-mono border border-slate-200 dark:border-slate-700 max-h-60 overflow-y-auto custom-scrollbar"></div>
-                </div>
-            </div>
-
-            <div class="flex gap-2 pt-2">
-                <button onclick="copyParentReportText()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition flex items-center justify-center gap-1.5">
-                    <span>📋 Скопировать отчёт</span>
-                </button>
-                <button onclick="closeParentReportModal()" class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs">
-                    Закрыть
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Модалка: Урок -->
+    <!-- МОДАЛКА: УРОК С ВЫБОРОМ ТЕМЫ ИЗ ДЕРЕВА, ПРЯМЫМ ДЗ И ОТМЕНОЙ С ОПЛАТОЙ -->
     <div id="modal-lesson" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-4">
@@ -561,7 +544,7 @@
 
                 <div id="box-select-single">
                     <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Ученик *</label>
-                    <select id="lesson-student" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100"></select>
+                    <select id="lesson-student" onchange="updateLessonTopicDropdown()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100"></select>
                 </div>
 
                 <div id="box-select-group" class="hidden">
@@ -580,9 +563,18 @@
                     </div>
                 </div>
 
+                <!-- ПУНКТ 2: ТЕМА ЗАНЯТИЯ С ВЫБОРОМ ИЗ ДЕРЕВА КОДИФИКАТОРА -->
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Тема занятия</label>
-                    <input type="text" id="lesson-topic" placeholder="например: Тригонометрия / Разбор варианта" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase">Тема занятия *</label>
+                        <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold cursor-pointer" onclick="document.getElementById('topic-select-dropdown').classList.toggle('hidden')">Выбрать из дерева ▾</span>
+                    </div>
+                    
+                    <select id="topic-select-dropdown" onchange="document.getElementById('lesson-topic').value = this.value; this.classList.add('hidden')" class="hidden mb-2 w-full bg-indigo-50/80 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 rounded-xl px-3 py-2 text-xs text-indigo-950 dark:text-indigo-200 font-medium">
+                        <!-- Заполняется JS -->
+                    </select>
+
+                    <input type="text" id="lesson-topic" placeholder="например: Тригонометрические уравнения (№13)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
 
                 <div id="recurrence-box" class="bg-indigo-50/70 dark:bg-indigo-950/40 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800 space-y-2">
@@ -603,24 +595,42 @@
                     </div>
                 </div>
 
+                <!-- ПУНКТ 3: ДОМАШНЕЕ ЗАДАНИЕ С ПРЯМОЙ ЗАГРУЗКОЙ ФОТО/ФАЙЛОВ -->
                 <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <div>
                             <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 block">Домашнее задание (ДЗ)</span>
-                            <span class="text-[10px] text-slate-500">Текст и ссылка на файл</span>
+                            <span class="text-[10px] text-slate-500">Текст и прикреплённое фото/файл</span>
                         </div>
                         <input type="checkbox" id="lesson-hw" onchange="toggleHwFields()" class="w-5 h-5 text-indigo-600 rounded">
                     </div>
 
                     <div id="hw-fields-box" class="hidden space-y-2 pt-1 border-t border-slate-200 dark:border-slate-700">
-                        <textarea id="lesson-hw-text" rows="2" placeholder="Текст домашнего задания..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100"></textarea>
-                        <input type="url" id="lesson-hw-file" placeholder="Ссылка на файл / Google Диск" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
+                        <textarea id="lesson-hw-text" rows="2" placeholder="Текст задания для ученика..." class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100"></textarea>
+                        
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1">Прикрепить фото / документ с устройства:</label>
+                            <input type="file" id="lesson-hw-file-input" accept="image/*,.pdf" onchange="handleHwFileUpload(this)" class="block w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                        </div>
+                        
+                        <input type="hidden" id="lesson-hw-file-base64">
+                        <div id="lesson-hw-preview" class="hidden text-xs text-emerald-600 font-bold flex items-center justify-between bg-emerald-50 dark:bg-emerald-950/40 p-2 rounded-xl">
+                            <span>📎 Файл прикреплён</span>
+                            <button type="button" onclick="removeAttachedFile()" class="text-rose-500 text-xs">Удалить</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2">
-                    <button type="button" id="lesson-btn-delete" onclick="promptDeleteLesson()" class="text-rose-600 text-xs font-bold hidden">Удалить урок</button>
-                    <div class="flex space-x-2 ml-auto">
+                <!-- ПУНКТ 5: КНОПКА ОТМЕНЫ С УДЕРЖАНИЕМ ОПЛАТЫ -->
+                <div class="pt-2 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <button type="button" id="lesson-btn-delete" onclick="promptDeleteLesson()" class="text-rose-600 text-xs font-bold hidden">Удалить из расписания</button>
+                        <button type="button" id="lesson-btn-cancel-paid" onclick="cancelLessonWithPayment()" class="text-amber-600 dark:text-amber-400 text-xs font-bold hidden">
+                            ❌ Урок отменен (оплата списана)
+                        </button>
+                    </div>
+
+                    <div class="flex space-x-2 justify-end">
                         <button type="button" onclick="closeLessonModal()" class="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold">Отмена</button>
                         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                     </div>
@@ -643,6 +653,20 @@
                 </button>
                 <button onclick="closeDeleteSeriesModal()" class="text-xs text-slate-400 hover:underline pt-1 block mx-auto">Отмена</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Модалка: Просмотр ДЗ учеником с загрузкой своего решения -->
+    <div id="modal-hw-view" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800 space-y-3.5 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">📝 Домашнее задание</h3>
+                <button onclick="closeHwViewModal()" class="text-slate-400 text-lg">✕</button>
+            </div>
+            
+            <div id="hw-view-content" class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 space-y-2"></div>
+            
+            <button onclick="closeHwViewModal()" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold">Закрыть</button>
         </div>
     </div>
 
@@ -681,16 +705,7 @@
         </div>
     </div>
 
-    <!-- Модалка: Просмотр ДЗ учеником -->
-    <div id="modal-hw-view" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800 space-y-3">
-            <h3 class="text-base font-bold text-slate-900 dark:text-white">📝 Домашнее задание</h3>
-            <div id="hw-view-content" class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 space-y-2"></div>
-            <button onclick="closeHwViewModal()" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold">Понятно</button>
-        </div>
-    </div>
-
-    <!-- Модалка: Ученик -->
+    <!-- Модалка: Ученик (С выбором класса и типа экзамена для дерева тем) -->
     <div id="modal-student" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800">
             <div class="flex justify-between items-center mb-4">
@@ -705,10 +720,22 @@
                     <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Имя и фамилия *</label>
                     <input type="text" id="student-name" required placeholder="например: Анна Смирнова" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Предмет *</label>
-                    <input type="text" id="student-subject" required placeholder="например: Профильная математика" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Программа / Экзамен *</label>
+                        <select id="student-exam-type" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-2 text-xs text-slate-800 dark:text-slate-100 font-semibold">
+                            <option value="oge">8–9 класс (ОГЭ)</option>
+                            <option value="ege_base">10–11 класс (ЕГЭ База)</option>
+                            <option value="ege_prof" selected>11 класс (ЕГЭ Профиль)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Название предмета</label>
+                        <input type="text" id="student-subject" required placeholder="Математика (Профиль)" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Стоимость (₽/урок) *</label>
@@ -765,6 +792,37 @@
         </div>
     </div>
 
+    <!-- Модалка: Отчёт для родителей -->
+    <div id="modal-parent-report" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">📄 Отчёт об успехах для родителей</h3>
+                <button onclick="closeParentReportModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Личный комментарий репетитора:</label>
+                    <textarea id="report-custom-comment" rows="2" placeholder="Например: Анна отлично усвоила тему логарифмов и показывает стабильный прогресс!" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Готовый текст сообщения (WhatsApp / Telegram):</label>
+                    <div id="parent-report-text" class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap font-mono border border-slate-200 dark:border-slate-700 max-h-60 overflow-y-auto custom-scrollbar"></div>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+                <button onclick="copyParentReportText()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition flex items-center justify-center gap-1.5">
+                    <span>📋 Скопировать отчёт</span>
+                </button>
+                <button onclick="closeParentReportModal()" class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Модалка: Материал -->
     <div id="modal-material" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800">
@@ -790,6 +848,31 @@
         </div>
     </div>
 
+    <!-- Модалка: Заявки -->
+    <div id="modal-leads" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">📥 Заявки с бесплатной диагностики</h3>
+                <button onclick="closeLeadsModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            <div id="leads-list-container" class="space-y-2.5"></div>
+            <button onclick="closeLeadsModal()" class="w-full py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Модалка: PWA Инструкция -->
+    <div id="modal-install-app" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4">
+            <div class="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-black">📲</div>
+            <h3 class="text-base font-black text-slate-900 dark:text-white">Установка приложения на телефон</h3>
+            <div class="text-left text-xs text-slate-600 dark:text-slate-300 space-y-3 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <p><b>На iPhone (Safari):</b><br>1. Нажмите кнопку <b>«Поделиться»</b> (квадрат со стрелкой 📤 внизу).<br>2. Выберите <b>«На экран «Домой»»</b>.</p>
+                <p><b>На Android (Chrome):</b><br>1. Нажмите меню (три точки ⋮ вверху).<br>2. Выберите <b>«Установить приложение»</b>.</p>
+            </div>
+            <button onclick="closeInstallModal()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-2xl text-xs">Понятно</button>
+        </div>
+    </div>
+
     <!-- Модалка: Настройки -->
     <div id="modal-cloud" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar">
@@ -804,7 +887,6 @@
                     <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
 
-                <!-- Zoom и Доска -->
                 <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
                     <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">Ссылки для уроков (Zoom и Доска)</label>
                     <div>
@@ -817,7 +899,6 @@
                     </div>
                 </div>
 
-                <!-- Контакты для футера -->
                 <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
                     <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">Контакты в футере сайта</label>
                     <div>
@@ -830,7 +911,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] text-slate-400 block">Номер телефона для звонка:</span>
-                        <input type="text" id="contact-phone" placeholder="+7 (999) 999-99-99" class="w-full bg-white border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
+                        <input type="text" id="contact-phone" placeholder="+7 (999) 999-99-99" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                 </div>
 
@@ -849,10 +930,48 @@
 
     <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
     <script>
-        // =========================================================================
-        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT (оканчивается на /exec):
+        // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT ЕСЛИ ЕСТЬ:
         const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
-        // =========================================================================
+
+        // БАЗА ДАННЫХ ДЕРЕВА ТЕМ (ПУНКТ 2)
+        const EXAM_TOPIC_TREES = {
+            oge: {
+                title: "8–9 класс (ОГЭ по математике)",
+                sections: [
+                    { name: "Алгебра", topics: ["Числа и вычисления (№6)", "Числовые неравенства и прямая (№7)", "Квадратные корни и степени (№8)", "Линейные и квадратные уравнения (№9)", "Теория вероятностей (№10)", "Графики функций и формулы (№11)", "Расчеты по формулам (№12)", "Неравенства и системы (№13)", "Арифметическая и геометрическая прогрессии (№14)"] },
+                    { name: "Геометрия", topics: ["Треугольники и углы (№15)", "Окружность, хорды и касательные (№16)", "Четырехугольники и многоугольники (№17)", "Фигуры на квадратной решетке (№18)", "Верные и неверные утверждения (№19)"] },
+                    { name: "Практические задачи (№1–5)", topics: ["План участка / Квартира", "Шины / Форматы листов", "Печь для бани / Тарифы", "Маршруты и расстояния"] },
+                    { name: "Вторая часть (Сложные задания)", topics: ["Алгебраические выражения и уравнения (№20)", "Текстовые задачи на движение и сплавы (№21)", "Кусочно-заданные функции с параметром (№22)", "Геометрическая задача на вычисление (№23)", "Геометрическая задача на доказательство (№24)", "Сложная планиметрия (№25)"] }
+                ]
+            },
+            ege_base: {
+                title: "10–11 класс (ЕГЭ Базовая математика)",
+                sections: [
+                    { name: "Арифметика и алгебра", topics: ["Простейшие текстовые задачи (№1)", "Соответствие величин (№2)", "Чтение графиков и диаграмм (№3)", "Вычисления по формулам (№4)", "Теория вероятностей (№5)", "Выбор оптимального варианта (№6)", "Анализ графиков и производная (№7)", "Логические задачи (№8)"] },
+                    { name: "Геометрия и уравнения", topics: ["План местности и площади (№9)", "Планиметрия (№10)", "Стереометрия (№11)", "Простейшие уравнения (№12)", "Вычисления и степени (№13)", "Неравенства (№14)", "Числа и их свойства (№15)"] }
+                ]
+            },
+            ege_prof: {
+                title: "11 класс (ЕГЭ Профильная математика)",
+                sections: [
+                    { name: "Часть 1 (№1–12)", topics: ["Планиметрия (№1)", "Векторы на плоскости (№2)", "Стереометрия простая (№3)", "Теория вероятностей простая (№4)", "Теория вероятностей сложная (№5)", "Простейшие уравнения (№6)", "Вычисления и преобразования (№7)", "Производная и геометрический смысл (№8)", "Задачи с прикладным содержанием (№9)", "Текстовые задачи на движение и работу (№10)", "Графики элементарных функций (№11)", "Наибольшее и наименьшее значение функции (№12)"] },
+                    { name: "Часть 2 (Развернутый ответ)", topics: ["Уравнения тригонометрические / логарифмические (№13)", "Стереометрия: сечения и расстояния (№14)", "Неравенства: логарифмы и показательные (№15)", "Финансовая математика: кредиты и вклады (№16)", "Планиметрия сложная: окружности и треугольники (№17)", "Уравнения и неравенства с параметром (№18)", "Теория чисел и свойства делимости (№19)"] }
+                ]
+            }
+        };
+
+        // НАЧАЛЬНЫЕ ДАННЫЕ ДИПЛОМОВ И ОТЗЫВОВ ДЛЯ ЛЕНДИНГА (ПУНКТ 6)
+        const DEFAULT_DIPLOMAS = [
+            { title: "Высшее педагогическое образование", desc: "МГУ им. Ломоносова / Мехмат", tag: "Диплом с отличием" },
+            { title: "Сертифицированный эксперт ЕГЭ", desc: "ФИПИ / Проверка заданий профильного уровня", tag: "Сертификат 2026" },
+            { title: "Победитель всероссийских олимпиад", desc: "Олимпиада «Ломоносов» и «Физтех» по математике", tag: "Олимпиады" }
+        ];
+
+        const DEFAULT_REVIEWS = [
+            { name: "Дмитрий К.", score: "92 балла ЕГЭ", text: "Артём помог полностью закрыть вторую часть: параметры и 19 задачу разобрали досконально. Поступил в ВШЭ на бюджет!", photo: "Д" },
+            { name: "Мария С.", score: "88 баллов ЕГЭ", text: "До занятий пробники писала на 55 баллов. Личный кабинет с графиком прогресса очень мотивировал не бросать подготовку.", photo: "М" },
+            { name: "Елена (мама Ивана)", score: "ОГЭ на «5» (31 балл)", text: "Очень благодарна за ежемесячные отчёты! Всегда знала, как сын занимается, какие темы сдал и сколько уроков оплачено.", photo: "Е" }
+        ];
 
         let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [], deletedLessonIds: [], settings: {} };
         let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
@@ -909,24 +1028,231 @@
             if (!Array.isArray(data.deletedLessonIds)) data.deletedLessonIds = [];
             if (!data.settings || typeof data.settings !== 'object') data.settings = {};
             if (!Array.isArray(data.settings.leads)) data.settings.leads = [];
+            if (!Array.isArray(data.settings.diplomas)) data.settings.diplomas = DEFAULT_DIPLOMAS;
+            if (!Array.isArray(data.settings.reviews)) data.settings.reviews = DEFAULT_REVIEWS;
+
+            data.students.forEach(st => {
+                if (!st.examType) st.examType = 'ege_prof';
+                if (!Array.isArray(st.masteredTopics)) st.masteredTopics = st.topics || [];
+            });
 
             data.lessons.forEach(l => {
                 if (!l.studentIds && l.studentId) l.studentIds = [l.studentId];
                 if (!l.studentIds) l.studentIds = [];
             });
 
+            // Автоочистка тяжелых файлов ДЗ старше 7 дней (Пункт 11)
             const now = new Date();
             const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
             data.lessons.forEach(l => {
                 if (l.date && l.date < sevenDaysAgo) {
-                    if (l.homeworkFile) l.homeworkFile = "";
+                    if (l.homeworkBase64) l.homeworkBase64 = "";
                 }
             });
 
             return data;
         }
 
-        // ДИАГНОСТИКА ПОДКЛЮЧЕНИЯ
+        // ================= КАРУСЕЛИ ЛЕНДИНГА (ПУНКТ 6) =================
+        function renderLandingCarousels() {
+            const diplomasContainer = document.getElementById('carousel-diplomas');
+            const reviewsContainer = document.getElementById('carousel-reviews');
+
+            const diplomas = (db.settings && db.settings.diplomas) || DEFAULT_DIPLOMAS;
+            const reviews = (db.settings && db.settings.reviews) || DEFAULT_REVIEWS;
+
+            if (diplomasContainer) {
+                diplomasContainer.innerHTML = diplomas.map(d => `
+                    <div class="min-w-[280px] sm:min-w-[340px] bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-3">
+                        <span class="text-[10px] bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold px-2.5 py-1 rounded-lg w-fit">${d.tag}</span>
+                        <div>
+                            <h4 class="font-extrabold text-sm text-slate-900 dark:text-white">${d.title}</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${d.desc}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (reviewsContainer) {
+                reviewsContainer.innerHTML = reviews.map(r => `
+                    <div class="min-w-[290px] sm:min-w-[360px] bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black">${r.photo}</div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900 dark:text-white leading-tight">${r.name}</h4>
+                                <span class="text-xs font-black text-emerald-600 dark:text-emerald-400">${r.score}</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed">"${r.text}"</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function slideCarousel(type, direction) {
+            const container = document.getElementById(`carousel-${type}`);
+            if (container) {
+                container.scrollBy({ left: direction * 320, behavior: 'smooth' });
+            }
+        }
+
+        // ================= ПУНКТ 1: СИСТЕМА УРОВНЕЙ И XP =================
+        function calculateStudentGamification(studentId) {
+            const lessons = (db.lessons || []).filter(l => ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.status !== 'canceled_paid');
+            const student = (db.students || []).find(s => s.id === studentId) || {};
+            
+            const attendedCount = lessons.length;
+            const completedHwCount = lessons.filter(l => l.hasHomework).length;
+            const exams = student.exams || [];
+            
+            // Четкие правила начисления: 50 за урок, 40 за ДЗ, 1 за балл пробника
+            let xp = (attendedCount * 50) + (completedHwCount * 40);
+            exams.forEach(e => xp += Number(e.score || 0));
+
+            let level = "Новичок";
+            let icon = "🌱";
+            let nextThreshold = 200;
+            let prevThreshold = 0;
+
+            if (xp >= 3500) { level = "Магистр"; icon = "👑"; prevThreshold = 3500; nextThreshold = 5000; }
+            else if (xp >= 2000) { level = "Эксперт"; icon = "💎"; prevThreshold = 2000; nextThreshold = 3500; }
+            else if (xp >= 1000) { level = "Профи"; icon = "🏆"; prevThreshold = 1000; nextThreshold = 2000; }
+            else if (xp >= 500) { level = "Знаток"; icon = "⭐"; prevThreshold = 500; nextThreshold = 1000; }
+            else if (xp >= 200) { level = "Ученик"; icon = "📚"; prevThreshold = 200; nextThreshold = 500; }
+
+            const percent = Math.min(100, Math.max(5, Math.round(((xp - prevThreshold) / (nextThreshold - prevThreshold)) * 100)));
+            const xpLeft = Math.max(0, nextThreshold - xp);
+
+            return { xp, level, icon, percent, xpLeft, attendedCount, completedHwCount };
+        }
+
+        // ================= ПУНКТ 4: УМНАЯ КНОПКА ZOOM =================
+        function checkZoomTimeStatus(lesson) {
+            if (!lesson || !lesson.date || !lesson.time) return { canJoin: false, text: 'Урок не назначен' };
+
+            const parts = lesson.date.split('-');
+            const tParts = lesson.time.split(':');
+            const lessonStartTime = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]), parseInt(tParts[0]), parseInt(tParts[1])).getTime();
+            const lessonEndTime = lessonStartTime + 60 * 60 * 1000;
+            const now = new Date().getTime();
+
+            // Вход открывается за 15 минут до урока и действует до конца урока
+            if (now >= (lessonStartTime - 15 * 60 * 1000) && now <= lessonEndTime) {
+                return { canJoin: true, text: '🎥 Войти в Zoom' };
+            } else if (now < lessonStartTime) {
+                return { canJoin: false, text: `Вход откроется в ${tParts[0]}:${Math.max(0, parseInt(tParts[1])-15).toString().padStart(2,'0')}` };
+            } else {
+                return { canJoin: false, text: 'Урок завершён' };
+            }
+        }
+
+        function handleStudentZoomClick() {
+            const settings = db.settings || {};
+            if (!settings.zoomUrl) {
+                alert('Репетитор ещё не указал ссылку на Zoom в настройках.');
+                return;
+            }
+            window.open(settings.zoomUrl, '_blank');
+        }
+
+        // ================= ПУНКТ 3: ПРИКРЕПЛЕНИЕ ФАЙЛОВ ДЗ НАПРЯМУЮ =================
+        function handleHwFileUpload(input) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+
+            if (file.size > 8 * 1024 * 1024) {
+                alert('Файл слишком большой! Максимальный размер 8 МБ.');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('lesson-hw-file-base64').value = e.target.result;
+                document.getElementById('lesson-hw-preview').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeAttachedFile() {
+            document.getElementById('lesson-hw-file-input').value = '';
+            document.getElementById('lesson-hw-file-base64').value = '';
+            document.getElementById('lesson-hw-preview').classList.add('hidden');
+        }
+
+        // ================= ПУНКТ 2: ДЕРЕВО ТЕМ И ВЫБОР В УРОКЕ =================
+        function updateLessonTopicDropdown() {
+            const studentId = document.getElementById('lesson-student').value;
+            const student = (db.students || []).find(s => s.id === studentId);
+            const examType = (student && student.examType) || 'ege_prof';
+            const tree = EXAM_TOPIC_TREES[examType] || EXAM_TOPIC_TREES.ege_prof;
+
+            const dropdown = document.getElementById('topic-select-dropdown');
+            dropdown.innerHTML = '<option value="">-- Выберите тему из дерева кодификатора ФИПИ --</option>';
+
+            tree.sections.forEach(sec => {
+                dropdown.innerHTML += `<optgroup label="📂 ${sec.name}">` + 
+                    sec.topics.map(t => `<option value="${t}">${t}</option>`).join('') + 
+                `</optgroup>`;
+            });
+        }
+
+        function renderStudentTopicsTree(studentId) {
+            const st = (db.students || []).find(s => s.id === studentId);
+            if (!st) return;
+
+            const examType = st.examType || 'ege_prof';
+            const tree = EXAM_TOPIC_TREES[examType] || EXAM_TOPIC_TREES.ege_prof;
+
+            document.getElementById('tree-exam-type-badge').innerText = tree.title;
+
+            // Находим все темы, которые были пройдены в завершенных уроках
+            const studentLessons = (db.lessons || []).filter(l => 
+                ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.status !== 'canceled_paid'
+            );
+
+            const passedTopicNames = studentLessons.map(l => (l.topic || '').trim().toLowerCase());
+            const manualTopics = (st.masteredTopics || []).map(t => t.trim().toLowerCase());
+
+            let totalTopicsCount = 0;
+            let masteredCount = 0;
+
+            const container = document.getElementById('student-topics-tree-container');
+            container.innerHTML = tree.sections.map(sec => {
+                const topicsHtml = sec.topics.map(t => {
+                    totalTopicsCount++;
+                    const isPassed = passedTopicNames.some(p => p.includes(t.toLowerCase()) || t.toLowerCase().includes(p)) ||
+                                     manualTopics.some(m => m === t.toLowerCase());
+
+                    if (isPassed) masteredCount++;
+
+                    return `
+                        <div class="flex items-center justify-between p-2 rounded-xl text-xs ${isPassed ? 'bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-950 dark:text-emerald-200 font-semibold' : 'bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400'}">
+                            <span class="flex items-center gap-2">
+                                <span class="${isPassed ? 'text-emerald-600 font-black' : 'text-slate-300'}">${isPassed ? '✓' : '○'}</span>
+                                ${t}
+                            </span>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md ${isPassed ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}">
+                                ${isPassed ? 'Пройдено' : 'В плане'}
+                            </span>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 space-y-2">
+                        <h5 class="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wide">📂 ${sec.name}</h5>
+                        <div class="space-y-1.5">${topicsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+
+            const percent = totalTopicsCount > 0 ? Math.round((masteredCount / totalTopicsCount) * 100) : 0;
+            document.getElementById('tree-student-progress-title').innerText = `Освоено тем: ${masteredCount} из ${totalTopicsCount} (${percent}%)`;
+            document.getElementById('tree-progress-percent').innerText = `${percent}%`;
+        }
+
+        // ================= ДИАГНОСТИКА ПОДКЛЮЧЕНИЯ =================
         async function runDiagnostic() {
             const activeUrl = cloudUrl || DEFAULT_CLOUD_URL;
             if (!activeUrl || activeUrl.indexOf("ВСТАВЬТЕ") !== -1) {
@@ -946,25 +1272,18 @@
 
                     alert(`✅ СВЯЗЬ С ОБЛАКОМ ЕСТЬ!\n\n` +
                           `👥 Загружено учеников: ${studentsCount} чел.\n\n` +
-                          `🔑 Список PIN-кодов в базе Google:\n${pins || 'База пустая (добавьте учеников)'}\n\n` +
-                          `💡 Если учеников 0: зайдите под 7777 на компьютере и нажмите «Сохранить настройки».`);
+                          `🔑 Список PIN-кодов в базе:\n${pins || 'База пустая (добавьте учеников)'}`);
                     
                     db = sanitizeDb(data);
                     persistLocal();
-                } else {
-                    alert("⚠️ Ответ от Google получен, но данные имеют неверный формат.");
                 }
             } catch (err) {
                 alert(`❌ ОШИБКА СВЯЗИ С GOOGLE!\n\nПричина: ${err.message}\n\nПроверьте:\n1. В Google Apps Script доступ должен быть: «Все / Anyone».\n2. Ссылка должна оканчиваться на /exec.`);
             }
         }
 
-        function openInstallModal() {
-            document.getElementById('modal-install-app').classList.remove('hidden');
-        }
-        function closeInstallModal() {
-            document.getElementById('modal-install-app').classList.add('hidden');
-        }
+        function openInstallModal() { document.getElementById('modal-install-app').classList.remove('hidden'); }
+        function closeInstallModal() { document.getElementById('modal-install-app').classList.add('hidden'); }
 
         function handleLeadSubmit(e) {
             e.preventDefault();
@@ -976,38 +1295,29 @@
             db.settings.leads.unshift({ 
                 id: 'lead_' + Date.now(), 
                 date: new Date().toLocaleDateString('ru') + ' ' + new Date().toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'}), 
-                name, 
-                contact, 
-                goal 
+                name, contact, goal 
             });
             
             syncToCloud();
             updateLeadsBadge();
-
             alert(`Спасибо, ${name}! Заявка принята. Артём свяжется с вами в ближайшее время.`);
             document.getElementById('lead-name').value = '';
             document.getElementById('lead-contact').value = '';
         }
 
-        function openLeadsModal() {
-            renderLeadsList();
-            document.getElementById('modal-leads').classList.remove('hidden');
-        }
-        function closeLeadsModal() {
-            document.getElementById('modal-leads').classList.add('hidden');
-        }
+        function openLeadsModal() { renderLeadsList(); document.getElementById('modal-leads').classList.remove('hidden'); }
+        function closeLeadsModal() { document.getElementById('modal-leads').classList.add('hidden'); }
 
         function renderLeadsList() {
             const container = document.getElementById('leads-list-container');
             const leads = db.settings.leads || [];
             if (leads.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-400 py-6 text-center">Новых заявок с сайта пока нет</p>';
+                container.innerHTML = '<p class="text-xs text-slate-400 py-6 text-center">Новых заявок пока нет</p>';
                 return;
             }
 
             container.innerHTML = leads.map((lead, idx) => {
-                const isPhone = lead.contact.match(/\d/g);
-                const phoneClean = isPhone ? lead.contact.replace(/\D/g, '') : '';
+                const phoneClean = lead.contact.replace(/\D/g, '');
                 return `
                     <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-2">
                         <div class="flex justify-between items-start">
@@ -1019,10 +1329,10 @@
                         </div>
                         <p class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold">Цель: ${lead.goal}</p>
                         <div class="flex items-center justify-between pt-1 border-t border-slate-200 dark:border-slate-700">
-                            <span class="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">${lead.contact}</span>
+                            <span class="text-xs font-mono font-bold">${lead.contact}</span>
                             <div class="flex gap-1.5">
-                                ${phoneClean ? `<a href="https://wa.me/${phoneClean}" target="_blank" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px]">WhatsApp</a>` : ''}
-                                <a href="https://t.me/${lead.contact.replace('@','')}" target="_blank" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-[11px]">Telegram</a>
+                                ${phoneClean ? `<a href="https://wa.me/${phoneClean}" target="_blank" class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded-lg text-[11px]">WhatsApp</a>` : ''}
+                                <a href="https://t.me/${lead.contact.replace('@','')}" target="_blank" class="px-2.5 py-1 bg-indigo-600 text-white font-bold rounded-lg text-[11px]">Telegram</a>
                             </div>
                         </div>
                     </div>
@@ -1053,11 +1363,8 @@
             const inp = document.getElementById('login-pin');
             if (inp) { inp.value = ''; inp.focus(); }
         }
-        function closePinModal() {
-            document.getElementById('modal-pin-login').classList.add('hidden');
-        }
+        function closePinModal() { document.getElementById('modal-pin-login').classList.add('hidden'); }
 
-        // ВХОД
         async function doLogin() {
             const input = document.getElementById('login-pin');
             const errorMsg = document.getElementById('login-error-msg');
@@ -1077,10 +1384,7 @@
                 return;
             }
 
-            // Поиск ученика
             let student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
-            
-            // Если не найден — принудительно опрашиваем облако прямо сейчас
             if (!student && cloudUrl) {
                 await pullFromCloud();
                 student = (db.students || []).find(s => String(s.pin || '').trim() === pin);
@@ -1096,9 +1400,7 @@
             }
 
             if (errorMsg) {
-                errorMsg.innerText = (db.students || []).length === 0 
-                    ? 'База не загружена. Нажмите «Диагностика» ниже.' 
-                    : 'Неверный PIN-код!';
+                errorMsg.innerText = (db.students || []).length === 0 ? 'База не загружена. Нажмите «Диагностика».' : 'Неверный PIN-код!';
                 errorMsg.classList.remove('hidden');
             }
             input.value = '';
@@ -1124,6 +1426,7 @@
                 if (tutorHeader) tutorHeader.classList.add('hidden');
                 if (studentHeader) studentHeader.classList.add('hidden');
                 if (mobileNav) mobileNav.classList.add('hidden');
+                renderLandingCarousels();
                 return;
             }
 
@@ -1151,29 +1454,6 @@
             }
             updateFooterContacts();
             updateLeadsBadge();
-        }
-
-        function calculateStudentGamification(studentId) {
-            const lessons = (db.lessons || []).filter(l => (l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId);
-            const student = (db.students || []).find(s => s.id === studentId) || {};
-            
-            const completedLessons = lessons.length;
-            const completedHw = lessons.filter(l => l.hasHomework).length;
-            const exams = student.exams || [];
-            
-            let xp = (completedLessons * 20) + (completedHw * 30);
-            exams.forEach(e => xp += Number(e.score || 0));
-
-            let level = "Новичок";
-            let icon = "🌱";
-            if (xp >= 1500) { level = "Магистр"; icon = "👑"; }
-            else if (xp >= 900) { level = "Эксперт"; icon = "💎"; }
-            else if (xp >= 500) { level = "Профи"; icon = "🏆"; }
-            else if (xp >= 250) { level = "Знаток"; icon = "⭐"; }
-            else if (xp >= 100) { level = "Ученик"; icon = "📚"; }
-
-            const streak = Math.min(completedLessons, 12);
-            return { xp, level, icon, streak };
         }
 
         async function initApp() {
@@ -1377,15 +1657,16 @@
                     }).join(' & ');
 
                     const isGroup = ids.length > 1;
+                    const isCanceledPaid = (l.status === 'canceled_paid');
 
                     return `
                         <div onclick="event.stopPropagation(); openLessonModal('${l.id}')" 
-                             class="p-2 rounded-2xl border cursor-pointer transition hover:scale-[1.02] ${isGroup ? 'bg-violet-50 dark:bg-violet-950/40 border-violet-200 dark:border-violet-800 text-violet-950 dark:text-violet-200' : 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200'}">
+                             class="p-2 rounded-2xl border cursor-pointer transition hover:scale-[1.02] ${isCanceledPaid ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 text-amber-900 dark:text-amber-300 opacity-80' : (isGroup ? 'bg-violet-50 dark:bg-violet-950/40 border-violet-200 dark:border-violet-800 text-violet-950 dark:text-violet-200' : 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200')}">
                             <div class="flex items-center justify-between font-bold text-xs">
-                                <span>${l.time} ${isGroup ? '👥 ' : ''}${names}</span>
-                                <span class="w-2 h-2 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
+                                <span>${l.time} ${isCanceledPaid ? '❌ ' : (isGroup ? '👥 ' : '')}${names}</span>
+                                <span class="w-2 h-2 rounded-full ${isCanceledPaid ? 'bg-amber-500' : (l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400')}"></span>
                             </div>
-                            <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-1">${l.topic || 'Без темы'}</p>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-1">${isCanceledPaid ? 'Отменен (оплачен)' : (l.topic || 'Без темы')}</p>
                         </div>
                     `;
                 }).join('');
@@ -1443,7 +1724,7 @@
 
                             <div class="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                                 <p>Ставка: <b>${st.price} ₽</b> за урок</p>
-                                <p>Пройденных тем: <b>${(st.topics || []).length}</b></p>
+                                <p>Программа: <b>${st.examType === 'oge' ? 'ОГЭ (8-9 кл)' : (st.examType === 'ege_base' ? 'ЕГЭ База' : 'ЕГЭ Профиль')}</b></p>
                             </div>
                         </div>
 
@@ -1482,15 +1763,13 @@
             document.getElementById('modal-parent-report').classList.remove('hidden');
         }
 
-        function closeParentReportModal() {
-            document.getElementById('modal-parent-report').classList.add('hidden');
-        }
+        function closeParentReportModal() { document.getElementById('modal-parent-report').classList.add('hidden'); }
 
         function generateParentReportText() {
             const st = (db.students || []).find(s => s.id === activeReportingStudentId);
             if (!st) return;
 
-            const studentLessons = (db.lessons || []).filter(l => (l.studentIds && l.studentIds.includes(st.id)) || l.studentId === st.id);
+            const studentLessons = (db.lessons || []).filter(l => ((l.studentIds && l.studentIds.includes(st.id)) || l.studentId === st.id) && l.status !== 'canceled_paid');
             const totalLessons = studentLessons.length;
             const completedHwCount = studentLessons.filter(l => l.hasHomework).length;
             const game = calculateStudentGamification(st.id);
@@ -1511,7 +1790,7 @@
                            `📝 *Домашние задания:* сдано ${completedHwCount} из ${totalLessons}\n` +
                            `📈 *Результаты пробников:* ${examsText}\n` +
                            `🧠 *Изученные темы:* ${topicsText}\n` +
-                           `🏆 *Уровень на платформе:* ${game.icon} ${game.level} (${game.xp} XP, 🔥 ${game.streak} зан. подряд)\n\n` +
+                           `🏆 *Уровень на платформе:* ${game.icon} ${game.level} (${game.xp} XP)\n\n` +
                            `💬 *Комментарий преподавателя:*\n${comment}\n\n` +
                            `_С уважением, Артём_ ✨`;
 
@@ -1639,7 +1918,7 @@
                                         ${studentLessons.map(l => `
                                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
                                                 <td class="py-2.5 font-semibold text-slate-800 dark:text-slate-200">${formatReadableDate(l.date, l.time)}</td>
-                                                <td class="py-2.5 text-slate-600 dark:text-slate-300">${l.topic || '<span class="text-slate-300">Без темы</span>'}</td>
+                                                <td class="py-2.5 text-slate-600 dark:text-slate-300">${l.status === 'canceled_paid' ? '❌ <span class="line-through">Урок отменен</span>' : (l.topic || '<span class="text-slate-300">Без темы</span>')}</td>
                                                 <td class="py-2.5 text-center">
                                                     <input type="checkbox" ${l.hasHomework ? 'checked' : ''} onchange="toggleHw('${l.id}', this.checked)" class="w-4 h-4 text-emerald-600 rounded">
                                                 </td>
@@ -1687,7 +1966,7 @@
             (db.students || []).forEach(st => {
                 const nextWeekLessons = (db.lessons || []).filter(l => 
                     ((l.studentIds && l.studentIds.includes(st.id)) || l.studentId === st.id) && 
-                    l.date >= startStr && l.date <= endStr
+                    l.date >= startStr && l.date <= endStr && l.status !== 'canceled_paid'
                 );
                 
                 const count = nextWeekLessons.length;
@@ -1760,22 +2039,17 @@
             document.getElementById('student-portal-name').innerText = st.name;
             document.getElementById('student-avatar').innerText = (st.name || 'У')[0];
 
+            // 1. Компактная геймификация (Пункт 1)
             const game = calculateStudentGamification(studentId);
             document.getElementById('portal-level-title').innerText = game.level;
             document.getElementById('portal-level-icon').innerText = game.icon;
-            document.getElementById('portal-streak-val').innerText = `${game.streak} зан. подряд`;
             document.getElementById('portal-xp-val').innerText = `${game.xp} XP`;
+            document.getElementById('portal-xp-next').innerText = `до след. уровня ${game.xpLeft} XP`;
+            document.getElementById('portal-xp-bar').style.width = `${game.percent}%`;
 
+            // 2. Zoom и Онлайн-доска с проверкой времени (Пункт 4)
             const settings = db.settings || {};
-            const zoomBtn = document.getElementById('btn-zoom-link');
             const boardBtn = document.getElementById('btn-board-link');
-
-            if (settings.zoomUrl) {
-                zoomBtn.href = settings.zoomUrl;
-                zoomBtn.classList.remove('hidden');
-            } else {
-                zoomBtn.classList.add('hidden');
-            }
 
             if (settings.boardUrl) {
                 boardBtn.href = settings.boardUrl;
@@ -1786,11 +2060,14 @@
 
             const nowStr = new Date().toISOString().split('T')[0];
             const upcomingLessons = (db.lessons || [])
-                .filter(l => ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.date >= nowStr)
+                .filter(l => ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.date >= nowStr && l.status !== 'canceled_paid')
                 .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
 
             const nextBtnBox = document.getElementById('portal-hw-details-btn');
             nextBtnBox.innerHTML = '';
+
+            const zoomActionBtn = document.getElementById('btn-zoom-action');
+            const zoomText = document.getElementById('btn-zoom-text');
 
             if (upcomingLessons.length > 0) {
                 const next = upcomingLessons[0];
@@ -1798,6 +2075,11 @@
                 document.getElementById('portal-next-topic').innerText = `Тема: ${next.topic || 'Без темы'}`;
                 document.getElementById('portal-next-hw').innerText = next.hasHomework ? '✓ Задано ДЗ' : 'Не задано';
                 
+                // Проверка времени для Zoom (Пункт 4)
+                const zoomStatus = checkZoomTimeStatus(next);
+                zoomText.innerText = zoomStatus.text;
+                zoomActionBtn.classList.toggle('opacity-60', !zoomStatus.canJoin);
+
                 if (next.hasHomework) {
                     nextBtnBox.innerHTML = `
                         <button onclick="openHwViewModal('${next.id}')" class="text-xs bg-white/20 hover:bg-white/30 text-white font-bold px-3 py-1 rounded-xl transition">
@@ -1809,11 +2091,14 @@
                 document.getElementById('portal-next-date').innerText = 'Нет запланированных уроков';
                 document.getElementById('portal-next-topic').innerText = 'Артём скоро назначит дату занятия';
                 document.getElementById('portal-next-hw').innerText = '—';
+                zoomText.innerText = '🎥 Урок не назначен';
+                zoomActionBtn.classList.add('opacity-60');
             }
 
             renderExamsChart(st.exams || []);
             renderStudentWeekCalendar(studentId);
-            renderStudentTopicsAndMaterials(studentId);
+            renderStudentTopicsTree(studentId);
+            renderStudentMaterials(studentId);
         }
 
         function changeStudentWeek(delta) {
@@ -1860,13 +2145,14 @@
                 let cardsHtml = '';
 
                 artemLessons.forEach(l => {
+                    const isCanceled = l.status === 'canceled_paid';
                     cardsHtml += `
-                        <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200 text-[11px] font-bold">
+                        <div class="p-2 rounded-xl ${isCanceled ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 opacity-75' : 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800'} border text-indigo-950 dark:text-indigo-200 text-[11px] font-bold">
                             <div class="flex justify-between items-center">
                                 <span>📚 ${l.time} Артём</span>
-                                <span class="w-1.5 h-1.5 rounded-full ${l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400'}"></span>
+                                <span class="w-1.5 h-1.5 rounded-full ${isCanceled ? 'bg-amber-500' : (l.hasHomework ? 'bg-emerald-500' : 'bg-amber-400')}"></span>
                             </div>
-                            <span class="text-[9px] font-normal text-slate-500 dark:text-slate-400 block truncate">${l.topic || 'Урок'}</span>
+                            <span class="text-[9px] font-normal text-slate-500 dark:text-slate-400 block truncate">${isCanceled ? 'Отменен (оплачен)' : (l.topic || 'Урок')}</span>
                         </div>
                     `;
                 });
@@ -1897,22 +2183,14 @@
             }
         }
 
-        function openPersonalEventModal() {
-            document.getElementById('personal-title').value = '';
-            document.getElementById('modal-personal-event').classList.remove('hidden');
-        }
-
-        function closePersonalEventModal() {
-            document.getElementById('modal-personal-event').classList.add('hidden');
-        }
+        function openPersonalEventModal() { document.getElementById('personal-title').value = ''; document.getElementById('modal-personal-event').classList.remove('hidden'); }
+        function closePersonalEventModal() { document.getElementById('modal-personal-event').classList.add('hidden'); }
 
         function submitPersonalEvent(e) {
             e.preventDefault();
             if (!currentAuth) return;
-
             const st = (db.students || []).find(s => s.id === currentAuth);
             if (!st) return;
-
             if (!st.personalEvents) st.personalEvents = [];
             
             st.personalEvents.push({
@@ -1966,15 +2244,7 @@
             });
         }
 
-        function renderStudentTopicsAndMaterials(studentId) {
-            const st = (db.students || []).find(s => s.id === studentId);
-            
-            document.getElementById('student-subview-topics').innerHTML = (st.topics || []).map(t => `
-                <div class="p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl text-xs font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2 border border-slate-100 dark:border-slate-700">
-                    <span class="text-emerald-500 font-bold">✓</span> ${t}
-                </div>
-            `).join('') || '<p class="text-xs text-slate-400 py-4 text-center">Список тем пуст</p>';
-
+        function renderStudentMaterials(studentId) {
             document.getElementById('student-subview-materials').innerHTML = (db.materials || []).map(m => `
                 <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-700 flex justify-between items-center">
                     <div>
@@ -1987,7 +2257,7 @@
         }
 
         function switchStudentSubTab(tab) {
-            ['calendar', 'topics', 'materials'].forEach(t => {
+            ['calendar', 'topics-tree', 'materials'].forEach(t => {
                 document.getElementById(`student-subview-${t}`).classList.toggle('hidden', t !== tab);
                 const btn = document.getElementById(`st-tab-${t}`);
                 if (btn) {
@@ -1999,22 +2269,26 @@
             document.getElementById('btn-add-personal').classList.toggle('hidden', tab !== 'calendar');
         }
 
+        // Просмотр ДЗ учеником с отображением прикрепленного фото/файла
         function openHwViewModal(lessonId) {
             const l = (db.lessons || []).find(item => item.id === lessonId);
             if (!l) return;
 
-            let html = `<p class="font-medium whitespace-pre-wrap">${l.homeworkText || 'Задание не расписано текстом'}</p>`;
-            if (l.homeworkFile) {
-                html += `<div class="pt-2 border-t border-slate-200 dark:border-slate-700 mt-2"><a href="${l.homeworkFile}" target="_blank" class="text-indigo-600 dark:text-indigo-400 font-bold hover:underline flex items-center gap-1">📎 Открыть прикрепленный файл / задание ↗</a></div>`;
+            let html = `<p class="font-medium whitespace-pre-wrap leading-relaxed">${l.homeworkText || 'Задание не расписано текстом'}</p>`;
+            
+            if (l.homeworkBase64) {
+                if (l.homeworkBase64.startsWith('data:image/')) {
+                    html += `<div class="pt-2"><img src="${l.homeworkBase64}" class="w-full max-h-72 object-contain rounded-xl border border-slate-200 dark:border-slate-700"></div>`;
+                } else {
+                    html += `<div class="pt-2"><a href="${l.homeworkBase64}" download="domashka" class="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">📎 Скачать прикрепленный файл задания</a></div>`;
+                }
             }
 
             document.getElementById('hw-view-content').innerHTML = html;
             document.getElementById('modal-hw-view').classList.remove('hidden');
         }
 
-        function closeHwViewModal() {
-            document.getElementById('modal-hw-view').classList.add('hidden');
-        }
+        function closeHwViewModal() { document.getElementById('modal-hw-view').classList.add('hidden'); }
 
         // ================= ОПЕРАЦИИ С УРОКАМИ =================
         let currentLessonMode = 'single';
@@ -2057,7 +2331,11 @@
             `).join('');
 
             const delBtn = document.getElementById('lesson-btn-delete');
+            const cancelPaidBtn = document.getElementById('lesson-btn-cancel-paid');
             const recBox = document.getElementById('recurrence-box');
+
+            removeAttachedFile();
+            updateLessonTopicDropdown();
 
             if (id) {
                 const l = (db.lessons || []).find(item => item.id === id);
@@ -2081,10 +2359,15 @@
                 document.getElementById('lesson-topic').value = l.topic || '';
                 document.getElementById('lesson-hw').checked = !!l.hasHomework;
                 document.getElementById('lesson-hw-text').value = l.homeworkText || '';
-                document.getElementById('lesson-hw-file').value = l.homeworkFile || '';
-                toggleHwFields();
+                
+                if (l.homeworkBase64) {
+                    document.getElementById('lesson-hw-file-base64').value = l.homeworkBase64;
+                    document.getElementById('lesson-hw-preview').classList.remove('hidden');
+                }
 
+                toggleHwFields();
                 if (delBtn) delBtn.classList.remove('hidden');
+                if (cancelPaidBtn) cancelPaidBtn.classList.remove('hidden');
                 if (recBox) recBox.classList.add('hidden');
             } else {
                 document.getElementById('lesson-modal-heading').innerText = 'Запланировать урок';
@@ -2099,6 +2382,7 @@
                 toggleHwFields();
                 if (preselectedStudentId && sel) sel.value = preselectedStudentId;
                 if (delBtn) delBtn.classList.add('hidden');
+                if (cancelPaidBtn) cancelPaidBtn.classList.add('hidden');
                 if (recBox) recBox.classList.remove('hidden');
             }
             document.getElementById('modal-lesson').classList.remove('hidden');
@@ -2119,7 +2403,7 @@
             const topic = document.getElementById('lesson-topic').value;
             const hasHomework = document.getElementById('lesson-hw').checked;
             const homeworkText = document.getElementById('lesson-hw-text').value.trim();
-            const homeworkFile = document.getElementById('lesson-hw-file').value.trim();
+            const homeworkBase64 = document.getElementById('lesson-hw-file-base64').value;
 
             let studentIds = [];
             if (currentLessonMode === 'single') {
@@ -2128,9 +2412,7 @@
                 document.querySelectorAll('.group-student-checkbox:checked').forEach(cb => {
                     studentIds.push(cb.value);
                 });
-                if (studentIds.length === 0) {
-                    return alert('Выберите хотя бы одного ученика для группы!');
-                }
+                if (studentIds.length === 0) return alert('Выберите хотя бы одного ученика для группы!');
             }
 
             const repeatType = document.getElementById('lesson-repeat-type').value;
@@ -2147,7 +2429,8 @@
                         topic, 
                         hasHomework, 
                         homeworkText, 
-                        homeworkFile 
+                        homeworkBase64,
+                        status: 'active'
                     });
                 }
             } else {
@@ -2173,7 +2456,8 @@
                         topic: count > 1 ? `${topic} (Урок ${i + 1})` : topic,
                         hasHomework: i === 0 ? hasHomework : false,
                         homeworkText: i === 0 ? homeworkText : '',
-                        homeworkFile: i === 0 ? homeworkFile : ''
+                        homeworkBase64: i === 0 ? homeworkBase64 : '',
+                        status: 'active'
                     });
                 }
 
@@ -2190,25 +2474,42 @@
             refreshViews();
         }
 
+        // ПУНКТ 5: ОТМЕНА УРОКА С УДЕРЖАНИЕМ ОПЛАТЫ
+        function cancelLessonWithPayment() {
+            const id = document.getElementById('lesson-id').value;
+            const l = (db.lessons || []).find(item => item.id === id);
+            if (!l) return;
+
+            if (confirm('Пометить этот урок как «Отменён»? Деньги за занятие останутся у вас на балансе.')) {
+                l.status = 'canceled_paid';
+                
+                // Удаляем из Google Календаря чтобы не висел
+                if (l.calendarEventId) {
+                    if (!db.deletedCalendarEventIds) db.deletedCalendarEventIds = [];
+                    db.deletedCalendarEventIds.push(l.calendarEventId);
+                    l.calendarEventId = null;
+                }
+
+                syncToCloud();
+                closeLessonModal();
+                refreshViews();
+            }
+        }
+
         function promptDeleteLesson() {
             const id = document.getElementById('lesson-id').value;
             const l = (db.lessons || []).find(item => item.id === id);
             if (!l) return;
 
             currentDeletingLessonId = id;
-
             if (l.seriesId) {
                 document.getElementById('modal-delete-series').classList.remove('hidden');
             } else {
-                if (confirm('Удалить этот урок?')) {
-                    executeDeleteSingleLesson(id);
-                }
+                if (confirm('Удалить этот урок?')) executeDeleteSingleLesson(id);
             }
         }
 
-        function closeDeleteSeriesModal() {
-            document.getElementById('modal-delete-series').classList.add('hidden');
-        }
+        function closeDeleteSeriesModal() { document.getElementById('modal-delete-series').classList.add('hidden'); }
 
         function executeDeleteSeries(deleteAllFuture) {
             const l = (db.lessons || []).find(item => item.id === currentDeletingLessonId);
@@ -2301,7 +2602,6 @@
             document.getElementById('exam-score').value = '';
             document.getElementById('modal-exam').classList.remove('hidden');
         }
-
         function closeExamModal() { document.getElementById('modal-exam').classList.add('hidden'); }
 
         function submitExamScore(e) {
@@ -2335,7 +2635,6 @@
             document.getElementById('mat-url').value = '';
             document.getElementById('modal-material').classList.remove('hidden');
         }
-
         function closeMaterialModal() { document.getElementById('modal-material').classList.add('hidden'); }
 
         function submitMaterial(e) {
@@ -2366,6 +2665,7 @@
                 document.getElementById('student-id').value = st.id;
                 document.getElementById('student-name').value = st.name;
                 document.getElementById('student-subject').value = st.subject;
+                document.getElementById('student-exam-type').value = st.examType || 'ege_prof';
                 document.getElementById('student-price').value = st.price;
                 document.getElementById('student-paid').value = st.paidLessons;
                 document.getElementById('student-pin').value = st.pin || '1042';
@@ -2386,6 +2686,7 @@
             const item = {
                 name: document.getElementById('student-name').value,
                 subject: document.getElementById('student-subject').value,
+                examType: document.getElementById('student-exam-type').value,
                 price: Number(document.getElementById('student-price').value),
                 paidLessons: Number(document.getElementById('student-paid').value),
                 pin: document.getElementById('student-pin').value.trim()
@@ -2397,6 +2698,7 @@
             } else {
                 item.id = 'st_' + Date.now();
                 item.topics = [];
+                item.masteredTopics = [];
                 item.exams = [];
                 item.personalEvents = [];
                 db.students.push(item);
@@ -2434,10 +2736,8 @@
         function saveAppSettings() {
             const urlVal = document.getElementById('cloud-url-input').value.trim();
             const pinVal = document.getElementById('tutor-pin-input').value.trim();
-            
             const zoomVal = document.getElementById('setting-zoom-url').value.trim();
             const boardVal = document.getElementById('setting-board-url').value.trim();
-
             const tgVal = document.getElementById('contact-tg').value.trim();
             const waVal = document.getElementById('contact-wa').value.trim();
             const phoneVal = document.getElementById('contact-phone').value.trim();
