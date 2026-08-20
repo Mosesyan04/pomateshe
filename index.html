@@ -122,7 +122,6 @@
                 </div>
             </div>
 
-            <!-- Недельная сетка 7 дней -->
             <div id="tutor-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2.5"></div>
         </section>
 
@@ -251,7 +250,7 @@
                 <div id="portal-exams-labels" class="flex justify-between text-[11px] text-slate-400 mt-2 px-2"></div>
             </div>
 
-            <!-- Вкладки ученика: Недельный календарь / Темы / База знаний -->
+            <!-- Вкладки ученика -->
             <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-3 flex-wrap gap-2">
                     <div class="flex gap-2">
@@ -336,7 +335,6 @@
                 <input type="hidden" id="lesson-id">
                 <input type="hidden" id="lesson-series-id">
                 
-                <!-- Переключатель: 1 ученик или Группа -->
                 <div class="flex bg-slate-100 p-1 rounded-xl gap-1">
                     <button type="button" id="btn-mode-single" onclick="setLessonMode('single')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white shadow-sm text-indigo-600">Один ученик</button>
                     <button type="button" id="btn-mode-group" onclick="setLessonMode('group')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900">👥 Группа (2+)</button>
@@ -368,7 +366,6 @@
                     <input type="text" id="lesson-topic" placeholder="например: Тригонометрия / Разбор варианта" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
                 </div>
 
-                <!-- Повторение -->
                 <div id="recurrence-box" class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-100 space-y-2">
                     <label class="block text-[11px] font-bold text-indigo-900 uppercase">🔁 Регулярное расписание</label>
                     <div class="grid grid-cols-2 gap-2">
@@ -382,13 +379,11 @@
                                 <option value="4">4 урока</option>
                                 <option value="8" selected>8 уроков</option>
                                 <option value="12">12 уроков</option>
-                                <option value="16">16 уроков</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- ДЗ -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <div>
@@ -545,7 +540,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-1">
                     <button type="button" onclick="closeExamModal()" class="px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-semibold">Отмена</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
+                    <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold">Сохранить</button>
                 </div>
             </form>
         </div>
@@ -590,11 +585,10 @@
                     <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
                 </div>
 
-                <!-- Контакты для футера -->
                 <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
                     <label class="block text-[11px] font-bold text-slate-700 uppercase">Контакты в футере сайта</label>
                     <div>
-                        <span class="text-[10px] text-slate-400 block">Telegram (никнейм или ссылка):</span>
+                        <span class="text-[10px] text-slate-400 block">Telegram (никнейм без @ или ссылка):</span>
                         <input type="text" id="contact-tg" placeholder="artem_tutor" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
                     </div>
                     <div>
@@ -623,9 +617,9 @@
     <!-- ==================== СИСТЕМНЫЙ JS ==================== -->
     <script>
         // ВСТАВЬТЕ СЮДА ВАШУ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT:
-        const DEFAULT_CLOUD_URL = "";
+        const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
 
-        let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [], deletedLessonIds: [] };
+        let db = { students: [], lessons: [], materials: [], deletedCalendarEventIds: [], deletedLessonIds: [], settings: {} };
         let cloudUrl = localStorage.getItem('tutor_cloud_script_url') || (DEFAULT_CLOUD_URL.indexOf("ВСТАВЬТЕ") === -1 ? DEFAULT_CLOUD_URL : '');
         let currentAuth = localStorage.getItem('tutor_current_auth') || null;
         let currentTab = 'calendar';
@@ -663,6 +657,7 @@
             if (!Array.isArray(data.materials)) data.materials = [];
             if (!Array.isArray(data.deletedCalendarEventIds)) data.deletedCalendarEventIds = [];
             if (!Array.isArray(data.deletedLessonIds)) data.deletedLessonIds = [];
+            if (!data.settings || typeof data.settings !== 'object') data.settings = {};
 
             data.lessons.forEach(l => {
                 if (!l.studentIds && l.studentId) l.studentIds = [l.studentId];
@@ -689,7 +684,7 @@
             const pin = input.value.replace(/\D/g, '').trim();
             if (errorMsg) errorMsg.classList.add('hidden');
 
-            const masterPin = localStorage.getItem('tutor_master_pin') || '7777';
+            const masterPin = (db.settings && db.settings.masterPin) || localStorage.getItem('tutor_master_pin') || '7777';
 
             if (pin === '7777' || pin === masterPin) {
                 currentAuth = 'tutor';
@@ -812,15 +807,17 @@
                     setCloudStatus('local');
                 }
 
-                const tutorPin = localStorage.getItem('tutor_master_pin') || '7777';
+                // Загрузка сохраненных настроек в форму
+                const settings = db.settings || {};
+                const tutorPin = settings.masterPin || localStorage.getItem('tutor_master_pin') || '7777';
                 const tutorPinInp = document.getElementById('tutor-pin-input');
                 if (tutorPinInp) tutorPinInp.value = tutorPin;
 
-                document.getElementById('contact-tg').value = localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
-                document.getElementById('contact-wa').value = localStorage.getItem('tutor_contact_wa') || '79999999999';
-                document.getElementById('contact-phone').value = localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
+                document.getElementById('contact-tg').value = settings.tg || localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
+                document.getElementById('contact-wa').value = settings.wa || localStorage.getItem('tutor_contact_wa') || '79999999999';
+                document.getElementById('contact-phone').value = settings.phone || localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
+                
                 updateFooterContacts();
-
                 applyAuthSession();
             } catch (err) {
                 console.error("Ошибка запуска:", err);
@@ -830,9 +827,10 @@
         }
 
         function updateFooterContacts() {
-            const tg = localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
-            const wa = localStorage.getItem('tutor_contact_wa') || '79999999999';
-            const phone = localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
+            const settings = db.settings || {};
+            const tg = settings.tg || localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
+            const wa = settings.wa || localStorage.getItem('tutor_contact_wa') || '79999999999';
+            const phone = settings.phone || localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
 
             const tgClean = tg.replace('@', '').replace('https://t.me/', '');
             const waClean = wa.replace(/\D/g, '');
@@ -898,6 +896,7 @@
                 if (data && typeof data === 'object') {
                     db = sanitizeDb(data);
                     persistLocal();
+                    updateFooterContacts();
                     refreshViews();
                 }
                 setCloudStatus('connected');
@@ -1135,6 +1134,7 @@
                             </div>
                         </div>
 
+                        <!-- Пройденные темы -->
                         <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
                             <h4 class="text-xs font-bold text-slate-700 uppercase mb-2">Пройденные темы</h4>
                             <form onsubmit="addTopic(event, '${st.id}')" class="flex gap-1.5 mb-3">
@@ -1953,7 +1953,16 @@
         }
 
         // ================= НАСТРОЙКИ, БЭКАП И КОНТАКТЫ =================
-        function openCloudModal() { document.getElementById('modal-cloud').classList.remove('hidden'); }
+        function openCloudModal() { 
+            const settings = db.settings || {};
+            document.getElementById('cloud-url-input').value = cloudUrl || '';
+            document.getElementById('tutor-pin-input').value = settings.masterPin || localStorage.getItem('tutor_master_pin') || '7777';
+            document.getElementById('contact-tg').value = settings.tg || localStorage.getItem('tutor_contact_tg') || 'artem_tutor';
+            document.getElementById('contact-wa').value = settings.wa || localStorage.getItem('tutor_contact_wa') || '79999999999';
+            document.getElementById('contact-phone').value = settings.phone || localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
+            document.getElementById('modal-cloud').classList.remove('hidden'); 
+        }
+
         function closeCloudModal() { document.getElementById('modal-cloud').classList.add('hidden'); }
 
         function saveAppSettings() {
@@ -1964,22 +1973,32 @@
             const waVal = document.getElementById('contact-wa').value.trim();
             const phoneVal = document.getElementById('contact-phone').value.trim();
 
+            if (!db.settings) db.settings = {};
+
+            // Сохраняем контакты в общую базу данных для всех устройств!
+            db.settings.tg = tgVal;
+            db.settings.wa = waVal;
+            db.settings.phone = phoneVal;
+
             if (urlVal) {
                 cloudUrl = urlVal;
                 localStorage.setItem('tutor_cloud_script_url', urlVal);
-                pullFromCloud();
             }
 
             if (pinVal && pinVal.length === 4) {
                 localStorage.setItem('tutor_master_pin', pinVal);
+                db.settings.masterPin = pinVal;
             }
 
-            if (tgVal) localStorage.setItem('tutor_contact_tg', tgVal);
-            if (waVal) localStorage.setItem('tutor_contact_wa', waVal);
-            if (phoneVal) localStorage.setItem('tutor_contact_phone', phoneVal);
+            localStorage.setItem('tutor_contact_tg', tgVal);
+            localStorage.setItem('tutor_contact_wa', waVal);
+            localStorage.setItem('tutor_contact_phone', phoneVal);
 
+            // Мгновенно отправляем новые контакты на Google Диск
+            syncToCloud();
             updateFooterContacts();
-            alert('Настройки и контакты сохранены!');
+
+            alert('Настройки и контакты успешно сохранены и синхронизированы!');
             closeCloudModal();
         }
 
