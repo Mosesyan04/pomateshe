@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Уроки с Артёмом | pomateshe</title>
     
-    <!-- PWA Мета-теги для мобильных устройств -->
+    <!-- Встроенный PWA Manifest для установки приложения на телефон -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="pomateshe">
     <meta name="theme-color" content="#4f46e5">
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%D0%A3%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%20%D0%90%D1%80%D1%82%D1%91%D0%BC%D0%BE%D0%BC%22%2C%22short_name%22%3A%22pomateshe%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%234f46e5%22%7D">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -35,9 +36,8 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col antialiased transition-colors duration-200">
 
-    <!-- ==================== 1. ПУБЛИЧНЫЙ ЛЕНДИНГ-ВИЗИТКА ==================== -->
+    <!-- ==================== 1. ПУБЛИЧНЫЙ ЛЕНДИНГ ==================== -->
     <div id="view-landing" class="flex-1 flex flex-col">
-        <!-- Шапка лендинга -->
         <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40">
             <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
                 <div class="flex items-center space-x-2.5">
@@ -48,7 +48,10 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-sm transition" title="Сменить тему">
+                    <button onclick="openInstallModal()" class="hidden sm:inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition">
+                        📲 Приложение
+                    </button>
+                    <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-sm transition">
                         <span id="theme-toggle-icon">🌙</span>
                     </button>
                     <button onclick="openPinModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm shadow-md shadow-indigo-200 dark:shadow-none transition flex items-center gap-1.5">
@@ -58,21 +61,21 @@
             </div>
         </header>
 
-        <!-- Главный экран лендинга (Hero) -->
+        <!-- Главный экран -->
         <section class="max-w-6xl mx-auto px-4 py-12 sm:py-20 flex flex-col lg:flex-row items-center gap-10">
             <div class="flex-1 space-y-6 text-center lg:text-left">
                 <div class="inline-flex items-center gap-2 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 px-3.5 py-1.5 rounded-full text-xs font-bold text-indigo-700 dark:text-indigo-300">
-                    <span>🚀 Набор на 2026/2027 учебный год</span>
+                    <span>🚀 Системная подготовка к экзаменам</span>
                 </div>
                 <h2 class="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">
                     Подготовка к ЕГЭ и ОГЭ по математике на <span class="text-indigo-600 dark:text-indigo-400">80+ баллов</span>
                 </h2>
                 <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    Понятное объяснение сложной математики без зубрежки. Индивидуальный интерактивный личный кабинет, онлайн-доска, отслеживание динамики баллов и системная подготовка к экзаменам.
+                    Понятное объяснение сложной математики без зубрежки. Индивидуальный интерактивный кабинет, онлайн-доска, отслеживание динамики пробников и прозрачные отчёты для родителей.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2">
                     <a href="#trial-form" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-lg shadow-indigo-200 dark:shadow-none transition transform hover:-translate-y-0.5">
-                        Записаться на пробный урок →
+                        Записаться на диагностику →
                     </a>
                     <button onclick="openPinModal()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold px-6 py-3.5 rounded-2xl text-sm transition">
                         Кабинет ученика
@@ -80,9 +83,9 @@
                 </div>
             </div>
 
-            <!-- Карточка с преимуществами и статистикой -->
+            <!-- Карточка со статистикой -->
             <div class="w-full max-w-md bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
-                <h3 class="text-base font-extrabold text-slate-900 dark:text-white text-center">Почему выбирают занятия со мной:</h3>
+                <h3 class="text-base font-extrabold text-slate-900 dark:text-white text-center">Результаты учеников:</h3>
                 
                 <div class="grid grid-cols-2 gap-3 text-center">
                     <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-100 dark:border-slate-700/60">
@@ -98,26 +101,26 @@
                 <div class="space-y-3 text-xs text-slate-600 dark:text-slate-300">
                     <div class="flex items-start gap-2.5">
                         <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
-                        <span><b>Личный онлайн-кабинет:</b> расписание, ДЗ с файлами, трекинг тем и график баллов.</span>
+                        <span><b>Личный онлайн-кабинет:</b> расписание, вход в Zoom в 1 клик, ДЗ с файлами и темы.</span>
                     </div>
                     <div class="flex items-start gap-2.5">
                         <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
-                        <span><b>Формат:</b> Zoom с интерактивной онлайн-доской (записи всех уроков сохраняются).</span>
+                        <span><b>Интерактивная доска:</b> сохранение всех записей и конспектов каждого занятия.</span>
                     </div>
                     <div class="flex items-start gap-2.5">
                         <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">✓</span>
-                        <span><b>Ежемесячные отчёты для родителей</b> с прозрачным графиком роста результатов.</span>
+                        <span><b>Ежемесячные отчёты для родителей</b> с реальным графиком роста баллов на пробниках.</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Форма заявки на пробный урок -->
+        <!-- Форма записи на бесплатную диагностику -->
         <section id="trial-form" class="bg-slate-100 dark:bg-slate-900/60 py-12 sm:py-16 border-y border-slate-200 dark:border-slate-800">
             <div class="max-w-xl mx-auto px-4 text-center space-y-6">
                 <div class="space-y-2">
                     <h3 class="text-2xl font-black text-slate-900 dark:text-white">Запишитесь на бесплатную диагностику</h3>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Определим текущий уровень знаний, разберем пробелы и составим личный план подготовки на нужный балл.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Определим уровень знаний, разберем проблемные темы и составим персональный план подготовки.</p>
                 </div>
 
                 <form onsubmit="handleLeadSubmit(event)" class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md space-y-3.5 text-left">
@@ -126,7 +129,7 @@
                         <input type="text" id="lead-name" required placeholder="например: Михаил" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Телефон или Telegram *</label>
+                        <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Телефон или Telegram для связи *</label>
                         <input type="text" id="lead-contact" required placeholder="+7 (999) 000-00-00 или @username" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
@@ -146,7 +149,7 @@
         </section>
     </div>
 
-    <!-- ==================== МОДАЛКА ВХОДА ПО PIN (ДЛЯ УЧЕНИКОВ И РЕПЕТИТОРА) ==================== -->
+    <!-- ==================== МОДАЛКА ВХОДА ПО PIN ==================== -->
     <div id="modal-pin-login" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 text-center relative">
             <button onclick="closePinModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold p-1">✕</button>
@@ -199,9 +202,15 @@
             </div>
 
             <div class="flex items-center space-x-2">
+                <!-- Кнопка Заявок с сайта -->
+                <button onclick="openLeadsModal()" class="relative bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                    <span>📥 Заявки</span>
+                    <span id="leads-count-badge" class="hidden bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-extrabold">0</span>
+                </button>
+
                 <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-bold transition">🌙</button>
                 <button onclick="pullFromCloud()" title="Синхронизировать" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">🔄</button>
-                <button onclick="openCloudModal()" class="bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">⚙️ Настройки</button>
+                <button onclick="openCloudModal()" class="bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold shadow-sm transition">⚙️</button>
                 <button onclick="openLessonModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition">+ Урок</button>
                 <button onclick="logout()" title="Выйти" class="p-2 text-slate-400 hover:text-rose-600 transition">🚪</button>
             </div>
@@ -219,6 +228,9 @@
                 </div>
             </div>
             <div class="flex items-center space-x-2">
+                <button onclick="openInstallModal()" class="hidden sm:inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition">
+                    📲 Приложение
+                </button>
                 <button onclick="toggleDarkMode()" class="p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-xs font-bold transition">🌙</button>
                 <button onclick="pullFromCloud()" title="Обновить" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition">🔄</button>
                 <button onclick="logout()" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-xl font-bold transition flex items-center gap-1">
@@ -228,7 +240,7 @@
         </div>
     </header>
 
-    <!-- ==================== ОСНОВНАЯ РАБОЧАЯ ЗОНА (РЕПЕТИТОР / УЧЕНИК) ==================== -->
+    <!-- ==================== ОСНОВНОЙ КОНТЕНТ ==================== -->
     <main id="main-content" class="hidden max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full pb-safe md:pb-6">
 
         <!-- 1. НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА -->
@@ -243,13 +255,12 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-3 text-xs">
-                    <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Индивидуально</span>
+                    <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> 1 ученик</span>
                     <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span> 👥 Группа</span>
                     <span class="flex items-center gap-1 text-slate-500 dark:text-slate-400"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> ДЗ ✓</span>
                 </div>
             </div>
 
-            <!-- Недельная сетка 7 дней -->
             <div id="tutor-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2.5"></div>
         </section>
 
@@ -323,7 +334,7 @@
 
         <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА -->
         <section id="view-student-portal" class="hidden max-w-5xl mx-auto space-y-5">
-            <!-- Плашка: Ближайший урок с кнопками ZOOM и ОНЛАЙН-ДОСКИ -->
+            <!-- Плашка: Ближайший урок -->
             <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-7 rounded-3xl shadow-xl relative overflow-hidden">
                 <div class="relative z-10 space-y-4">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -378,20 +389,7 @@
                 </div>
             </div>
 
-            <!-- График пробников -->
-            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <h3 class="font-bold text-slate-900 dark:text-white text-base">📈 График прогресса (Пробники)</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">Динамика баллов за курс обучения</p>
-                    </div>
-                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg" id="portal-score-growth">+0 баллов</span>
-                </div>
-                <div id="portal-exams-chart" class="h-40 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-slate-100 dark:border-slate-800"></div>
-                <div id="portal-exams-labels" class="flex justify-between text-[11px] text-slate-400 mt-2 px-2"></div>
-            </div>
-
-            <!-- Вкладки ученика -->
+            <!-- Вкладки ученика: Недельный календарь / Темы / База знаний -->
             <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3 flex-wrap gap-2">
                     <div class="flex gap-2">
@@ -418,6 +416,19 @@
 
                 <div id="student-subview-topics" class="hidden space-y-2"></div>
                 <div id="student-subview-materials" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            </div>
+
+            <!-- 2. ГРАФИК ПРОБНИКОВ (ОПУЩЕН В САМЫЙ НИЗ СТРАНИЦЫ) -->
+            <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white text-base">📈 График прогресса (Пробники)</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Динамика баллов за курс обучения</p>
+                    </div>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg" id="portal-score-growth">+0 баллов</span>
+                </div>
+                <div id="portal-exams-chart" class="h-40 flex items-end gap-2 pt-6 pb-2 px-2 border-b border-slate-100 dark:border-slate-800"></div>
+                <div id="portal-exams-labels" class="flex justify-between text-[11px] text-slate-400 mt-2 px-2"></div>
             </div>
         </section>
 
@@ -464,7 +475,40 @@
 
     <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
 
-    <!-- МОДАЛКА: ОТЧЁТ ДЛЯ РОДИТЕЛЕЙ (НОВАЯ ФИЧА) -->
+    <!-- МОДАЛКА: ЗАЯВКИ С ЛЕНДИНГА (НОВОЕ) -->
+    <div id="modal-leads" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">📥 Заявки с бесплатной диагностики</h3>
+                <button onclick="closeLeadsModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            
+            <div id="leads-list-container" class="space-y-2.5"></div>
+
+            <button onclick="closeLeadsModal()" class="w-full py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs">
+                Закрыть
+            </button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА: ИНСТРУКЦИЯ ПО УСТАНОВКЕ ПРИЛОЖЕНИЯ (PWA) -->
+    <div id="modal-install-app" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4">
+            <div class="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto text-xl font-black">📲</div>
+            <h3 class="text-base font-black text-slate-900 dark:text-white">Установка приложения на телефон</h3>
+            
+            <div class="text-left text-xs text-slate-600 dark:text-slate-300 space-y-3 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <p><b>На iPhone (Safari):</b><br>1. Нажмите кнопку <b>«Поделиться»</b> (квадрат со стрелкой 📤 внизу).<br>2. Выберите <b>«На экран «Домой»»</b>.</p>
+                <p><b>На Android (Chrome):</b><br>1. Нажмите меню (три точки ⋮ вверху).<br>2. Выберите <b>«Установить приложение»</b>.</p>
+            </div>
+
+            <button onclick="closeInstallModal()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-2xl text-xs">
+                Понятно
+            </button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА: ОТЧЁТ ДЛЯ РОДИТЕЛЕЙ -->
     <div id="modal-parent-report" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar space-y-4">
             <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -486,7 +530,7 @@
 
             <div class="flex gap-2 pt-2">
                 <button onclick="copyParentReportText()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md transition flex items-center justify-center gap-1.5">
-                    <span>📋 Скопировать отчёт для WhatsApp/TG</span>
+                    <span>📋 Скопировать отчёт</span>
                 </button>
                 <button onclick="closeParentReportModal()" class="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs">
                     Закрыть
@@ -743,7 +787,7 @@
         </div>
     </div>
 
-    <!-- Модалка: Настройки (Google URL, Zoom, Доска, Контакты, Смена PIN) -->
+    <!-- Модалка: Настройки -->
     <div id="modal-cloud" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-3">
@@ -757,7 +801,7 @@
                     <input type="url" id="cloud-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-slate-100">
                 </div>
 
-                <!-- Ссылки на Zoom и Онлайн-доску -->
+                <!-- Zoom и Доска -->
                 <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
                     <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase">Ссылки для уроков (Zoom и Доска)</label>
                     <div>
@@ -860,6 +904,7 @@
             if (!Array.isArray(data.deletedCalendarEventIds)) data.deletedCalendarEventIds = [];
             if (!Array.isArray(data.deletedLessonIds)) data.deletedLessonIds = [];
             if (!data.settings || typeof data.settings !== 'object') data.settings = {};
+            if (!Array.isArray(data.settings.leads)) data.settings.leads = [];
 
             data.lessons.forEach(l => {
                 if (!l.studentIds && l.studentId) l.studentIds = [l.studentId];
@@ -877,6 +922,14 @@
             return data;
         }
 
+        // МОДАЛКА УСТАНОВКИ ПРИЛОЖЕНИЯ
+        function openInstallModal() {
+            document.getElementById('modal-install-app').classList.remove('hidden');
+        }
+        function closeInstallModal() {
+            document.getElementById('modal-install-app').classList.add('hidden');
+        }
+
         // ОТПРАВКА ЗАЯВКИ С ЛЕНДИНГА
         function handleLeadSubmit(e) {
             e.preventDefault();
@@ -885,12 +938,80 @@
             const goal = document.getElementById('lead-goal').value;
 
             if (!db.settings.leads) db.settings.leads = [];
-            db.settings.leads.push({ id: 'lead_' + Date.now(), date: new Date().toISOString(), name, contact, goal });
+            db.settings.leads.unshift({ 
+                id: 'lead_' + Date.now(), 
+                date: new Date().toLocaleDateString('ru') + ' ' + new Date().toLocaleTimeString('ru', {hour: '2-digit', minute:'2-digit'}), 
+                name, 
+                contact, 
+                goal 
+            });
+            
             syncToCloud();
+            updateLeadsBadge();
 
             alert(`Спасибо, ${name}! Заявка принята. Артём свяжется с вами в ближайшее время.`);
             document.getElementById('lead-name').value = '';
             document.getElementById('lead-contact').value = '';
+        }
+
+        // РАБОТА С ЗАЯВКАМИ
+        function openLeadsModal() {
+            renderLeadsList();
+            document.getElementById('modal-leads').classList.remove('hidden');
+        }
+        function closeLeadsModal() {
+            document.getElementById('modal-leads').classList.add('hidden');
+        }
+
+        function renderLeadsList() {
+            const container = document.getElementById('leads-list-container');
+            const leads = db.settings.leads || [];
+            if (leads.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 py-6 text-center">Новых заявок с сайта пока нет</p>';
+                return;
+            }
+
+            container.innerHTML = leads.map((lead, idx) => {
+                const isPhone = lead.contact.match(/\d/g);
+                const phoneClean = isPhone ? lead.contact.replace(/\D/g, '') : '';
+                return `
+                    <div class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-2">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-extrabold text-sm text-slate-900 dark:text-white">${lead.name}</h4>
+                                <span class="text-[10px] text-slate-400">${lead.date}</span>
+                            </div>
+                            <button onclick="deleteLead(${idx})" class="text-slate-300 hover:text-rose-500 text-xs">✕</button>
+                        </div>
+                        <p class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold">Цель: ${lead.goal}</p>
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-200 dark:border-slate-700">
+                            <span class="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">${lead.contact}</span>
+                            <div class="flex gap-1.5">
+                                ${phoneClean ? `<a href="https://wa.me/${phoneClean}" target="_blank" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-[11px]">WhatsApp</a>` : ''}
+                                <a href="https://t.me/${lead.contact.replace('@','')}" target="_blank" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-[11px]">Telegram</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteLead(idx) {
+            if (confirm('Удалить эту заявку?')) {
+                db.settings.leads.splice(idx, 1);
+                syncToCloud();
+                renderLeadsList();
+                updateLeadsBadge();
+            }
+        }
+
+        function updateLeadsBadge() {
+            const badge = document.getElementById('leads-count-badge');
+            const count = (db.settings.leads || []).length;
+            if (badge) {
+                badge.innerText = count;
+                badge.classList.toggle('hidden', count === 0);
+            }
         }
 
         // МОДАЛКА PIN
@@ -988,6 +1109,7 @@
                 renderStudentPortal(currentAuth);
             }
             updateFooterContacts();
+            updateLeadsBadge();
         }
 
         function calculateStudentGamification(studentId) {
@@ -1041,6 +1163,7 @@
                 document.getElementById('contact-phone').value = settings.phone || localStorage.getItem('tutor_contact_phone') || '+7 (999) 999-99-99';
                 
                 updateFooterContacts();
+                updateLeadsBadge();
                 applyAuthSession();
             } catch (err) {
                 console.error("Ошибка запуска:", err);
@@ -1120,6 +1243,7 @@
                     db = sanitizeDb(data);
                     persistLocal();
                     updateFooterContacts();
+                    updateLeadsBadge();
                     refreshViews();
                 }
                 setCloudStatus('connected');
@@ -1310,7 +1434,7 @@
             });
         }
 
-        // ================= ОТЧЁТ ДЛЯ РОДИТЕЛЕЙ (НОВАЯ ФИЧА) =================
+        // ================= ОТЧЁТ ДЛЯ РОДИТЕЛЕЙ =================
         function openParentReportModal(studentId) {
             activeReportingStudentId = studentId;
             generateParentReportText();
@@ -1330,15 +1454,12 @@
             const completedHwCount = studentLessons.filter(l => l.hasHomework).length;
             const game = calculateStudentGamification(st.id);
 
-            // Пробники
             let examsText = '—';
             if (st.exams && st.exams.length > 0) {
                 examsText = st.exams.map(e => `${e.month}: ${e.score} б.`).join(' ➔ ');
             }
 
-            // Темы
             let topicsText = (st.topics && st.topics.length > 0) ? st.topics.slice(-4).join(', ') : 'Базовые разделы курса';
-            
             const comment = document.getElementById('report-custom-comment').value.trim() || 'Ученик занимается регулярно и показывает уверенную динамику. Продолжаем системную работу!';
 
             const report = `📋 *ОТЧЁТ ОБ УСПЕХАХ ПО МАТЕМАТИКЕ*\n` +
@@ -1604,7 +1725,6 @@
             document.getElementById('portal-streak-val').innerText = `${game.streak} зан. подряд`;
             document.getElementById('portal-xp-val').innerText = `${game.xp} XP`;
 
-            // Установка ссылок на Zoom и онлайн-доску
             const settings = db.settings || {};
             const zoomBtn = document.getElementById('btn-zoom-link');
             const boardBtn = document.getElementById('btn-board-link');
