@@ -31,22 +31,12 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
         .pb-safe { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)); }
-        .cat-polaroid { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12); transition: all 0.3s ease; }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col antialiased transition-colors duration-200">
 
     <!-- ==================== 1. ПУБЛИЧНЫЙ ЛЕНДИНГ ==================== -->
     <div id="view-landing" class="flex-1 flex flex-col relative overflow-hidden">
-        
-        <!-- КОТИК НА ЛЕНДИНГЕ (ВИДЕН И НА ТЕЛЕФОНЕ И НА ПК) -->
-        <div class="pointer-events-none select-none absolute top-16 right-2 sm:right-10 z-0 opacity-40 sm:opacity-85">
-            <div class="w-20 sm:w-32 bg-white dark:bg-slate-800 p-1.5 sm:p-2 pb-2.5 sm:pb-3 rounded-2xl cat-polaroid border border-slate-200 dark:border-slate-700 transform -rotate-6">
-                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80" alt="Кот" class="w-full h-16 sm:h-28 object-cover rounded-xl shadow-inner">
-                <p class="text-[8px] sm:text-[10px] text-center font-bold text-slate-600 dark:text-slate-300 mt-1 font-mono">🐾 Математик</p>
-            </div>
-        </div>
-
         <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40">
             <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
                 <div class="flex items-center space-x-2.5">
@@ -188,18 +178,10 @@
         </section>
     </div>
 
-    <!-- ==================== МОДАЛКА ВХОДА ПО PIN + КОТИК №2 (ВИДЕН НА ТЕЛЕФОНЕ) ==================== -->
+    <!-- ==================== МОДАЛКА ВХОДА ПО PIN ==================== -->
     <div id="modal-pin-login" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 text-center relative">
             <button onclick="closePinModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-lg font-bold p-1">✕</button>
-            
-            <!-- КОТИК ПРИ ВХОДЕ -->
-            <div class="pointer-events-none select-none absolute -top-12 left-2 z-10">
-                <div class="w-16 sm:w-20 bg-white dark:bg-slate-800 p-1 pb-1.5 rounded-xl cat-polaroid border border-slate-200 dark:border-slate-700 transform rotate-6">
-                    <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?w=400&auto=format&fit=crop&q=80" alt="Кот" class="w-full h-12 sm:h-16 object-cover rounded-lg shadow-inner">
-                    <p class="text-[7px] sm:text-[8px] text-center font-bold text-slate-500 dark:text-slate-400 mt-0.5">🐾 Вход</p>
-                </div>
-            </div>
 
             <div class="w-12 h-12 bg-indigo-600 rounded-2xl text-white flex items-center justify-center mx-auto shadow-md mb-3">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -293,17 +275,8 @@
     <!-- ==================== ОСНОВНОЙ КОНТЕНТ ==================== -->
     <main id="main-content" class="hidden max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full pb-safe md:pb-6 relative">
 
-        <!-- 1. НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА + КОТИК №3 -->
-        <section id="view-calendar" class="space-y-4 relative">
-            
-            <!-- КОТИК В КАЛЕНДАРЕ (ВИДЕН И НА ТЕЛЕФОНЕ) -->
-            <div class="pointer-events-none select-none absolute -top-9 right-1 sm:right-6 z-10">
-                <div class="w-14 sm:w-20 bg-white dark:bg-slate-800 p-1 pb-1.5 rounded-xl cat-polaroid border border-slate-200 dark:border-slate-700 transform -rotate-3">
-                    <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400&auto=format&fit=crop&q=80" alt="Кот" class="w-full h-10 sm:h-14 object-cover rounded-lg shadow-inner">
-                    <p class="text-[7px] sm:text-[8px] text-center font-bold text-slate-500 dark:text-slate-400 mt-0.5 font-mono">📅 Расписание</p>
-                </div>
-            </div>
-
+        <!-- 1. НЕДЕЛЬНЫЙ КАЛЕНДАРЬ РЕПЕТИТОРА -->
+        <section id="view-calendar" class="space-y-4">
             <div class="bg-white dark:bg-slate-900 p-3.5 sm:p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 relative">
                 <div class="flex items-center space-x-2">
                     <h2 id="cal-week-range" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white capitalize">Неделя</h2>
@@ -323,17 +296,8 @@
             <div id="tutor-week-grid" class="grid grid-cols-1 sm:grid-cols-7 gap-2.5"></div>
         </section>
 
-        <!-- 2. УЧЕНИКИ + КОТИК №4 -->
-        <section id="view-students" class="hidden space-y-4 relative">
-            
-            <!-- КОТИК В УЧЕНИКАХ (ВИДЕН НА ТЕЛЕФОНЕ) -->
-            <div class="pointer-events-none select-none absolute -top-9 right-2 sm:right-36 z-10">
-                <div class="w-14 sm:w-20 bg-white dark:bg-slate-800 p-1 pb-1.5 rounded-xl cat-polaroid border border-slate-200 dark:border-slate-700 transform rotate-8">
-                    <img src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&auto=format&fit=crop&q=80" alt="Кот" class="w-full h-10 sm:h-14 object-cover rounded-lg shadow-inner">
-                    <p class="text-[7px] sm:text-[8px] text-center font-bold text-slate-500 dark:text-slate-400 mt-0.5 font-mono">🎓 Ученики</p>
-                </div>
-            </div>
-
+        <!-- 2. УЧЕНИКИ -->
+        <section id="view-students" class="hidden space-y-4">
             <div class="flex justify-between items-center">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">Ученики</h2>
@@ -354,17 +318,8 @@
             <div id="student-profile-details"></div>
         </section>
 
-        <!-- 4. ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ + КОТИК №5 -->
-        <section id="view-billing" class="hidden space-y-4 relative">
-            
-            <!-- КОТИК В ОПЛАТАХ (ВИДЕН НА ТЕЛЕФОНЕ) -->
-            <div class="pointer-events-none select-none absolute -top-8 right-2 sm:right-12 z-20">
-                <div class="w-14 sm:w-20 bg-white dark:bg-slate-800 p-1 pb-1.5 rounded-xl cat-polaroid border border-slate-200 dark:border-slate-700 transform -rotate-8">
-                    <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=400&auto=format&fit=crop&q=80" alt="Кот" class="w-full h-10 sm:h-14 object-cover rounded-lg shadow-inner">
-                    <p class="text-[7px] sm:text-[8px] text-center font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 font-mono">💰 Баланс</p>
-                </div>
-            </div>
-
+        <!-- 4. ОПЛАТЫ ПО ВОСКРЕСЕНЬЯМ -->
+        <section id="view-billing" class="hidden space-y-4">
             <div class="bg-gradient-to-r from-indigo-700 to-violet-700 text-white p-5 rounded-3xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <span class="bg-white/20 text-white px-2.5 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide">Оплаты за неделю вперед</span>
@@ -395,17 +350,8 @@
             </div>
         </section>
 
-        <!-- 5. БАЗА МАТЕРИАЛОВ + КОТИК №6 -->
-        <section id="view-materials" class="space-y-4 relative">
-            
-            <!-- КОТИК В МАТЕРИАЛАХ (ВИДЕН НА ТЕЛЕФОНЕ) -->
-            <div class="pointer-events-none select-none absolute -top-8 right-2 sm:right-36 z-10">
-                <div class="w-14 sm:w-20 bg-white dark:bg-slate-800 p-1 pb-1.5 rounded-xl cat-polaroid border border-slate-200 dark:border-slate-700 transform rotate-12">
-                    <img src="https://images.unsplash.com/photo-1561948955-570b270e7c36?w=400&auto=format&fit=crop&q=80" alt="Кот" class="w-full h-10 sm:h-14 object-cover rounded-lg shadow-inner">
-                    <p class="text-[7px] sm:text-[8px] text-center font-bold text-slate-500 dark:text-slate-400 mt-0.5 font-mono">📖 Книги</p>
-                </div>
-            </div>
-
+        <!-- 5. БАЗА МАТЕРИАЛОВ -->
+        <section id="view-materials" class="space-y-4">
             <div class="flex justify-between items-center flex-wrap gap-3">
                 <div>
                     <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">База знаний и материалы</h2>
@@ -429,19 +375,10 @@
             <div id="materials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА + КОТИК №7 -->
+        <!-- 6. ЛИЧНЫЙ КАБИНЕТ УЧЕНИКА -->
         <section id="view-student-portal" class="hidden max-w-5xl mx-auto space-y-5">
             <!-- Плашка: Ближайший урок -->
             <div class="bg-gradient-to-tr from-indigo-600 via-indigo-700 to-purple-800 text-white p-5 sm:p-7 rounded-3xl shadow-xl relative overflow-hidden">
-                
-                <!-- КОТИК НА ПЛАШКЕ УРОКА (ВИДЕН НА ТЕЛЕФОНЕ) -->
-                <div class="pointer-events-none select-none absolute -bottom-1 -right-1 sm:right-4 z-0 opacity-40 sm:opacity-90">
-                    <div class="w-16 sm:w-24 bg-white/90 dark:bg-slate-900/90 p-1 pb-1.5 rounded-2xl cat-polaroid border border-white/40 transform -rotate-6">
-                        <img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=400&auto=format&fit=crop&q=80" alt="Кот" class="w-full h-11 sm:h-16 object-cover rounded-xl shadow-inner">
-                        <p class="text-[7px] sm:text-[8px] text-center font-bold text-indigo-900 dark:text-indigo-300 mt-0.5 font-mono">🐾 Вперёд к 5!</p>
-                    </div>
-                </div>
-
                 <div class="relative z-10 space-y-4">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
@@ -458,7 +395,7 @@
                         </div>
                     </div>
 
-                    <!-- Кнопки входа -->
+                    <!-- ПУНКТ 2: СТРОГАЯ КНОПКА ZOOM (БЕЗ ДОСРОЧНОГО ВХОДА) -->
                     <div class="flex flex-wrap gap-2.5 pt-2 border-t border-white/20" id="portal-lesson-links">
                         <button id="btn-zoom-action" onclick="handleStudentZoomClick()" class="bg-white hover:bg-slate-100 text-indigo-900 font-extrabold px-4 py-2.5 rounded-2xl text-xs shadow-md transition flex items-center gap-2">
                             <span id="btn-zoom-text">🎥 Войти в Zoom</span>
@@ -470,7 +407,7 @@
                 </div>
             </div>
 
-            <!-- ПУНКТ 3: СБАЛАНСИРОВАННАЯ ГЕЙМИФИКАЦИЯ -->
+            <!-- ПУНКТ 3: СБАЛАНСИРОВАННЫЙ XP (ТОЛЬКО ЗА ПРОШЕДШИЕ УРОКИ) -->
             <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2.5">
@@ -491,7 +428,7 @@
 
                 <!-- Правила начисления XP -->
                 <div class="flex justify-between text-[10px] text-slate-400 dark:text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800/60">
-                    <span>📚 +15 XP за урок</span>
+                    <span>📚 +15 XP за пройденный урок</span>
                     <span>📝 +10 XP за сданное ДЗ</span>
                     <span>📈 +0.5 XP за балл теста</span>
                 </div>
@@ -560,7 +497,7 @@
     <!-- ==================== ФУТЕР С КОНТАКТАМИ ==================== -->
     <footer id="app-footer" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 px-4 text-center mt-auto">
         <div class="max-w-4xl mx-auto space-y-2">
-            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Уроки с Артёмом | pomateshe 🐾</h4>
+            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Уроки с Артёмом | pomateshe</h4>
             <div class="flex justify-center items-center gap-4 text-xs font-semibold pt-1">
                 <a id="footer-tg" href="https://t.me/artem_tutor" target="_blank" class="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
                     <span>✈️ Telegram</span>
@@ -598,7 +535,7 @@
 
     <!-- ==================== МОДАЛЬНЫЕ ОКНА ==================== -->
 
-    <!-- МОДАЛКА: УРОК С ВЫБОРОМ ТЕМЫ ИЗ ДЕРЕВА -->
+    <!-- МОДАЛКА: УРОК С ВЫБОРОМ ТЕМЫ ИЗ ДЕРЕВА И ПРОСМОТРОМ РЕШЕНИЯ УЧЕНИКА -->
     <div id="modal-lesson" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center mb-4">
@@ -667,7 +604,7 @@
                     </div>
                 </div>
 
-                <!-- ДОМАШНЕЕ ЗАДАНИЕ -->
+                <!-- ДОМАШНЕЕ ЗАДАНИЕ (ВЫДАЧА И ПРОСМОТР РЕШЕНИЯ УЧЕНИКА) -->
                 <div class="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <div>
@@ -689,6 +626,12 @@
                         <div id="lesson-hw-preview" class="hidden text-xs text-emerald-600 font-bold flex items-center justify-between bg-emerald-50 dark:bg-emerald-950/40 p-2 rounded-xl">
                             <span>📎 Файл задания прикреплён</span>
                             <button type="button" onclick="removeAttachedFile()" class="text-rose-500 text-xs">Удалить</button>
+                        </div>
+
+                        <!-- Блок решения ученика для репетитора -->
+                        <div id="tutor-student-solution-box" class="hidden pt-2 border-t border-slate-200 dark:border-slate-700">
+                            <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 block mb-1">📥 Сданное решение ученика:</span>
+                            <div id="tutor-student-solution-preview"></div>
                         </div>
                     </div>
                 </div>
@@ -728,15 +671,31 @@
         </div>
     </div>
 
-    <!-- Модалка: Просмотр ДЗ учеником -->
+    <!-- ПУНКТ 4: МОДАЛКА ПРОСМОТРА ДЗ С КНОПКОЙ СКРЕПКИ / ЗАГРУЗКИ РЕШЕНИЯ УЧЕНИКОМ -->
     <div id="modal-hw-view" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 shadow-xl border border-slate-200 dark:border-slate-800 space-y-3.5 max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800 space-y-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
             <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
                 <h3 class="text-base font-bold text-slate-900 dark:text-white">📝 Домашнее задание</h3>
                 <button onclick="closeHwViewModal()" class="text-slate-400 text-lg">✕</button>
             </div>
+            
             <div id="hw-view-content" class="bg-slate-50 dark:bg-slate-800 p-3.5 rounded-2xl text-xs text-slate-700 dark:text-slate-200 space-y-2"></div>
-            <button onclick="closeHwViewModal()" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold">Закрыть</button>
+            
+            <!-- ПУНКТ 4: ФОРМА ДЛЯ УЧЕНИКА: СКРЕПКА / ПРИКРЕПИТЬ СВОЁ РЕШЕНИЕ -->
+            <div class="border-t border-slate-200 dark:border-slate-800 pt-3 space-y-2.5">
+                <label class="block text-xs font-bold text-slate-800 dark:text-slate-200">
+                    📎 Прикрепить моё выполненное решение (фото тетради / файл):
+                </label>
+                
+                <input type="file" id="student-hw-upload-input" accept="image/*,.pdf" onchange="handleStudentHwSubmission(this)" class="block w-full text-xs text-slate-500 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                
+                <div id="student-hw-status-preview" class="hidden text-xs bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 p-2.5 rounded-xl flex items-center justify-between border border-emerald-200 dark:border-emerald-800">
+                    <span class="font-bold">✓ Ваше решение загружено и отправлено Артёму!</span>
+                    <button type="button" onclick="removeStudentHwSubmission()" class="text-rose-500 font-bold text-xs">Удалить</button>
+                </div>
+            </div>
+
+            <button onclick="closeHwViewModal()" class="w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-md">Закрыть</button>
         </div>
     </div>
 
@@ -775,7 +734,7 @@
         </div>
     </div>
 
-    <!-- ПУНКТ 4: МОДАЛКА УЧЕНИКА С 5 ВАРИАНТАМИ ПРОГРАММ ДЛЯ ДЕРЕВА ТЕМ -->
+    <!-- Модалка: Ученик (С 5 вариантами классов) -->
     <div id="modal-student" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-xl border border-slate-200 dark:border-slate-800">
             <div class="flex justify-between items-center mb-4">
@@ -1021,7 +980,7 @@
     <script>
         const DEFAULT_CLOUD_URL = "https://script.google.com/macros/s/AKfycbx87HN67BadUUmnKYLi6zez3hKAFmVWcn_RYUY310x3WVg7tCFLQqDaPv8pvkgxmON3/exec";
 
-        // ПУНКТ 4: 5 НЕЗАВИСИМЫХ ДЕРЕВЬЕВ ТЕМ ПО КЛАССАМ И ЭКЗАМЕНАМ
+        // 5 НЕЗАВИСИМЫХ ДЕРЕВЬЕВ ТЕМ ПО КЛАССАМ
         const EXAM_TOPIC_TREES = {
             grade_5_6: {
                 title: "5–6 класс (Базовая математика)",
@@ -1086,6 +1045,7 @@
         let currentTab = 'calendar';
         let activeStudentId = null;
         let activeReportingStudentId = null;
+        let activeHwLessonId = null;
         let currentMaterialGradeFilter = 'all';
         
         let tutorCurrentWeekStart = getMonday(new Date());
@@ -1148,6 +1108,7 @@
             data.lessons.forEach(l => {
                 if (!l.studentIds && l.studentId) l.studentIds = [l.studentId];
                 if (!l.studentIds) l.studentIds = [];
+                if (!l.studentSolutions || typeof l.studentSolutions !== 'object') l.studentSolutions = {};
             });
 
             const now = new Date();
@@ -1155,13 +1116,13 @@
             data.lessons.forEach(l => {
                 if (l.date && l.date < sevenDaysAgo) {
                     if (l.homeworkBase64) l.homeworkBase64 = "";
+                    if (l.studentSolutions) l.studentSolutions = {};
                 }
             });
 
             return data;
         }
 
-        // ================= КАРУСЕЛИ =================
         function renderLandingCarousels() {
             const diplomasContainer = document.getElementById('carousel-diplomas');
             const reviewsContainer = document.getElementById('carousel-reviews');
@@ -1199,16 +1160,29 @@
             if (container) container.scrollBy({ left: direction * 320, behavior: 'smooth' });
         }
 
-        // ================= ПУНКТ 3: СБАЛАНСИРОВАННЫЙ РАСЧЕТ XP =================
+        // ================= ПУНКТ 3: НАЧИСЛЕНИЕ XP ТОЛЬКО ЗА ПРОШЕДШИЕ УРОКИ =================
         function calculateStudentGamification(studentId) {
-            const lessons = (db.lessons || []).filter(l => ((l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId) && l.status !== 'canceled_paid');
-            const student = (db.students || []).find(s => s.id === studentId) || {};
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            const pad = n => (n < 10 ? '0' : '') + n;
+            const currentTimeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+            // ТОЛЬКО те уроки, которые УЖЕ ПРОШЛИ
+            const pastLessons = (db.lessons || []).filter(l => {
+                const isForStudent = (l.studentIds && l.studentIds.includes(studentId)) || l.studentId === studentId;
+                if (!isForStudent || l.status === 'canceled_paid') return false;
+                
+                if (l.date < todayStr) return true;
+                if (l.date === todayStr && (l.time || '00:00') <= currentTimeStr) return true;
+                return false;
+            });
+
+            const attendedCount = pastLessons.length;
+            const completedHwCount = pastLessons.filter(l => l.hasHomework || (l.studentSolutions && l.studentSolutions[studentId])).length;
             
-            const attendedCount = lessons.length;
-            const completedHwCount = lessons.filter(l => l.hasHomework).length;
+            const student = (db.students || []).find(s => s.id === studentId) || {};
             const exams = student.exams || [];
             
-            // Баланс: 15 за урок, 10 за ДЗ, 0.5 за балл теста
             let xp = Math.round((attendedCount * 15) + (completedHwCount * 10));
             exams.forEach(e => xp += Math.round(Number(e.score || 0) * 0.5));
 
@@ -1229,9 +1203,9 @@
             return { xp, level, icon, percent, xpLeft, attendedCount, completedHwCount };
         }
 
-        // ================= ZOOM =================
+        // ================= ПУНКТ 2: СТРОГИЙ ZOOM ТАЙМЕР =================
         function checkZoomTimeStatus(lesson) {
-            if (!lesson || !lesson.date || !lesson.time) return { canJoin: false, text: 'Урок не назначен' };
+            if (!lesson || !lesson.date || !lesson.time) return { canJoin: false, text: '🎥 Урок не назначен' };
 
             const parts = lesson.date.split('-');
             const tParts = lesson.time.split(':');
@@ -1239,21 +1213,44 @@
             const lessonEndTime = lessonStartTime + 60 * 60 * 1000;
             const now = new Date().getTime();
 
-            if (now >= (lessonStartTime - 15 * 60 * 1000) && now <= lessonEndTime) {
-                return { canJoin: true, text: '🎥 Войти в Zoom' };
+            // Вход открывается строго в минуту начала урока и действует 60 минут
+            if (now >= lessonStartTime && now <= lessonEndTime) {
+                return { canJoin: true, text: '🎥 Войти в Zoom (Урок идёт)' };
             } else if (now < lessonStartTime) {
-                return { canJoin: false, text: `Вход откроется в ${tParts[0]}:${Math.max(0, parseInt(tParts[1])-15).toString().padStart(2,'0')}` };
+                return { canJoin: false, text: `Вход откроется ровно в ${lesson.time}` };
             } else {
                 return { canJoin: false, text: 'Урок завершён' };
             }
         }
 
         function handleStudentZoomClick() {
+            const nowStr = new Date().toISOString().split('T')[0];
+            const upcoming = (db.lessons || [])
+                .filter(l => ((l.studentIds && l.studentIds.includes(currentAuth)) || l.studentId === currentAuth) && l.status !== 'canceled_paid')
+                .sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+
+            if (!upcoming.length) {
+                alert('У вас нет активных запланированных уроков.');
+                return;
+            }
+
+            const next = upcoming[0];
+            const status = checkZoomTimeStatus(next);
+
+            if (!status.canJoin) {
+                alert(`Вход в Zoom заблокирован.\n${status.text}.\nПодключение доступно строго в назначенное время урока.`);
+                return;
+            }
+
             const settings = db.settings || {};
-            if (!settings.zoomUrl) return alert('Репетитор ещё не указал ссылку на Zoom в настройках.');
+            if (!settings.zoomUrl) {
+                alert('Репетитор ещё не указал ссылку на Zoom в настройках.');
+                return;
+            }
             window.open(settings.zoomUrl, '_blank');
         }
 
+        // ================= ПУНКТ 4: ДОМАШКА ДЛЯ РЕПЕТИТОРА И УЧЕНИКА =================
         function handleHwFileUpload(input) {
             if (!input.files || !input.files[0]) return;
             const file = input.files[0];
@@ -1277,6 +1274,42 @@
             document.getElementById('lesson-hw-preview').classList.add('hidden');
         }
 
+        // Ученик прикрепляет своё решение
+        function handleStudentHwSubmission(input) {
+            if (!input.files || !input.files[0] || !activeHwLessonId || !currentAuth) return;
+            const file = input.files[0];
+            if (file.size > 8 * 1024 * 1024) {
+                alert('Файл слишком большой! Максимальный размер 8 МБ.');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lesson = (db.lessons || []).find(l => l.id === activeHwLessonId);
+                if (lesson) {
+                    if (!lesson.studentSolutions) lesson.studentSolutions = {};
+                    lesson.studentSolutions[currentAuth] = e.target.result;
+                    syncToCloud();
+                    document.getElementById('student-hw-status-preview').classList.remove('hidden');
+                    alert('Ваше решение успешно прикреплено и отправлено Артёму!');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeStudentHwSubmission() {
+            if (!activeHwLessonId || !currentAuth) return;
+            const lesson = (db.lessons || []).find(l => l.id === activeHwLessonId);
+            if (lesson && lesson.studentSolutions) {
+                delete lesson.studentSolutions[currentAuth];
+                syncToCloud();
+                document.getElementById('student-hw-upload-input').value = '';
+                document.getElementById('student-hw-status-preview').classList.add('hidden');
+                alert('Прикреплённое решение удалено.');
+            }
+        }
+
         function updateLessonTopicDropdown() {
             const studentId = document.getElementById('lesson-student').value;
             const student = (db.students || []).find(s => s.id === studentId);
@@ -1293,7 +1326,6 @@
             });
         }
 
-        // ================= ПУНКТ 4: ДЕРЕВО ТЕМ ПО КЛАССАМ =================
         function renderTopicsTreeHTML(studentId, isTutorMode) {
             const st = (db.students || []).find(s => s.id === studentId);
             if (!st) return { title: '', summary: '', percent: '0%', html: '' };
@@ -1379,7 +1411,6 @@
             document.getElementById('student-topics-tree-container').innerHTML = treeData.html;
         }
 
-        // ================= МАТЕРИАЛЫ С РАЗДЕЛЕНИЕМ ПО КЛАССАМ =================
         function filterMaterialsByGrade(grade) {
             currentMaterialGradeFilter = grade;
             document.querySelectorAll('.mat-filter-btn').forEach(btn => {
@@ -1984,7 +2015,7 @@
             });
         }
 
-        // ================= ПРОФИЛЬ УЧЕНИКА С ДЕРЕВОМ ТЕМ =================
+        // ================= ПРОФИЛЬ УЧЕНИКА =================
         function openProfile(id) {
             activeStudentId = id;
             document.getElementById('view-calendar').classList.add('hidden');
@@ -2227,6 +2258,7 @@
                 document.getElementById('portal-next-topic').innerText = `Тема: ${next.topic || 'Без темы'}`;
                 document.getElementById('portal-next-hw').innerText = next.hasHomework ? '✓ Задано ДЗ' : 'Не задано';
                 
+                // ПУНКТ 2: Строгая проверка времени Zoom
                 const zoomStatus = checkZoomTimeStatus(next);
                 zoomText.innerText = zoomStatus.text;
                 zoomActionBtn.classList.toggle('opacity-60', !zoomStatus.canJoin);
@@ -2234,7 +2266,7 @@
                 if (next.hasHomework) {
                     nextBtnBox.innerHTML = `
                         <button onclick="openHwViewModal('${next.id}')" class="text-xs bg-white/20 hover:bg-white/30 text-white font-bold px-3 py-1 rounded-xl transition">
-                            Посмотреть задание ↗
+                            Посмотреть ДЗ и прикрепить решение ↗
                         </button>
                     `;
                 }
@@ -2373,7 +2405,7 @@
             labels.innerHTML = '';
 
             if (!exams || exams.length === 0) {
-                chart.innerHTML = '<div class="w-full text-center text-slate-400 text-xs self-center">Результаты пробников появятся здесь</div>';
+                chart.innerHTML = '<div class="w-full text-center text-slate-400 text-xs self-center">Результаты тестов появятся здесь</div>';
                 document.getElementById('portal-score-growth').innerText = '+0 баллов';
                 return;
             }
@@ -2425,8 +2457,9 @@
             document.getElementById('btn-add-personal').classList.toggle('hidden', tab !== 'calendar');
         }
 
-        // ================= ПРОСМОТР ДЗ =================
+        // ================= ПУНКТ 4: ПРОСМОТР ДЗ И ПРИКРЕПЛЕНИЕ РЕШЕНИЯ УЧЕНИКОМ =================
         function openHwViewModal(lessonId) {
+            activeHwLessonId = lessonId;
             const l = (db.lessons || []).find(item => item.id === lessonId);
             if (!l) return;
 
@@ -2441,10 +2474,26 @@
             }
 
             document.getElementById('hw-view-content').innerHTML = html;
+
+            // Проверяем, прикрепил ли уже ученик решение
+            const studentSubmitted = l.studentSolutions && l.studentSolutions[currentAuth];
+            const previewBox = document.getElementById('student-hw-status-preview');
+            const fileInput = document.getElementById('student-hw-upload-input');
+            if (fileInput) fileInput.value = '';
+
+            if (studentSubmitted) {
+                previewBox.classList.remove('hidden');
+            } else {
+                previewBox.classList.add('hidden');
+            }
+
             document.getElementById('modal-hw-view').classList.remove('hidden');
         }
 
-        function closeHwViewModal() { document.getElementById('modal-hw-view').classList.add('hidden'); }
+        function closeHwViewModal() { 
+            activeHwLessonId = null;
+            document.getElementById('modal-hw-view').classList.add('hidden'); 
+        }
 
         // ================= ОПЕРАЦИИ С УРОКАМИ =================
         let currentLessonMode = 'single';
@@ -2489,6 +2538,8 @@
             const delBtn = document.getElementById('lesson-btn-delete');
             const cancelPaidBtn = document.getElementById('lesson-btn-cancel-paid');
             const recBox = document.getElementById('recurrence-box');
+            const solutionBox = document.getElementById('tutor-student-solution-box');
+            const solutionPreview = document.getElementById('tutor-student-solution-preview');
 
             removeAttachedFile();
             updateLessonTopicDropdown();
@@ -2521,6 +2572,22 @@
                     document.getElementById('lesson-hw-preview').classList.remove('hidden');
                 }
 
+                // Отображение решения ученика для репетитора
+                if (l.studentSolutions && Object.keys(l.studentSolutions).length > 0) {
+                    solutionBox.classList.remove('hidden');
+                    solutionPreview.innerHTML = Object.entries(l.studentSolutions).map(([stId, base64]) => {
+                        const st = (db.students || []).find(s => s.id === stId);
+                        const stName = st ? st.name : 'Ученик';
+                        if (base64.startsWith('data:image/')) {
+                            return `<div class="space-y-1"><span class="text-[11px] font-bold">${stName}:</span><img src="${base64}" class="w-full max-h-48 object-contain rounded-xl border"></div>`;
+                        } else {
+                            return `<a href="${base64}" download="solution_${stName}" class="text-indigo-600 font-bold hover:underline block text-xs">📎 Скачать решение: ${stName}</a>`;
+                        }
+                    }).join('');
+                } else {
+                    solutionBox.classList.add('hidden');
+                }
+
                 toggleHwFields();
                 if (delBtn) delBtn.classList.remove('hidden');
                 if (cancelPaidBtn) cancelPaidBtn.classList.remove('hidden');
@@ -2536,6 +2603,7 @@
                 document.getElementById('lesson-repeat-type').value = 'none';
                 toggleRepeatOptions();
                 toggleHwFields();
+                solutionBox.classList.add('hidden');
                 if (preselectedStudentId && sel) sel.value = preselectedStudentId;
                 if (delBtn) delBtn.classList.add('hidden');
                 if (cancelPaidBtn) cancelPaidBtn.classList.add('hidden');
@@ -2613,7 +2681,8 @@
                         hasHomework: i === 0 ? hasHomework : false,
                         homeworkText: i === 0 ? homeworkText : '',
                         homeworkBase64: i === 0 ? homeworkBase64 : '',
-                        status: 'active'
+                        status: 'active',
+                        studentSolutions: {}
                     });
                 }
 
