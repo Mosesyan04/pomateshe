@@ -12,7 +12,8 @@ export default async function TeacherDashboardPage() {
       <p>
         <a href="/teacher/students">Ученики и приглашения</a> ·{" "}
         <a href="/teacher/schedule">Расписание</a> ·{" "}
-        <a href="/teacher/homework">Домашние задания</a>
+        <a href="/teacher/homework">Домашние задания</a> ·{" "}
+        <a href="/teacher/profile">Публичная страница</a>
       </p>
       <p style={{ color: "#666" }}>Доска, доходы — Phase 2+/3 (docs/ROADMAP.md).</p>
     </div>
