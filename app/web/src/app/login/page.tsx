@@ -3,14 +3,15 @@ import { loginAction } from "./actions";
 const ERROR_MESSAGES: Record<string, string> = {
   missing_fields: "Введите email и пароль.",
   invalid_credentials: "Неверный email или пароль.",
+  rate_limited: "Слишком много попыток входа. Попробуйте позже.",
 };
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; next?: string }>;
+  searchParams: Promise<{ error?: string; next?: string; retryAfter?: string }>;
 }) {
-  const { error, next } = await searchParams;
+  const { error, next, retryAfter } = await searchParams;
 
   return (
     <main style={{ maxWidth: 420, margin: "4rem auto", padding: "0 1rem" }}>
@@ -19,6 +20,7 @@ export default async function LoginPage({
       {error && (
         <p role="alert" style={{ color: "#b00020" }}>
           {ERROR_MESSAGES[error] ?? "Не удалось войти."}
+          {error === "rate_limited" && retryAfter && ` (~${Math.ceil(Number(retryAfter) / 60)} мин.)`}
         </p>
       )}
 

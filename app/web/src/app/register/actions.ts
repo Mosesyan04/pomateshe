@@ -6,6 +6,11 @@ import { registerTeacher } from "../../server/teachers";
 import { SESSION_COOKIE_NAME } from "../../lib/auth/current-user";
 import { createSession } from "../../lib/auth/session";
 import { Prisma } from "../../../generated/prisma/client";
+import { checkAndRecord } from "../../lib/rate-limit";
+import { getClientIp } from "../../lib/http/client-ip";
+
+const REGISTER_LIMIT = 3;
+const REGISTER_WINDOW_MS = 60 * 60 * 1000; // docs/SECURITY.md §4: 3 / час per IP
 
 function slugify(input: string): string {
   return (
@@ -24,6 +29,15 @@ export async function registerTeacherAction(formData: FormData): Promise<void> {
   const password = String(formData.get("password") ?? "");
   const displayName = String(formData.get("displayName") ?? "").trim();
   const timezone = String(formData.get("timezone") ?? "Europe/Moscow").trim();
+
+  // By IP only, every attempt counts regardless of outcome (docs/SECURITY.md §4) — unlike
+  // login, there's no "wrong password to forgive" case here; the thing being capped is how
+  // many accounts one IP can attempt to create per hour, full stop.
+  const ip = await getClientIp();
+  const { limited, retryAfterSeconds } = checkAndRecord(`register:${ip}`, REGISTER_LIMIT, REGISTER_WINDOW_MS);
+  if (limited) {
+    redirect(`/register?error=rate_limited&retryAfter=${retryAfterSeconds}`);
+  }
 
   if (!email || !password || !displayName) {
     redirect("/register?error=missing_fields");

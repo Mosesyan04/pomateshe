@@ -4,14 +4,15 @@ const ERROR_MESSAGES: Record<string, string> = {
   missing_fields: "Заполните все обязательные поля.",
   weak_password: "Пароль должен быть не короче 10 символов.",
   email_taken: "Аккаунт с этим email уже существует.",
+  rate_limited: "Слишком много попыток регистрации с вашего адреса. Попробуйте позже.",
 };
 
 export default async function RegisterPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; retryAfter?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, retryAfter } = await searchParams;
 
   return (
     <main style={{ maxWidth: 420, margin: "4rem auto", padding: "0 1rem" }}>
@@ -23,6 +24,7 @@ export default async function RegisterPage({
       {error && (
         <p role="alert" style={{ color: "#b00020" }}>
           {ERROR_MESSAGES[error] ?? "Не удалось зарегистрироваться."}
+          {error === "rate_limited" && retryAfter && ` (~${Math.ceil(Number(retryAfter) / 60)} мин.)`}
         </p>
       )}
 
