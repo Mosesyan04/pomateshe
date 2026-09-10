@@ -7,10 +7,10 @@ export default async function StudentDashboardPage() {
     <div>
       <h1>Личный кабинет ученика</h1>
       <p>Вы вошли как ученик (userId: {user?.userId}).</p>
-      <p style={{ color: "#666" }}>
-        Расписание, домашние задания, доска — Phase 2+ (docs/ROADMAP.md). Эта страница —
-        минимальная заглушка, подтверждающая, что защита маршрута по роли работает.
+      <p>
+        <a href="/student/schedule">Моё расписание</a>
       </p>
+      <p style={{ color: "#666" }}>Домашние задания, доска — Phase 2+ (docs/ROADMAP.md).</p>
     </div>
   );
 }

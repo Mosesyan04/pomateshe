@@ -10,11 +10,11 @@ export default async function TeacherDashboardPage() {
       <h1>Личный кабинет</h1>
       <p>Вы вошли как преподаватель (userId: {user?.userId}).</p>
       <p>
-        <a href="/teacher/students">Ученики и приглашения</a>
+        <a href="/teacher/students">Ученики и приглашения</a> ·{" "}
+        <a href="/teacher/schedule">Расписание</a>
       </p>
       <p style={{ color: "#666" }}>
-        Расписание, домашние задания, доска, доходы — Phase 2+ (docs/ROADMAP.md). Эта
-        страница — минимальная заглушка, подтверждающая, что защита маршрута по роли работает.
+        Домашние задания, доска, доходы — Phase 2+ (docs/ROADMAP.md).
       </p>
     </div>
   );
