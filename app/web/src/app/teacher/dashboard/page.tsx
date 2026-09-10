@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getCurrentUser } from "../../../lib/auth/current-user";
 
 export default async function TeacherDashboardPage() {
@@ -10,7 +11,7 @@ export default async function TeacherDashboardPage() {
       <h1>Личный кабинет</h1>
       <p>Вы вошли как преподаватель (userId: {user?.userId}).</p>
       <p>
-        <a href="/teacher/students">Ученики и приглашения</a> ·{" "}
+        <Link href="/teacher/students">Ученики и приглашения</Link> ·{" "}
         <a href="/teacher/schedule">Расписание</a> ·{" "}
         <a href="/teacher/homework">Домашние задания</a> ·{" "}
         <a href="/teacher/profile">Публичная страница</a>

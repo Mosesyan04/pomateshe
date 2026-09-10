@@ -164,8 +164,10 @@ model TeacherStudentLink {
   /// actually typed for their own students, not a global taxonomy.
   subject                String?
   gradeLevel             String?
-  /// Defaults pre-filled into the "new lesson" form (src/app/teacher/schedule) — NOT enforced
-  /// anywhere; a teacher can still set a different price/duration per individual lesson.
+  /// The student's usual price/duration, shown on their card — NOT enforced anywhere and NOT
+  /// (yet) auto-filled into the "new lesson" form; each lesson's own priceCents/durationMinutes
+  /// is entered independently. Wiring these in as form defaults is a small follow-up, not done
+  /// here — recorded so it isn't mistaken for already wired up.
   defaultPriceCents      Int?
   defaultDurationMinutes Int?
   notes                  String?

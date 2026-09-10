@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireRole } from "../../../lib/auth/current-user";
 import { getStudentsForTeacher } from "../../../server/teachers";
 import { getLessonsForTeacher } from "../../../server/lessons";
@@ -42,7 +43,7 @@ export default async function HomeworkPage({
         <h2>Новое задание</h2>
         {students.length === 0 ? (
           <p style={{ color: "#666" }}>
-            Сначала <a href="/teacher/students">пригласите ученика</a>.
+            Сначала <Link href="/teacher/students">пригласите ученика</Link>.
           </p>
         ) : (
           <form

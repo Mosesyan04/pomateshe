@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { requireRole } from "../../../lib/auth/current-user";
 import { getStudentsForTeacher } from "../../../server/teachers";
 import { getLessonsForTeacher } from "../../../server/lessons";
@@ -53,7 +54,7 @@ export default async function SchedulePage({
         <h2>Новое занятие</h2>
         {students.length === 0 ? (
           <p style={{ color: "#666" }}>
-            Сначала <a href="/teacher/students">пригласите ученика</a> — занятие можно создать
+            Сначала <Link href="/teacher/students">пригласите ученика</Link> — занятие можно создать
             только для ученика, принявшего приглашение.
           </p>
         ) : (

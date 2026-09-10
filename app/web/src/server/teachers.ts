@@ -104,12 +104,97 @@ export async function createGroup(teacherId: string, name: string) {
   );
 }
 
-export async function getStudentsForTeacher(teacherId: string) {
+export interface StudentFilters {
+  /** Matches against displayName, contactPhone, contactTelegram (case-insensitive substring). */
+  search?: string;
+  subject?: string;
+  gradeLevel?: string;
+  priceMinCents?: number;
+  priceMaxCents?: number;
+  durationMinMinutes?: number;
+  durationMaxMinutes?: number;
+}
+
+/**
+ * `filters` is optional and defaults to none — existing call sites (schedule/homework pages)
+ * that only need "my active students" keep working unchanged; only the students list page
+ * passes filters.
+ */
+export async function getStudentsForTeacher(teacherId: string, filters: StudentFilters = {}) {
+  const priceRange =
+    filters.priceMinCents != null || filters.priceMaxCents != null
+      ? { gte: filters.priceMinCents, lte: filters.priceMaxCents }
+      : undefined;
+  const durationRange =
+    filters.durationMinMinutes != null || filters.durationMaxMinutes != null
+      ? { gte: filters.durationMinMinutes, lte: filters.durationMaxMinutes }
+      : undefined;
+
   return withTenantContext({ teacherId }, (tx) =>
     tx.teacherStudentLink.findMany({
-      where: { teacherId, status: "active" },
+      where: {
+        teacherId,
+        status: "active",
+        ...(filters.subject ? { subject: filters.subject } : {}),
+        ...(filters.gradeLevel ? { gradeLevel: filters.gradeLevel } : {}),
+        ...(priceRange ? { defaultPriceCents: priceRange } : {}),
+        ...(durationRange ? { defaultDurationMinutes: durationRange } : {}),
+        ...(filters.search
+          ? {
+              OR: [
+                { displayName: { contains: filters.search, mode: "insensitive" } },
+                { contactPhone: { contains: filters.search, mode: "insensitive" } },
+                { contactTelegram: { contains: filters.search, mode: "insensitive" } },
+              ],
+            }
+          : {}),
+      },
       include: { studentUser: { select: { email: true } } },
       orderBy: { createdAt: "desc" },
     }),
   );
+}
+
+export async function getStudentLinkForTeacher(teacherId: string, studentLinkId: string) {
+  return withTenantContext({ teacherId }, (tx) =>
+    tx.teacherStudentLink.findFirst({
+      where: { id: studentLinkId, teacherId },
+      include: { studentUser: { select: { email: true } } },
+    }),
+  );
+}
+
+export interface UpdateStudentLinkInput {
+  teacherId: string;
+  studentLinkId: string;
+  displayName?: string;
+  subject?: string;
+  gradeLevel?: string;
+  contactPhone?: string;
+  contactTelegram?: string;
+  defaultPriceCents?: number;
+  defaultDurationMinutes?: number;
+  notes?: string;
+}
+
+/** updateMany + throw-on-zero — same tampering guard as lessons.ts's updateLessonStatus. */
+export async function updateStudentLink(input: UpdateStudentLinkInput): Promise<void> {
+  return withTenantContext({ teacherId: input.teacherId }, async (tx) => {
+    const result = await tx.teacherStudentLink.updateMany({
+      where: { id: input.studentLinkId, teacherId: input.teacherId },
+      data: {
+        displayName: input.displayName,
+        subject: input.subject,
+        gradeLevel: input.gradeLevel,
+        contactPhone: input.contactPhone,
+        contactTelegram: input.contactTelegram,
+        defaultPriceCents: input.defaultPriceCents,
+        defaultDurationMinutes: input.defaultDurationMinutes,
+        notes: input.notes,
+      },
+    });
+    if (result.count === 0) {
+      throw new Error("Ученик не найден.");
+    }
+  });
 }
