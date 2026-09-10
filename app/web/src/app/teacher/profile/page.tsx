@@ -7,6 +7,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   invalid_slug: "Адрес страницы может содержать только латинские буквы, цифры и дефис.",
   slug_taken: "Этот адрес страницы уже занят другим преподавателем.",
   bad_avatar: "Не удалось загрузить фото — проверьте формат (JPEG/PNG/WebP) и размер (до 5 МБ).",
+  bad_zoom_link: "Ссылка не похожа на Zoom (ожидается https://...zoom.us/...).",
 };
 
 export default async function TeacherProfilePage({
@@ -72,6 +73,16 @@ export default async function TeacherProfilePage({
         <label>
           Фото (необязательно, JPEG/PNG/WebP, до 5 МБ)
           <input name="avatar" type="file" accept="image/jpeg,image/png,image/webp" />
+        </label>
+        <label>
+          Постоянная ссылка на Zoom (необязательно) — добавляется к каждому новому занятию,
+          видна и вам, и ученику
+          <input
+            name="zoomPersonalLink"
+            type="url"
+            placeholder="https://us02web.zoom.us/j/..."
+            defaultValue={profile.zoomPersonalLink ?? ""}
+          />
         </label>
         <button type="submit">Сохранить</button>
       </form>

@@ -14,6 +14,7 @@ export async function updateTeacherProfileAction(formData: FormData): Promise<vo
   const contactInfo = String(formData.get("contactInfo") ?? "").trim();
   const priceRubles = String(formData.get("priceRubles") ?? "").trim();
   const subjectsRaw = String(formData.get("subjects") ?? "").trim();
+  const zoomPersonalLink = String(formData.get("zoomPersonalLink") ?? "").trim();
   const avatar = formData.get("avatar");
 
   if (!displayName || !slug) {
@@ -38,6 +39,10 @@ export async function updateTeacherProfileAction(formData: FormData): Promise<vo
       subjects,
       contactInfo: contactInfo || undefined,
       defaultLessonPriceCents: priceRubles ? Math.round(Number(priceRubles) * 100) : undefined,
+      // Unlike the other optional fields above, this one distinguishes "leave unchanged"
+      // (field omitted) from "clear it" (empty string here becomes explicit null) — a teacher
+      // clearing the box and saving should actually remove the link, not silently no-op.
+      zoomPersonalLink: zoomPersonalLink || null,
       avatar: hasAvatar
         ? { data: Buffer.from(await (avatar as File).arrayBuffer()) }
         : null,
@@ -48,6 +53,9 @@ export async function updateTeacherProfileAction(formData: FormData): Promise<vo
     }
     if (err instanceof Error && /Файл/.test(err.message)) {
       redirect("/teacher/profile?error=bad_avatar");
+    }
+    if (err instanceof Error && /Zoom/.test(err.message)) {
+      redirect("/teacher/profile?error=bad_zoom_link");
     }
     throw err;
   }

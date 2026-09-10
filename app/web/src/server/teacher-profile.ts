@@ -2,6 +2,7 @@ import { prisma } from "./db";
 import { withTenantContext } from "./tenant-context";
 import { saveFile } from "../lib/files/local-disk-storage";
 import { detectImageType } from "../lib/files/detect-image-type";
+import { isValidZoomUrl } from "../lib/zoom/validate-link";
 
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024; // product constant, not architecture
 
@@ -67,6 +68,7 @@ export async function getTeacherProfileForEditing(teacherId: string) {
         defaultLessonPriceCents: true,
         currency: true,
         avatarStorageKey: true,
+        zoomPersonalLink: true,
       },
     }),
   );
@@ -95,10 +97,17 @@ export interface UpdateTeacherProfileInput {
   subjects: string[];
   contactInfo?: string;
   defaultLessonPriceCents?: number;
+  /** Explicit null (not just omitted) clears a previously-set link — see the form's "Убрать
+   *  ссылку" checkbox in teacher/profile/page.tsx. */
+  zoomPersonalLink?: string | null;
   avatar?: { data: Buffer } | null;
 }
 
 export async function updateTeacherProfile(input: UpdateTeacherProfileInput) {
+  if (input.zoomPersonalLink && !isValidZoomUrl(input.zoomPersonalLink)) {
+    throw new Error("Ссылка не похожа на Zoom (ожидается https://...zoom.us/...).");
+  }
+
   return withTenantContext({ teacherId: input.teacherId }, async (tx) => {
     let avatarFields: { avatarStorageKey: string; avatarMimeType: string } | undefined;
 
@@ -127,6 +136,10 @@ export async function updateTeacherProfile(input: UpdateTeacherProfileInput) {
         subjects: input.subjects,
         contactInfo: input.contactInfo,
         defaultLessonPriceCents: input.defaultLessonPriceCents,
+        // undefined (field omitted from formData) leaves the stored value untouched;
+        // explicit null clears it — Prisma treats these differently, matching the interface
+        // comment above.
+        ...(input.zoomPersonalLink !== undefined ? { zoomPersonalLink: input.zoomPersonalLink } : {}),
         ...avatarFields,
       },
     });

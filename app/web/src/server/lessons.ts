@@ -1,5 +1,5 @@
 import { withTenantContext } from "./tenant-context";
-import type { LessonStatus } from "../../generated/prisma/client";
+import type { LessonStatus, Prisma } from "../../generated/prisma/client";
 
 /**
  * Lessons — either for one student (studentLinkId set) or a whole group (groupId set), never
@@ -38,9 +38,26 @@ export async function createLessonForStudent(input: CreateLessonInput) {
         durationMinutes: input.durationMinutes,
         priceCents: input.priceCents,
         notes: input.notes,
+        zoomLinkSnapshot: await currentZoomLink(tx, input.teacherId),
       },
     });
   });
+}
+
+/**
+ * docs/ZOOM.md §1: the teacher's Zoom link is copied into the lesson at creation time, not
+ * read live — so a later change to TeacherProfile.zoomPersonalLink doesn't rewrite history for
+ * lessons already scheduled.
+ */
+async function currentZoomLink(
+  tx: Prisma.TransactionClient,
+  teacherId: string,
+): Promise<string | undefined> {
+  const profile = await tx.teacherProfile.findUnique({
+    where: { id: teacherId },
+    select: { zoomPersonalLink: true },
+  });
+  return profile?.zoomPersonalLink ?? undefined;
 }
 
 export interface CreateGroupLessonInput {
@@ -70,6 +87,7 @@ export async function createLessonForGroup(input: CreateGroupLessonInput) {
         durationMinutes: input.durationMinutes,
         priceCents: input.priceCents,
         notes: input.notes,
+        zoomLinkSnapshot: await currentZoomLink(tx, input.teacherId),
       },
     });
   });
@@ -139,6 +157,7 @@ export interface StudentLessonGroup {
     priceCents: number;
     paidAt: Date | null;
     notes: string | null;
+    zoomLinkSnapshot: string | null;
     /** Set only for a group lesson — lets the student see WHY a lesson they didn't book
      *  individually is on their schedule. */
     groupName: string | null;
@@ -180,6 +199,7 @@ export async function getMyLessonsAsStudent(studentUserId: string): Promise<Stud
               priceCents: true,
               paidAt: true,
               notes: true,
+              zoomLinkSnapshot: true,
             },
           }),
         ),
@@ -212,6 +232,7 @@ export async function getMyLessonsAsStudent(studentUserId: string): Promise<Stud
                   priceCents: true,
                   paidAt: true,
                   notes: true,
+                  zoomLinkSnapshot: true,
                 },
               }),
             );

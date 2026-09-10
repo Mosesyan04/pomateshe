@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireRole } from "../../../lib/auth/current-user";
 import { getTeacherDashboardOverview } from "../../../server/dashboard";
 import { markLessonPaidFromDashboardAction } from "./actions";
+import { ZoomJoinLink } from "../../_components/zoom-join-link";
 
 function formatMoney(cents: number): string {
   return (cents / 100).toLocaleString("ru-RU", { minimumFractionDigits: 0 }) + " ₽";
@@ -57,6 +58,7 @@ export default async function TeacherDashboardPage({
                 <th>Когда</th>
                 <th>Ученик / группа</th>
                 <th>Стоимость</th>
+                <th>Zoom</th>
               </tr>
             </thead>
             <tbody>
@@ -65,6 +67,9 @@ export default async function TeacherDashboardPage({
                   <td>{formatDateTime(lesson.scheduledAt)}</td>
                   <td>{lesson.studentLabel}</td>
                   <td>{formatMoney(lesson.priceCents)}</td>
+                  <td>
+                    <ZoomJoinLink url={lesson.zoomLinkSnapshot} />
+                  </td>
                 </tr>
               ))}
             </tbody>

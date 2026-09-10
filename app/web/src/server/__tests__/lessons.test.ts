@@ -8,6 +8,7 @@ import {
   setLessonPaid,
   getMyLessonsAsStudent,
 } from "../lessons";
+import { updateTeacherProfile, getTeacherProfileForEditing } from "../teacher-profile";
 import { cleanupTestData } from "./test-helpers";
 import { prisma } from "../db";
 
@@ -149,5 +150,103 @@ describe("Individual lessons", () => {
     const idsInA = new Set(groupA.lessons.map((l) => l.id));
     const idsInB = new Set(groupB.lessons.map((l) => l.id));
     for (const id of idsInA) expect(idsInB.has(id)).toBe(false);
+  });
+});
+
+describe("Zoom link snapshotting (docs/ZOOM.md §1)", () => {
+  it("a lesson created after the teacher sets a Zoom link gets it copied into zoomLinkSnapshot", async () => {
+    const teacher = await makeTeacher("zoom-basic");
+    const { link } = await linkNewStudent(teacher.teacherId, "zoom-basic-student");
+    const profile = await getTeacherProfileForEditing(teacher.teacherId);
+
+    await updateTeacherProfile({
+      teacherId: teacher.teacherId,
+      displayName: profile.displayName,
+      slug: profile.slug,
+      subjects: [],
+      zoomPersonalLink: "https://us02web.zoom.us/j/1112223334",
+    });
+
+    const lesson = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date(),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    const [found] = await getLessonsForTeacher(teacher.teacherId);
+    expect(found.id).toBe(lesson.id);
+    expect(found.zoomLinkSnapshot).toBe("https://us02web.zoom.us/j/1112223334");
+  });
+
+  it("a lesson created before any Zoom link is set has a null snapshot, and doesn't retroactively pick one up", async () => {
+    const teacher = await makeTeacher("zoom-none-yet");
+    const { link } = await linkNewStudent(teacher.teacherId, "zoom-none-yet-student");
+
+    const lesson = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date(),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    let [found] = await getLessonsForTeacher(teacher.teacherId);
+    expect(found.zoomLinkSnapshot).toBeNull();
+
+    // Setting a link afterward must not rewrite history for the already-created lesson.
+    const profile = await getTeacherProfileForEditing(teacher.teacherId);
+    await updateTeacherProfile({
+      teacherId: teacher.teacherId,
+      displayName: profile.displayName,
+      slug: profile.slug,
+      subjects: [],
+      zoomPersonalLink: "https://zoom.us/j/9998887776",
+    });
+
+    [found] = await getLessonsForTeacher(teacher.teacherId);
+    expect(found.id).toBe(lesson.id);
+    expect(found.zoomLinkSnapshot).toBeNull();
+  });
+
+  it("rejects a non-Zoom URL when setting the personal link", async () => {
+    const teacher = await makeTeacher("zoom-invalid");
+    const profile = await getTeacherProfileForEditing(teacher.teacherId);
+
+    await expect(
+      updateTeacherProfile({
+        teacherId: teacher.teacherId,
+        displayName: profile.displayName,
+        slug: profile.slug,
+        subjects: [],
+        zoomPersonalLink: "https://evil.example.com/join",
+      }),
+    ).rejects.toThrow(/Zoom/);
+  });
+
+  it("a student sees the same Zoom link snapshot as the teacher, for both individual and group lessons", async () => {
+    const teacher = await makeTeacher("zoom-student-view");
+    const { link } = await linkNewStudent(teacher.teacherId, "zoom-student-view-student");
+    const profile = await getTeacherProfileForEditing(teacher.teacherId);
+    await updateTeacherProfile({
+      teacherId: teacher.teacherId,
+      displayName: profile.displayName,
+      slug: profile.slug,
+      subjects: [],
+      zoomPersonalLink: "https://zoom.us/j/5556667778",
+    });
+
+    const lesson = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date(),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    const groups = await getMyLessonsAsStudent(link.studentUserId);
+    const found = groups.find((g) => g.teacherId === teacher.teacherId)!.lessons.find((l) => l.id === lesson.id);
+    expect(found?.zoomLinkSnapshot).toBe("https://zoom.us/j/5556667778");
   });
 });

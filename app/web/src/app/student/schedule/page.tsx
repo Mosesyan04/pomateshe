@@ -1,5 +1,6 @@
 import { requireRole } from "../../../lib/auth/current-user";
 import { getMyLessonsAsStudent } from "../../../server/lessons";
+import { ZoomJoinLink } from "../../_components/zoom-join-link";
 
 const STATUS_LABELS: Record<string, string> = {
   scheduled: "запланировано",
@@ -40,6 +41,7 @@ export default async function StudentSchedulePage() {
                   <th>Формат</th>
                   <th>Статус</th>
                   <th>Оплата</th>
+                  <th>Zoom</th>
                 </tr>
               </thead>
               <tbody>
@@ -50,6 +52,9 @@ export default async function StudentSchedulePage() {
                     <td>{STATUS_LABELS[lesson.status] ?? lesson.status}</td>
                     <td>
                       {formatMoney(lesson.priceCents)} — {lesson.paidAt ? "оплачено" : "не оплачено"}
+                    </td>
+                    <td>
+                      <ZoomJoinLink url={lesson.zoomLinkSnapshot} />
                     </td>
                   </tr>
                 ))}

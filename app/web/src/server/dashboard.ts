@@ -16,6 +16,7 @@ export interface DashboardLesson {
   /** Either the student's display name/email, or "Группа: X" for a group lesson — same
    *  labeling convention as /teacher/schedule's table. */
   studentLabel: string;
+  zoomLinkSnapshot: string | null;
 }
 
 export interface DashboardOverview {
@@ -86,6 +87,7 @@ export async function getTeacherDashboardOverview(teacherId: string): Promise<Da
         durationMinutes: l.durationMinutes,
         priceCents: l.priceCents,
         studentLabel: labelFor(l),
+        zoomLinkSnapshot: l.zoomLinkSnapshot,
       })),
       weekIncomeCents: weekIncome._sum.priceCents ?? 0,
       unpaidLessons: unpaid.map((l) => ({
@@ -94,6 +96,7 @@ export async function getTeacherDashboardOverview(teacherId: string): Promise<Da
         durationMinutes: l.durationMinutes,
         priceCents: l.priceCents,
         studentLabel: labelFor(l),
+        zoomLinkSnapshot: l.zoomLinkSnapshot,
       })),
     };
   });

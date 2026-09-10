@@ -3,6 +3,7 @@ import { requireRole } from "../../../lib/auth/current-user";
 import { getStudentsForTeacher } from "../../../server/teachers";
 import { getGroupsForTeacher } from "../../../server/groups";
 import { getLessonsForTeacher } from "../../../server/lessons";
+import { ZoomJoinLink } from "../../_components/zoom-join-link";
 import {
   createLessonAction,
   createGroupLessonAction,
@@ -149,6 +150,7 @@ export default async function SchedulePage({
                 <th>Ученик / группа</th>
                 <th>Статус</th>
                 <th>Оплата</th>
+                <th>Zoom</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -164,6 +166,9 @@ export default async function SchedulePage({
                   <td>{STATUS_LABELS[lesson.status] ?? lesson.status}</td>
                   <td>
                     {formatMoney(lesson.priceCents)} — {lesson.paidAt ? "оплачено" : "не оплачено"}
+                  </td>
+                  <td>
+                    <ZoomJoinLink url={lesson.zoomLinkSnapshot} />
                   </td>
                   <td style={{ display: "flex", gap: "0.25rem", flexWrap: "wrap" }}>
                     {lesson.status === "scheduled" && (

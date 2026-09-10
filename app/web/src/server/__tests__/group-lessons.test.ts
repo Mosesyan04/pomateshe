@@ -9,6 +9,7 @@ import {
   updateLessonStatus,
   setLessonPaid,
 } from "../lessons";
+import { updateTeacherProfile, getTeacherProfileForEditing } from "../teacher-profile";
 import { cleanupTestData } from "./test-helpers";
 import { prisma } from "../db";
 
@@ -135,6 +136,37 @@ describe("Group lessons", () => {
     const found = teacherGroup.lessons.find((l) => l.id === lesson.id);
     expect(found).toBeDefined();
     expect(found!.groupName).toBe("Visible group");
+  });
+
+  it("a group lesson snapshots the teacher's Zoom link too, visible to a group member", async () => {
+    const teacher = await makeTeacher("grouplesson-zoom");
+    const { link } = await linkNewStudent(teacher.teacherId, "grouplesson-zoom-student");
+    const group = await createGroup(teacher.teacherId, "Zoom group");
+    await addStudentToGroup(teacher.teacherId, group.id, link.id);
+
+    const profile = await getTeacherProfileForEditing(teacher.teacherId);
+    await updateTeacherProfile({
+      teacherId: teacher.teacherId,
+      displayName: profile.displayName,
+      slug: profile.slug,
+      subjects: [],
+      zoomPersonalLink: "https://zoom.us/j/4443332221",
+    });
+
+    const lesson = await createLessonForGroup({
+      teacherId: teacher.teacherId,
+      groupId: group.id,
+      scheduledAt: new Date(),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    const [teacherSideLesson] = await getLessonsForTeacher(teacher.teacherId);
+    expect(teacherSideLesson.zoomLinkSnapshot).toBe("https://zoom.us/j/4443332221");
+
+    const groups = await getMyLessonsAsStudent(link.studentUserId);
+    const found = groups.find((g) => g.teacherId === teacher.teacherId)!.lessons.find((l) => l.id === lesson.id);
+    expect(found?.zoomLinkSnapshot).toBe("https://zoom.us/j/4443332221");
   });
 
   it("a student removed from the group no longer sees NEW group lessons created after they left", async () => {
