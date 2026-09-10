@@ -98,6 +98,7 @@ export async function lookupInvite(rawToken: string): Promise<InviteLookup> {
 
 export interface AcceptInviteResult {
   session: CreatedSession;
+  userId: string;
 }
 
 /**
@@ -143,7 +144,7 @@ export async function acceptInviteAsNewUser(
   });
 
   const session = await createSession(user.id);
-  return { session };
+  return { session, userId: user.id };
 }
 
 /**

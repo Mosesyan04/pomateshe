@@ -10,6 +10,7 @@ const INVALID_MESSAGES: Record<string, string> = {
 
 const ERROR_MESSAGES: Record<string, string> = {
   weak_password: "Пароль должен быть не короче 10 символов.",
+  missing_consent: "Нужно подтвердить согласие на обработку персональных данных.",
   accept_failed: "Не удалось принять приглашение. Возможно, оно устарело — обновите страницу.",
 };
 
@@ -67,6 +68,15 @@ export default async function InvitePage({
           <label>
             Придумайте пароль
             <input name="password" type="password" required minLength={10} autoComplete="new-password" />
+          </label>
+          <label style={{ display: "flex", gap: "0.5rem", alignItems: "start" }}>
+            <input name="consent" type="checkbox" required style={{ marginTop: "0.2rem" }} />
+            <span>
+              Я даю согласие на обработку персональных данных в соответствии с{" "}
+              <a href="/legal/privacy" target="_blank">Политикой обработки персональных данных</a>
+              . Если мне не исполнилось 18 лет, я подтверждаю, что действую с согласия своего
+              законного представителя (родителя, усыновителя, опекуна) либо являюсь им.
+            </span>
           </label>
           <button type="submit">Создать аккаунт и принять приглашение</button>
         </form>

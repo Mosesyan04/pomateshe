@@ -5,6 +5,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   weak_password: "Пароль должен быть не короче 10 символов.",
   email_taken: "Аккаунт с этим email уже существует.",
   rate_limited: "Слишком много попыток регистрации с вашего адреса. Попробуйте позже.",
+  missing_consent: "Нужно согласиться с условиями и политикой, чтобы зарегистрироваться.",
 };
 
 export default async function RegisterPage({
@@ -44,6 +45,14 @@ export default async function RegisterPage({
         <label>
           Часовой пояс
           <input name="timezone" type="text" defaultValue="Europe/Moscow" required />
+        </label>
+        <label style={{ display: "flex", gap: "0.5rem", alignItems: "start" }}>
+          <input name="consent" type="checkbox" required style={{ marginTop: "0.2rem" }} />
+          <span>
+            Я принимаю <a href="/legal/offer" target="_blank">Пользовательское соглашение</a> и
+            даю согласие на обработку персональных данных в соответствии с{" "}
+            <a href="/legal/privacy" target="_blank">Политикой обработки персональных данных</a>.
+          </span>
         </label>
         <button type="submit">Зарегистрироваться</button>
       </form>
