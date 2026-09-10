@@ -1,5 +1,5 @@
-import { randomBytes, createHash } from "node:crypto";
 import { prisma } from "../../server/db";
+import { generateOpaqueToken, hashOpaqueToken } from "./tokens";
 
 /**
  * Sessions are NOT tenant-scoped (docs/DATABASE.md §2 — no RLS on this table), so this
@@ -13,14 +13,6 @@ import { prisma } from "../../server/db";
 
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days, docs/AUTH.md §5
 
-function generateToken(): string {
-  return randomBytes(32).toString("base64url");
-}
-
-function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
-}
-
 export interface CreatedSession {
   /** The raw token — set this as the httpOnly session cookie. Never persisted anywhere. */
   token: string;
@@ -28,13 +20,13 @@ export interface CreatedSession {
 }
 
 export async function createSession(userId: string): Promise<CreatedSession> {
-  const token = generateToken();
+  const token = generateOpaqueToken();
   const expiresAt = new Date(Date.now() + SESSION_TTL_MS);
 
   await prisma.session.create({
     data: {
       userId,
-      tokenHash: hashToken(token),
+      tokenHash: hashOpaqueToken(token),
       expiresAt,
     },
   });
@@ -45,6 +37,8 @@ export async function createSession(userId: string): Promise<CreatedSession> {
 export interface ValidatedSession {
   userId: string;
   role: "admin" | "teacher" | "student";
+  /** Only set when role === "teacher" — see User.teacherProfileId in schema.prisma. */
+  teacherProfileId: string | null;
 }
 
 /**
@@ -53,7 +47,7 @@ export interface ValidatedSession {
  * cookie layer, not here — this only records activity).
  */
 export async function validateSession(token: string): Promise<ValidatedSession | null> {
-  const tokenHash = hashToken(token);
+  const tokenHash = hashOpaqueToken(token);
 
   const session = await prisma.session.findUnique({
     where: { tokenHash },
@@ -69,11 +63,15 @@ export async function validateSession(token: string): Promise<ValidatedSession |
     data: { lastUsedAt: new Date() },
   });
 
-  return { userId: session.user.id, role: session.user.role };
+  return {
+    userId: session.user.id,
+    role: session.user.role,
+    teacherProfileId: session.user.teacherProfileId,
+  };
 }
 
 export async function revokeSession(token: string): Promise<void> {
-  await prisma.session.deleteMany({ where: { tokenHash: hashToken(token) } });
+  await prisma.session.deleteMany({ where: { tokenHash: hashOpaqueToken(token) } });
 }
 
 /** "Log out everywhere" — docs/AUTH.md §5. Also used when a role changes or a password is reset. */

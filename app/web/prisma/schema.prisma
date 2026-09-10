@@ -42,6 +42,12 @@ enum ConsentType {
   offer
 }
 
+enum InviteStatus {
+  pending
+  accepted
+  revoked
+}
+
 /// Base identity table. Custom auth (docs/AUTH.md §0) — not managed by an external auth framework.
 model User {
   id             String    @id @default(cuid(2))
@@ -51,6 +57,19 @@ model User {
   role           UserRole
   createdAt      DateTime  @default(now())
   disabledAt     DateTime?
+
+  /// Denormalized pointer to TeacherProfile.id, set once at registration, for role=teacher
+  /// users only. Exists ONLY to break a chicken-and-egg problem: teacher_profiles' RLS
+  /// policy is keyed on its own id (docs/MULTI_TENANCY.md §2.3), so "given a userId, find
+  /// their teacherId" cannot be answered by querying teacher_profiles at all — there's no
+  /// context to set yet, since finding that context IS the query. Found the hard way in
+  /// Phase 1: src/lib/auth/current-user.ts's getCurrentUser() queried teacherProfile by
+  /// userId directly and silently got zero rows on every single request post-login (RLS
+  /// failing closed exactly as designed, just against a legitimate query). Storing the
+  /// pointer here works because User carries no RLS at all — deliberately not a `@relation`
+  /// to keep this a plain, manually-managed value, not something Prisma treats as a live
+  /// join target.
+  teacherProfileId String? @unique
 
   teacherProfile      TeacherProfile?
   studentLinks        TeacherStudentLink[]
@@ -108,6 +127,7 @@ model TeacherProfile {
 
   user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   studentLinks        TeacherStudentLink[]
+  studentInvites      StudentInvite[]
   groups              Group[]
   groupMembers        GroupMember[]
   lessons             Lesson[]
@@ -145,6 +165,31 @@ model TeacherStudentLink {
   @@index([teacherId])
   @@index([studentUserId])
   @@map("teacher_student_links")
+}
+
+/// Not in the original docs/DATABASE.md draft — added while building the invite flow
+/// (docs/AUTH.md §3). Deliberately NOT RLS-protected, same reasoning as
+/// PasswordResetToken/Session (docs/DATABASE.md §2): the row that matters is looked up by an
+/// unguessable token hash by someone who isn't authenticated as the teacher yet — that IS
+/// the authorization, the same way a password-reset link is. RLS would only get in the way
+/// of that lookup (fail-closed with no tenant context set) without adding real protection,
+/// since the token itself is already the secret. Teacher-facing list/revoke operations
+/// still filter by teacherId explicitly in the data-access layer (src/server/invites.ts),
+/// same pattern as Session/PasswordResetToken already use.
+model StudentInvite {
+  id         String       @id @default(cuid(2))
+  teacherId  String
+  email      String
+  tokenHash  String       @unique
+  status     InviteStatus @default(pending)
+  expiresAt  DateTime
+  createdAt  DateTime     @default(now())
+  acceptedAt DateTime?
+
+  teacher TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@index([teacherId])
+  @@map("student_invites")
 }
 
 model Group {

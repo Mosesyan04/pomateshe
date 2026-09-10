@@ -52,6 +52,15 @@ export async function registerTeacher(input: RegisterTeacherInput): Promise<Regi
     }),
   );
 
+  // User carries no RLS (docs/DATABASE.md §2) — this plain update needs no tenant context,
+  // and is what makes it possible to answer "given this userId, what's their teacherId?"
+  // anywhere else in the app without re-querying the RLS-protected teacher_profiles table.
+  // See the schema.prisma comment on User.teacherProfileId for the full "why".
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { teacherProfileId: teacherId },
+  });
+
   return { userId: user.id, teacherId };
 }
 
@@ -92,5 +101,15 @@ export async function getLessonsForTeacher(teacherId: string) {
 export async function createGroup(teacherId: string, name: string) {
   return withTenantContext({ teacherId }, (tx) =>
     tx.group.create({ data: { teacherId, name } }),
+  );
+}
+
+export async function getStudentsForTeacher(teacherId: string) {
+  return withTenantContext({ teacherId }, (tx) =>
+    tx.teacherStudentLink.findMany({
+      where: { teacherId, status: "active" },
+      include: { studentUser: { select: { email: true } } },
+      orderBy: { createdAt: "desc" },
+    }),
   );
 }

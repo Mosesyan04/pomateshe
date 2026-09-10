@@ -24,6 +24,15 @@
 ### User (базовая identity-таблица, кастомная — не управляется внешним auth-фреймворком, см. `docs/AUTH.md`)
 - `id`, `email` (unique), `emailVerifiedAt`, `passwordHash` (Argon2id), `role`
   (`admin` | `teacher` | `student`), `createdAt`, `disabledAt`.
+- `teacherProfileId` (nullable, unique) **[Phase 1: добавлено при реализации]** — денормализованный
+  указатель на `TeacherProfile.id` для пользователей с `role=teacher`, проставляется один раз
+  при регистрации. Не было в первой версии схемы — понадобилось, потому что RLS-политика
+  `teacher_profiles` завязана на её собственный `id` (`docs/MULTI_TENANCY.md` §2.3), а значит
+  запрос "дан `userId`, найди его `teacherId`" не может пройти через саму `teacher_profiles`:
+  контекст, который должна установить RLS-проверка, — это и есть то, что запрос пытается
+  найти. `User` без RLS, поэтому поле здесь и решает то, что не может решить запрос к
+  тенантной таблице. Подробности и как этот баг реально проявился в Phase 1 — `docs/MULTI_TENANCY.md`
+  §4.2.
 
 ### Session **[review-2: схема больше не привязана к Auth.js Adapter]**
 - `id`, `userId` (FK → User), `tokenHash` (unique — SHA-256 хэш случайного токена сессии,
@@ -64,6 +73,21 @@
   `TeacherStudentLink.id` — конкретную связь конкретного ученика с конкретным преподавателем,
   а не на ученика "вообще". Это сохраняет инвариант "один тенант на строку" везде, кроме
   самой `TeacherStudentLink`.
+
+### StudentInvite **[Phase 1: добавлено при реализации, отсутствовало в первой версии схемы]**
+- `id`, `teacherId`, `email`, `tokenHash` (unique), `status` (`pending` | `accepted` | `revoked`),
+  `expiresAt`, `createdAt`, `acceptedAt`.
+- Реализует инвайт-флоу из `docs/AUTH.md` §3 — при проектировании схемы (Phase 0) эта таблица
+  не была явно выписана, хотя сам флоу приглашения был описан текстом.
+- **Намеренно без RLS**, как `Session`/`PasswordResetToken` — не "просто забыли": ссылку
+  принимает человек, ещё не аутентифицированный ни как кто, поэтому защищать доступ через
+  `app.current_teacher_id` здесь нечем — секретность обеспечивает сам `tokenHash`, тот же
+  принцип, что у сброса пароля. Teacher-facing операции (список/отзыв своих приглашений)
+  всё равно фильтруются по `teacherId` в data-access layer явно, тем же паттерном, что уже
+  используется для `Session`/`PasswordResetToken`. См. `docs/MULTI_TENANCY.md` §4.1 для
+  конкретной ошибки, которую этот выбор один раз всё же создал (RLS-джойн на `teacher_profiles`
+  через `include`, без контекста, тихо возвращающий `null`) и как это обойдено.
+- Индекс: `StudentInvite(teacherId)`.
 
 ### Group (`teacherId` — tenant key)
 - `id`, `teacherId`, `name`, `createdAt`, `archivedAt`.
@@ -137,6 +161,7 @@ TeacherProfile 1───N Lesson  (Lesson.studentLinkId → TeacherStudentLink 
 Lesson 1───0..1 Whiteboard        (FK на стороне Whiteboard.lessonId, unique)
 Lesson 1───N Homework 1───N MaterialFile
 TeacherProfile 1───0..1 CalendarIntegration
+TeacherProfile 1───N StudentInvite
 User 1───N Session
 User 1───N ConsentRecord
 User 1───N AuditLog (как actor)
@@ -186,9 +211,10 @@ SECURITY` и владение таблицами — теперь единств
 | `Whiteboard` | Hard delete по `expiresAt` (cron), retention-период — продуктовая константа | `docs/WHITEBOARD.md` §5 |
 | `Session` | Hard delete истёкших записей (`expiresAt` в прошлом) плановой задачей | Этот документ §2 |
 | `PasswordResetToken` | Hard delete использованных/истёкших токенов плановой задачей | Этот документ §2 |
+| `StudentInvite` **[Phase 1]** | Истёкшие/отменённые приглашения — hard delete плановой задачей, тот же паттерн, что у `PasswordResetToken` | Этот документ §2 |
 | `ConsentRecord` | Никогда не удаляется, переживает удаление аккаунта (обезличивается, не стирается) | `docs/CONSENTS.md` §4 |
 | `AuditLog` | Никогда не удаляется в рамках обычных процессов, переживает удаление актора | Этот документ §2 |
 | БД-бэкапы | ≥ 30 дней, зашифрованы, в РФ-периметре | Этот документ §6 |
 
-Задачи плановой очистки (`Session`, `PasswordResetToken`, `Whiteboard`) — единый список cron-задач
+Задачи плановой очистки (`Session`, `PasswordResetToken`, `StudentInvite`, `Whiteboard`) — единый список cron-задач
 фиксируется в `docs/ARCHITECTURE.md` §7 и `docs/DEPLOYMENT.md`.
