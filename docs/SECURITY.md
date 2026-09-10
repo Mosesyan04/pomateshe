@@ -77,13 +77,30 @@ Redis подключается только при горизонтальном 
 
 ## 6. HTTP security headers (через middleware/reverse proxy)
 
-- `Content-Security-Policy` — строгий, без `unsafe-inline` для скриптов (nonce-based для
-  инлайн-стилей Next.js, если потребуется).
+**[Phase 1: реализовано]** в `src/proxy.ts`, применяется к каждому запросу страницы.
+
+- `Content-Security-Policy` — строгий, без `unsafe-inline` для скриптов (per-request nonce +
+  `strict-dynamic`). Для `style-src` — **не** nonce-based, а `'unsafe-inline'`: найдено при
+  реализации, что CSP-nonce работает только для элементов `<script>`/`<style>`, но не для
+  инлайн-атрибута `style="..."`, а страницы Phase 1 написаны с `style={{...}}` (JSX-проп,
+  рендерится как раз в этот атрибут). К тому же по спеке CSP3 наличие nonce-source в
+  директиве заставляет браузер игнорировать `'unsafe-inline'` в той же директиве — то есть
+  указать оба сразу для `style-src` не просто бесполезно, а тихо отключает защиту с обеих
+  сторон одновременно. Когда Phase 2 (`docs/DESIGN_SYSTEM.md`) уберёт инлайн-стили в пользу
+  CSS Modules/Tailwind-классов, `style-src` можно будет перевести на nonce и убрать
+  `unsafe-inline` — до этого момента это осознанный, документированный компромисс, не пробел.
 - `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`.
 - `X-Content-Type-Options: nosniff`.
 - `Referrer-Policy: strict-origin-when-cross-origin`.
 - `Permissions-Policy` — отключить неиспользуемые API (camera, microphone, geolocation),
   кроме страницы доски, если понадобится (не планируется в MVP).
+- `X-Frame-Options: DENY` — добавлено сверх исходного списка как дублирующая защита к
+  `frame-ancestors` в CSP (см. §5 "Clickjacking") для браузеров без поддержки `frame-ancestors`.
+
+Nonce-based CSP требует динамического рендеринга каждой страницы, на которую применяется
+(иначе билд-тайм HTML не может содержать per-request nonce) — все страницы Phase 1 уже были
+динамическими (читают `cookies()`/`searchParams`), кроме `/`, которую пришлось явно перевести
+на динамический рендеринг (`connection()` из `next/server`) специально из-за этого.
 
 ## 7. Управление секретами
 
