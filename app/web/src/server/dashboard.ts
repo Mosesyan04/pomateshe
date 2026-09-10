@@ -1,4 +1,5 @@
 import { withTenantContext } from "./tenant-context";
+import { labelForLesson } from "./lesson-label";
 
 /**
  * Read-only aggregates for the teacher's main dashboard — deliberately just three numbers/
@@ -34,14 +35,6 @@ function startOfWeek(date: Date): Date {
   const diffToMonday = day === 0 ? -6 : 1 - day;
   d.setUTCDate(d.getUTCDate() + diffToMonday);
   return d;
-}
-
-function labelFor(lesson: {
-  group: { name: string } | null;
-  studentLink: { displayName: string | null; studentUser: { email: string } } | null;
-}): string {
-  if (lesson.group) return `Группа: ${lesson.group.name}`;
-  return lesson.studentLink?.displayName ?? lesson.studentLink?.studentUser.email ?? "—";
 }
 
 export async function getTeacherDashboardOverview(teacherId: string): Promise<DashboardOverview> {
@@ -86,7 +79,7 @@ export async function getTeacherDashboardOverview(teacherId: string): Promise<Da
         scheduledAt: l.scheduledAt,
         durationMinutes: l.durationMinutes,
         priceCents: l.priceCents,
-        studentLabel: labelFor(l),
+        studentLabel: labelForLesson(l),
         zoomLinkSnapshot: l.zoomLinkSnapshot,
       })),
       weekIncomeCents: weekIncome._sum.priceCents ?? 0,
@@ -95,7 +88,7 @@ export async function getTeacherDashboardOverview(teacherId: string): Promise<Da
         scheduledAt: l.scheduledAt,
         durationMinutes: l.durationMinutes,
         priceCents: l.priceCents,
-        studentLabel: labelFor(l),
+        studentLabel: labelForLesson(l),
         zoomLinkSnapshot: l.zoomLinkSnapshot,
       })),
     };
