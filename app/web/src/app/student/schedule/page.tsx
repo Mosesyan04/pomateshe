@@ -37,6 +37,7 @@ export default async function StudentSchedulePage() {
               <thead>
                 <tr style={{ textAlign: "left" }}>
                   <th>Когда</th>
+                  <th>Формат</th>
                   <th>Статус</th>
                   <th>Оплата</th>
                 </tr>
@@ -45,6 +46,7 @@ export default async function StudentSchedulePage() {
                 {group.lessons.map((lesson) => (
                   <tr key={lesson.id} style={{ borderTop: "1px solid #ddd" }}>
                     <td>{formatDateTime(lesson.scheduledAt)}</td>
+                    <td>{lesson.groupName ? `Группа: ${lesson.groupName}` : "Индивидуальное"}</td>
                     <td>{STATUS_LABELS[lesson.status] ?? lesson.status}</td>
                     <td>
                       {formatMoney(lesson.priceCents)} — {lesson.paidAt ? "оплачено" : "не оплачено"}

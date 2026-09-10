@@ -1,13 +1,20 @@
 import Link from "next/link";
 import { requireRole } from "../../../lib/auth/current-user";
 import { getStudentsForTeacher } from "../../../server/teachers";
+import { getGroupsForTeacher } from "../../../server/groups";
 import { getLessonsForTeacher } from "../../../server/lessons";
-import { createLessonAction, updateLessonStatusAction, toggleLessonPaidAction } from "./actions";
+import {
+  createLessonAction,
+  createGroupLessonAction,
+  updateLessonStatusAction,
+  toggleLessonPaidAction,
+} from "./actions";
 
 const ERROR_MESSAGES: Record<string, string> = {
   missing_fields: "Заполните все поля.",
   invalid_date: "Некорректная дата/время.",
   create_failed: "Не удалось создать занятие — проверьте, что ученик привязан к вам.",
+  create_group_failed: "Не удалось создать занятие — проверьте, что группа не архивирована.",
   invalid_status: "Некорректный статус.",
   update_failed: "Не удалось обновить занятие.",
 };
@@ -35,8 +42,9 @@ export default async function SchedulePage({
   const user = await requireRole("teacher");
   const { error } = await searchParams;
 
-  const [students, lessons] = await Promise.all([
+  const [students, groups, lessons] = await Promise.all([
     getStudentsForTeacher(user.teacherId!),
+    getGroupsForTeacher(user.teacherId!),
     getLessonsForTeacher(user.teacherId!),
   ]);
 
@@ -91,6 +99,45 @@ export default async function SchedulePage({
       </section>
 
       <section>
+        <h2>Новое групповое занятие</h2>
+        {groups.length === 0 ? (
+          <p style={{ color: "#666" }}>
+            Сначала <Link href="/teacher/groups">создайте группу</Link> и добавьте в неё учеников.
+          </p>
+        ) : (
+          <form action={createGroupLessonAction} style={{ display: "grid", gap: "0.5rem", maxWidth: 420 }}>
+            <label>
+              Группа
+              <select name="groupId" required>
+                {groups.map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.name} ({g.members.length})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Дата и время
+              <input name="scheduledAt" type="datetime-local" required />
+            </label>
+            <label>
+              Длительность (мин)
+              <input name="durationMinutes" type="number" min={5} step={5} defaultValue={60} required />
+            </label>
+            <label>
+              Стоимость занятия, ₽ (за всю группу)
+              <input name="priceRubles" type="number" min={0} step={50} required />
+            </label>
+            <label>
+              Заметка (необязательно)
+              <input name="notes" type="text" maxLength={500} />
+            </label>
+            <button type="submit">Создать групповое занятие</button>
+          </form>
+        )}
+      </section>
+
+      <section>
         <h2>Занятия ({lessons.length})</h2>
         {lessons.length === 0 ? (
           <p style={{ color: "#666" }}>Занятий пока нет.</p>
@@ -99,7 +146,7 @@ export default async function SchedulePage({
             <thead>
               <tr style={{ textAlign: "left" }}>
                 <th>Когда</th>
-                <th>Ученик</th>
+                <th>Ученик / группа</th>
                 <th>Статус</th>
                 <th>Оплата</th>
                 <th>Действия</th>
@@ -109,7 +156,11 @@ export default async function SchedulePage({
               {lessons.map((lesson) => (
                 <tr key={lesson.id} style={{ borderTop: "1px solid #ddd" }}>
                   <td>{formatDateTime(lesson.scheduledAt)}</td>
-                  <td>{lesson.studentLink?.displayName ?? lesson.studentLink?.studentUser.email ?? "—"}</td>
+                  <td>
+                    {lesson.group
+                      ? `Группа: ${lesson.group.name}`
+                      : lesson.studentLink?.displayName ?? lesson.studentLink?.studentUser.email ?? "—"}
+                  </td>
                   <td>{STATUS_LABELS[lesson.status] ?? lesson.status}</td>
                   <td>
                     {formatMoney(lesson.priceCents)} — {lesson.paidAt ? "оплачено" : "не оплачено"}

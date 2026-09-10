@@ -2,7 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { requireRole } from "../../../lib/auth/current-user";
-import { createLessonForStudent, updateLessonStatus, setLessonPaid } from "../../../server/lessons";
+import {
+  createLessonForStudent,
+  createLessonForGroup,
+  updateLessonStatus,
+  setLessonPaid,
+} from "../../../server/lessons";
 import type { LessonStatus } from "../../../../generated/prisma/client";
 
 const VALID_STATUSES: LessonStatus[] = ["scheduled", "completed", "cancelled", "no_show"];
@@ -38,6 +43,40 @@ export async function createLessonAction(formData: FormData): Promise<void> {
     });
   } catch {
     redirect("/teacher/schedule?error=create_failed");
+  }
+
+  redirect("/teacher/schedule?created=1");
+}
+
+export async function createGroupLessonAction(formData: FormData): Promise<void> {
+  const user = await requireRole("teacher");
+
+  const groupId = String(formData.get("groupId") ?? "");
+  const scheduledAtRaw = String(formData.get("scheduledAt") ?? "");
+  const durationMinutes = Number(formData.get("durationMinutes"));
+  const priceRubles = Number(formData.get("priceRubles"));
+  const notes = String(formData.get("notes") ?? "").trim();
+
+  if (!groupId || !scheduledAtRaw || !durationMinutes || !priceRubles) {
+    redirect("/teacher/schedule?error=missing_fields");
+  }
+
+  const scheduledAt = new Date(scheduledAtRaw);
+  if (Number.isNaN(scheduledAt.getTime())) {
+    redirect("/teacher/schedule?error=invalid_date");
+  }
+
+  try {
+    await createLessonForGroup({
+      teacherId: user.teacherId!,
+      groupId,
+      scheduledAt,
+      durationMinutes,
+      priceCents: Math.round(priceRubles * 100),
+      notes: notes || undefined,
+    });
+  } catch {
+    redirect("/teacher/schedule?error=create_group_failed");
   }
 
   redirect("/teacher/schedule?created=1");

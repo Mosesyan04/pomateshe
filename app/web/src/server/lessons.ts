@@ -2,10 +2,11 @@ import { withTenantContext } from "./tenant-context";
 import type { LessonStatus } from "../../generated/prisma/client";
 
 /**
- * Individual (student, not group) lessons — Phase 2 first slice per docs/ROADMAP.md.
- * Group lessons already work at the schema/RLS level (docs/DATABASE.md's CHECK constraint,
- * teachers.ts's createGroup/createLesson used by the Phase 1 isolation tests) but have no
- * teacher-facing UI yet — deliberately deferred, not forgotten, see docs/ROADMAP.md.
+ * Lessons — either for one student (studentLinkId set) or a whole group (groupId set), never
+ * both (docs/DATABASE.md's CHECK constraint on the lessons table). A group lesson is one
+ * Lesson row for the whole session — one status, one price, one payment mark for the group as
+ * a unit, not per-student billing within it; splitting that further is a bigger feature this
+ * doesn't attempt (Правило 10 ТЗ).
  */
 
 export interface CreateLessonInput {
@@ -42,6 +43,38 @@ export async function createLessonForStudent(input: CreateLessonInput) {
   });
 }
 
+export interface CreateGroupLessonInput {
+  teacherId: string;
+  groupId: string;
+  scheduledAt: Date;
+  durationMinutes: number;
+  priceCents: number;
+  notes?: string;
+}
+
+export async function createLessonForGroup(input: CreateGroupLessonInput) {
+  return withTenantContext({ teacherId: input.teacherId }, async (tx) => {
+    // Same ownership-check rationale as createLessonForStudent above.
+    const group = await tx.group.findFirst({
+      where: { id: input.groupId, teacherId: input.teacherId, archivedAt: null },
+    });
+    if (!group) {
+      throw new Error("Группа не найдена или архивирована.");
+    }
+
+    return tx.lesson.create({
+      data: {
+        teacherId: input.teacherId,
+        groupId: input.groupId,
+        scheduledAt: input.scheduledAt,
+        durationMinutes: input.durationMinutes,
+        priceCents: input.priceCents,
+        notes: input.notes,
+      },
+    });
+  });
+}
+
 export async function getLessonsForTeacher(teacherId: string) {
   return withTenantContext({ teacherId }, (tx) =>
     tx.lesson.findMany({
@@ -52,6 +85,7 @@ export async function getLessonsForTeacher(teacherId: string) {
         studentLink: {
           select: { id: true, displayName: true, studentUser: { select: { email: true } } },
         },
+        group: { select: { id: true, name: true } },
       },
       orderBy: { scheduledAt: "desc" },
     }),
@@ -105,6 +139,9 @@ export interface StudentLessonGroup {
     priceCents: number;
     paidAt: Date | null;
     notes: string | null;
+    /** Set only for a group lesson — lets the student see WHY a lesson they didn't book
+     *  individually is on their schedule. */
+    groupName: string | null;
   }>;
 }
 
@@ -125,7 +162,7 @@ export async function getMyLessonsAsStudent(studentUserId: string): Promise<Stud
 
   return Promise.all(
     links.map(async (link) => {
-      const [teacher, lessons] = await Promise.all([
+      const [teacher, individualLessons, groupMemberships] = await Promise.all([
         withTenantContext({ teacherId: link.teacherId }, (tx) =>
           tx.teacherProfile.findUniqueOrThrow({
             where: { id: link.teacherId },
@@ -135,7 +172,6 @@ export async function getMyLessonsAsStudent(studentUserId: string): Promise<Stud
         withTenantContext({ teacherId: link.teacherId }, (tx) =>
           tx.lesson.findMany({
             where: { teacherId: link.teacherId, studentLinkId: link.id },
-            orderBy: { scheduledAt: "desc" },
             select: {
               id: true,
               scheduledAt: true,
@@ -147,7 +183,46 @@ export async function getMyLessonsAsStudent(studentUserId: string): Promise<Stud
             },
           }),
         ),
+        // Groups this student currently belongs to under this teacher — a group lesson isn't
+        // tied to studentLinkId at all (it's tied to groupId), so it has to be found via
+        // membership, not via the lesson row itself.
+        withTenantContext({ teacherId: link.teacherId }, (tx) =>
+          tx.groupMember.findMany({
+            where: { teacherId: link.teacherId, studentLinkId: link.id, leftAt: null },
+            select: { groupId: true, group: { select: { name: true } } },
+          }),
+        ),
       ]);
+
+      const groupIds = groupMemberships.map((m) => m.groupId);
+      const groupNameById = new Map(groupMemberships.map((m) => [m.groupId, m.group.name]));
+
+      const groupLessons =
+        groupIds.length === 0
+          ? []
+          : await withTenantContext({ teacherId: link.teacherId }, (tx) =>
+              tx.lesson.findMany({
+                where: { teacherId: link.teacherId, groupId: { in: groupIds } },
+                select: {
+                  id: true,
+                  groupId: true,
+                  scheduledAt: true,
+                  durationMinutes: true,
+                  status: true,
+                  priceCents: true,
+                  paidAt: true,
+                  notes: true,
+                },
+              }),
+            );
+
+      const lessons = [
+        ...individualLessons.map((l) => ({ ...l, groupName: null as string | null })),
+        ...groupLessons.map((l) => ({
+          ...l,
+          groupName: groupNameById.get(l.groupId!) ?? null,
+        })),
+      ].sort((a, b) => b.scheduledAt.getTime() - a.scheduledAt.getTime());
 
       return {
         teacherId: link.teacherId,
