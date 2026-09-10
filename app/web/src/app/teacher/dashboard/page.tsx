@@ -12,6 +12,7 @@ export default async function TeacherDashboardPage() {
       <p>Вы вошли как преподаватель (userId: {user?.userId}).</p>
       <p>
         <Link href="/teacher/students">Ученики и приглашения</Link> ·{" "}
+        <Link href="/teacher/groups">Группы</Link> ·{" "}
         <a href="/teacher/schedule">Расписание</a> ·{" "}
         <a href="/teacher/homework">Домашние задания</a> ·{" "}
         <a href="/teacher/profile">Публичная страница</a>
