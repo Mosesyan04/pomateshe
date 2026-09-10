@@ -1,0 +1,17 @@
+# Repo-root safety net — closes docs/THREAT_MODEL.md T-003 ("no .gitignore" finding from the
+# Phase 0 audit). app/web/ has its own more specific .gitignore for that package; this file
+# catches stray secrets/editor artifacts anywhere else in the repo and is a second line of
+# defense even where a package-level .gitignore already covers something.
+
+.env
+.env.*
+!.env.example
+!*/.env.example
+
+*.pem
+*.key
+
+.DS_Store
+*.log
+
+node_modules/

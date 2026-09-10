@@ -1,0 +1,332 @@
+// Pomateshe — Prisma schema.
+// Mirrors docs/DATABASE.md exactly; see that document for the rationale behind each
+// entity and field. Do not let this file and docs/DATABASE.md drift apart — update both
+// together.
+//
+// Row-Level Security policies, FORCE ROW LEVEL SECURITY, and GRANTs are NOT expressed here
+// (Prisma's schema DSL has no first-party RLS support) — they live in raw SQL appended to
+// the initial migration. See docs/MULTI_TENANCY.md §2.3 for why this is not optional.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  admin
+  teacher
+  student
+}
+
+enum LessonStatus {
+  scheduled
+  completed
+  cancelled
+  no_show
+}
+
+enum LinkStatus {
+  active
+  archived
+}
+
+enum ConsentType {
+  privacy_policy
+  pdn_processing
+  cookie_analytics
+  cookie_marketing
+  offer
+}
+
+/// Base identity table. Custom auth (docs/AUTH.md §0) — not managed by an external auth framework.
+model User {
+  id             String    @id @default(cuid(2))
+  email          String    @unique
+  emailVerifiedAt DateTime?
+  passwordHash   String
+  role           UserRole
+  createdAt      DateTime  @default(now())
+  disabledAt     DateTime?
+
+  teacherProfile      TeacherProfile?
+  studentLinks        TeacherStudentLink[]
+  sessions            Session[]
+  passwordResetTokens PasswordResetToken[]
+  consentRecords      ConsentRecord[]
+  auditLogEntries     AuditLog[]
+
+  @@map("users")
+}
+
+/// Not tenant-scoped — belongs to the platform, not a teacher. No RLS.
+model Session {
+  id         String   @id @default(cuid(2))
+  userId     String
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  lastUsedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+/// Not tenant-scoped. No RLS.
+model PasswordResetToken {
+  id        String    @id @default(cuid(2))
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("password_reset_tokens")
+}
+
+model TeacherProfile {
+  id                      String   @id @default(cuid(2))
+  userId                  String   @unique
+  slug                    String   @unique
+  displayName             String
+  bio                     String?
+  subjects                String[]
+  avatarStorageKey        String?
+  timezone                String
+  publicPageSettings      Json     @default("{}")
+  zoomPersonalLink        String?
+  defaultLessonPriceCents Int?
+  currency                String   @default("RUB")
+  createdAt               DateTime @default(now())
+
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  studentLinks        TeacherStudentLink[]
+  groups              Group[]
+  groupMembers        GroupMember[]
+  lessons             Lesson[]
+  homework            Homework[]
+  materialFiles       MaterialFile[]
+  whiteboards         Whiteboard[]
+  calendarIntegration CalendarIntegration?
+
+  @@map("teacher_profiles")
+}
+
+/// Many-to-many between User(role=student) and TeacherProfile. See docs/MULTI_TENANCY.md §1.1, §3.2 —
+/// the only table with two RLS policies (teacher_scope OR student_scope).
+model TeacherStudentLink {
+  id              String     @id @default(cuid(2))
+  teacherId       String
+  studentUserId   String
+  displayName     String?
+  contactPhone    String?
+  contactTelegram String?
+  notes           String?
+  status          LinkStatus @default(active)
+  invitedAt       DateTime   @default(now())
+  joinedAt        DateTime?
+  createdAt       DateTime   @default(now())
+
+  teacher     TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  studentUser User           @relation(fields: [studentUserId], references: [id], onDelete: Cascade)
+
+  groupMembers GroupMember[]
+  lessons      Lesson[]
+  homework     Homework[]
+
+  @@unique([teacherId, studentUserId])
+  @@index([teacherId])
+  @@index([studentUserId])
+  @@map("teacher_student_links")
+}
+
+model Group {
+  id         String    @id @default(cuid(2))
+  teacherId  String
+  name       String
+  createdAt  DateTime  @default(now())
+  archivedAt DateTime?
+
+  teacher TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  members GroupMember[]
+  lessons Lesson[]
+
+  @@index([teacherId])
+  @@map("groups")
+}
+
+/// teacherId is denormalized here (also derivable via groupId -> Group.teacherId) so this
+/// table follows the same "every tenant table carries teacherId directly" rule as the rest
+/// of the schema (docs/DATABASE.md §1) — RLS policies stay uniform (direct column compare,
+/// no subquery) instead of this one table needing a different, slower policy shape. The
+/// data-access layer sets it from the parent Group at creation, never from client input.
+model GroupMember {
+  id            String    @id @default(cuid(2))
+  teacherId     String
+  groupId       String
+  studentLinkId String
+  joinedAt      DateTime  @default(now())
+  leftAt        DateTime?
+
+  teacher     TeacherProfile     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  group       Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  studentLink TeacherStudentLink @relation(fields: [studentLinkId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, studentLinkId])
+  @@index([teacherId])
+  @@map("group_members")
+}
+
+model Lesson {
+  id               String       @id @default(cuid(2))
+  teacherId        String
+  studentLinkId    String?
+  groupId          String?
+  scheduledAt      DateTime
+  durationMinutes  Int
+  status           LessonStatus @default(scheduled)
+  priceCents       Int
+  currency         String       @default("RUB")
+  paidAt           DateTime?
+  zoomLinkSnapshot String?
+  calendarEventId  String?
+  notes            String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  deletedAt        DateTime?
+
+  teacher       TeacherProfile      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  studentLink   TeacherStudentLink? @relation(fields: [studentLinkId], references: [id])
+  group         Group?              @relation(fields: [groupId], references: [id])
+  homework      Homework[]
+  materialFiles MaterialFile[]
+  whiteboard  Whiteboard?
+
+  @@index([teacherId, scheduledAt])
+  @@index([teacherId, paidAt])
+  @@map("lessons")
+  // CHECK (exactly one of studentLinkId/groupId set) — added in raw SQL migration,
+  // Prisma schema DSL has no CHECK constraint support at this Prisma version for this shape.
+}
+
+model Homework {
+  id            String    @id @default(cuid(2))
+  teacherId     String
+  lessonId      String?
+  studentLinkId String?
+  groupId       String?
+  title         String
+  description   String?
+  dueAt         DateTime?
+  createdAt     DateTime  @default(now())
+
+  teacher     TeacherProfile      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  lesson      Lesson?             @relation(fields: [lessonId], references: [id])
+  studentLink TeacherStudentLink? @relation(fields: [studentLinkId], references: [id])
+  materialFiles MaterialFile[]
+
+  @@index([teacherId, dueAt])
+  @@map("homework")
+}
+
+/// No deletedAt — hard delete, see docs/DATABASE.md §1 (review-2: resolved soft/hard-delete
+/// inconsistency in favor of the simpler model).
+model MaterialFile {
+  id               String   @id @default(cuid(2))
+  teacherId        String
+  ownerUserId      String
+  homeworkId       String?
+  lessonId         String?
+  storageKey       String
+  originalFileName String
+  mimeType         String
+  sizeBytes        Int
+  createdAt        DateTime @default(now())
+
+  teacher  TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  homework Homework?      @relation(fields: [homeworkId], references: [id])
+  lesson   Lesson?        @relation(fields: [lessonId], references: [id])
+
+  @@index([teacherId])
+  @@index([homeworkId])
+  @@index([lessonId])
+  @@map("material_files")
+}
+
+/// FK lives here only (not also on Lesson) — see docs/DATABASE.md §1 (review-2: resolved the
+/// redundant bidirectional Lesson<->Whiteboard link from the first draft).
+model Whiteboard {
+  id                 String    @id @default(cuid(2))
+  teacherId          String
+  lessonId           String    @unique
+  snapshotStorageKey String?
+  lastActivityAt     DateTime  @default(now())
+  expiresAt          DateTime
+  createdAt          DateTime  @default(now())
+
+  teacher TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  lesson  Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([teacherId])
+  @@index([expiresAt])
+  @@map("whiteboards")
+}
+
+model CalendarIntegration {
+  id                    String    @id @default(cuid(2))
+  teacherId             String    @unique
+  provider              String    @default("google")
+  googleAccountEmail    String?
+  accessTokenEncrypted  String?
+  refreshTokenEncrypted String?
+  tokenExpiresAt        DateTime?
+  calendarId            String?
+  watchChannelId        String?   @unique
+  watchExpiresAt        DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  teacher TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  @@map("calendar_integrations")
+}
+
+/// Survives account deletion (obfuscated, not deleted) — see docs/CONSENTS.md §4, docs/DATABASE.md §7.
+model ConsentRecord {
+  id            String      @id @default(cuid(2))
+  userId        String
+  type          ConsentType
+  policyVersion String
+  acceptedAt    DateTime    @default(now())
+  ip            String?
+  userAgent     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type, policyVersion])
+  @@index([userId, type])
+  @@map("consent_records")
+}
+
+/// Survives actor deletion — see docs/DATABASE.md §2, §7.
+model AuditLog {
+  id         String   @id @default(cuid(2))
+  actorUserId String?
+  action     String
+  targetType String
+  targetId   String
+  metadata   Json     @default("{}")
+  ip         String?
+  createdAt  DateTime @default(now())
+
+  actor User? @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
