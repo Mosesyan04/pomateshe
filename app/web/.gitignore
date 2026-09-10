@@ -45,3 +45,8 @@ next-env.d.ts
 # (relative to prisma/), i.e. app/web/generated/prisma, not app/web/app/generated/prisma —
 # fix applied after `prisma init` guessed the wrong path for our --no-src-dir-turned-src layout.
 /generated/
+
+# uploaded files — src/lib/files/local-disk-storage.ts's Phase 2 stand-in storage root.
+# Never committed regardless of environment; the production design swaps this out entirely
+# (docs/FILE_STORAGE.md §2).
+/var/uploads/

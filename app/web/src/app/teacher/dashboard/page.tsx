@@ -11,11 +11,10 @@ export default async function TeacherDashboardPage() {
       <p>Вы вошли как преподаватель (userId: {user?.userId}).</p>
       <p>
         <a href="/teacher/students">Ученики и приглашения</a> ·{" "}
-        <a href="/teacher/schedule">Расписание</a>
+        <a href="/teacher/schedule">Расписание</a> ·{" "}
+        <a href="/teacher/homework">Домашние задания</a>
       </p>
-      <p style={{ color: "#666" }}>
-        Домашние задания, доска, доходы — Phase 2+ (docs/ROADMAP.md).
-      </p>
+      <p style={{ color: "#666" }}>Доска, доходы — Phase 2+/3 (docs/ROADMAP.md).</p>
     </div>
   );
 }
