@@ -48,8 +48,17 @@
 ```
 teachers/{teacherId}/materials/{materialId}/{originalFileName}
 teachers/{teacherId}/avatars/{teacherId}.{ext}
-teachers/{teacherId}/whiteboards/{whiteboardId}/snapshot.json
+teachers/{teacherId}/whiteboards/{whiteboardId}/snapshot.bin
 ```
+
+**[Phase 3]** Ключ снапшота доски реализован как `.bin`, не `.json`, как было в первой версии
+этого раздела — содержимое (`Y.encodeStateAsUpdate`) двоичное, оборачивать его в JSON
+(base64) означало бы +33% к размеру объекта без всякой пользы. Ключ, что важнее,
+**вычисляется детерминированно** из (`teacherId`, `whiteboardId`), а не хранится как случайный
+идентификатор в `Whiteboard.snapshotStorageKey` (это поле убрано из схемы) — потому что
+realtime-сервис, единственный писатель снапшотов, не имеет доступа к Postgres вообще
+(`docs/WHITEBOARD.md` §2) и обязан быть способен вычислить свой собственный ключ без
+какого-либо похода в БД, имея только claims из уже проверенного токена.
 
 Префикс `teachers/{teacherId}/` — не механизм контроля доступа сам по себе (бакет приватный
 в любом случае), но упрощает эксплуатационные задачи (bulk-удаление всех файлов тенанта при

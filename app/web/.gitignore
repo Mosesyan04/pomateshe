@@ -50,3 +50,4 @@ next-env.d.ts
 # Never committed regardless of environment; the production design swaps this out entirely
 # (docs/FILE_STORAGE.md §2).
 /var/uploads/
+/var/whiteboard-snapshots/

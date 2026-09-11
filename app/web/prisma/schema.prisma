@@ -359,15 +359,20 @@ model MaterialFile {
 /// shape as Lesson.studentLinkId/groupId (docs/DATABASE.md §1) — CHECK constraint added in raw
 /// SQL migration, Prisma's schema DSL can't express it at this version (same reason Lesson's
 /// own constraint is raw SQL too).
+///
+/// No `snapshotStorageKey` column (removed in the Phase 3 migration) — the object key is
+/// computed deterministically from (teacherId, id) by both processes, never stored, because
+/// the realtime service that actually writes snapshots has no Postgres access at all
+/// (docs/WHITEBOARD.md §2, §4) and must be able to derive its own storage key from token
+/// claims alone.
 model Whiteboard {
-  id                 String    @id @default(cuid(2))
-  teacherId          String
-  studentLinkId      String?
-  groupId            String?
-  snapshotStorageKey String?
-  lastActivityAt     DateTime  @default(now())
-  expiresAt          DateTime
-  createdAt          DateTime  @default(now())
+  id             String   @id @default(cuid(2))
+  teacherId      String
+  studentLinkId  String?
+  groupId        String?
+  lastActivityAt DateTime @default(now())
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
 
   teacher     TeacherProfile      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   studentLink TeacherStudentLink? @relation(fields: [studentLinkId], references: [id], onDelete: Cascade)

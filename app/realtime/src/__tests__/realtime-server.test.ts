@@ -30,6 +30,11 @@ let baseUrl: string;
 
 beforeAll(() => {
   process.env.AUTH_SECRET = TEST_SECRET;
+  // room.ts kicks off snapshot persistence for every room, regardless of which test created
+  // it — deliberately unset here so these tests stay hermetic no matter what the invoking
+  // shell happens to have exported, instead of silently depending on ambient env state to
+  // decide whether snapshot save attempts are no-ops or real disk writes.
+  delete process.env.WHITEBOARD_SNAPSHOT_DIR;
 });
 
 afterEach(async () => {

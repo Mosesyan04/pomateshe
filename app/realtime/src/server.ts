@@ -54,7 +54,7 @@ export function createRealtimeServer(): RealtimeServer {
     }
 
     wss.handleUpgrade(request, socket, head, (ws) => {
-      const room = getOrCreateRoom(payload.whiteboardId);
+      const room = getOrCreateRoom(payload.whiteboardId, payload.teacherId);
       setupConnection(ws, room, payload);
     });
   });
