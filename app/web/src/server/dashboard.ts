@@ -1,5 +1,6 @@
 import { withTenantContext } from "./tenant-context";
 import { labelForLesson } from "./lesson-label";
+import { startOfWeekUtc } from "../lib/calendar/view-range";
 
 /**
  * Read-only aggregates for the teacher's main dashboard — deliberately just three numbers/
@@ -26,20 +27,11 @@ export interface DashboardOverview {
   unpaidLessons: DashboardLesson[];
 }
 
-/** Monday 00:00 UTC of the week containing `date` — a fixed, server-clock week boundary
- *  (no per-teacher timezone arithmetic yet; nothing else in the app does date math against
- *  TeacherProfile.timezone either, this doesn't introduce a new inconsistency). */
-function startOfWeek(date: Date): Date {
-  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-  const day = d.getUTCDay(); // 0 = Sunday .. 6 = Saturday
-  const diffToMonday = day === 0 ? -6 : 1 - day;
-  d.setUTCDate(d.getUTCDate() + diffToMonday);
-  return d;
-}
-
 export async function getTeacherDashboardOverview(teacherId: string): Promise<DashboardOverview> {
   const now = new Date();
-  const weekStart = startOfWeek(now);
+  // No per-teacher timezone arithmetic yet — nothing else in the app does date math against
+  // TeacherProfile.timezone either, this doesn't introduce a new inconsistency.
+  const weekStart = startOfWeekUtc(now);
   const weekEnd = new Date(weekStart.getTime() + 7 * 24 * 60 * 60 * 1000);
 
   const include = {

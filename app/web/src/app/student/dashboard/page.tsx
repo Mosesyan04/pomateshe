@@ -9,6 +9,7 @@ export default async function StudentDashboardPage() {
       <p>Вы вошли как ученик (userId: {user?.userId}).</p>
       <p>
         <a href="/student/schedule">Моё расписание</a> ·{" "}
+        <a href="/student/calendar">Календарь</a> ·{" "}
         <a href="/student/homework">Домашние задания</a>
       </p>
       <p style={{ color: "#666" }}>Доска — Phase 3 (docs/ROADMAP.md).</p>
