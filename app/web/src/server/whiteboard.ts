@@ -25,13 +25,11 @@ function accessWindow(scheduledAt: Date, durationMinutes: number): { from: Date;
   };
 }
 
-function isWithinAccessWindow(scheduledAt: Date, durationMinutes: number, now: Date): boolean {
-  const { from, to } = accessWindow(scheduledAt, durationMinutes);
-  return now >= from && now <= to;
-}
-
 export type WhiteboardAccessResult =
-  | { ok: true; whiteboardId: string; teacherId: string }
+  /** `accessWindowEnd` — when THIS lesson's window closes, for the token-issuing route to cap
+   *  a room token's TTL at (never hand out a token that outlives the window it was granted
+   *  under). */
+  | { ok: true; whiteboardId: string; teacherId: string; accessWindowEnd: Date }
   | { ok: false; reason: "not_found" }
   /** `availableFrom` is when the access window for THIS lesson opens — not a promise the
    *  board is reachable forever after that; it closes again once the window ends. */
@@ -86,11 +84,12 @@ export async function resolveWhiteboardForTeacher(
     if (!lesson || lesson.teacherId !== teacherId) {
       return { ok: false, reason: "not_found" };
     }
-    if (!isWithinAccessWindow(lesson.scheduledAt, lesson.durationMinutes, now)) {
-      return { ok: false, reason: "outside_window", availableFrom: accessWindow(lesson.scheduledAt, lesson.durationMinutes).from };
+    const window = accessWindow(lesson.scheduledAt, lesson.durationMinutes);
+    if (now < window.from || now > window.to) {
+      return { ok: false, reason: "outside_window", availableFrom: window.from };
     }
     const whiteboard = await findOrCreateWhiteboard(tx, teacherId, lesson);
-    return { ok: true, whiteboardId: whiteboard.id, teacherId };
+    return { ok: true, whiteboardId: whiteboard.id, teacherId, accessWindowEnd: window.to };
   });
 }
 
@@ -131,15 +130,12 @@ export async function resolveWhiteboardForStudent(
         return null; // unreachable given the DB CHECK constraint, kept for exhaustiveness
       }
 
-      if (!isWithinAccessWindow(lesson.scheduledAt, lesson.durationMinutes, now)) {
-        return {
-          ok: false,
-          reason: "outside_window",
-          availableFrom: accessWindow(lesson.scheduledAt, lesson.durationMinutes).from,
-        };
+      const window = accessWindow(lesson.scheduledAt, lesson.durationMinutes);
+      if (now < window.from || now > window.to) {
+        return { ok: false, reason: "outside_window", availableFrom: window.from };
       }
       const whiteboard = await findOrCreateWhiteboard(tx, link.teacherId, lesson);
-      return { ok: true, whiteboardId: whiteboard.id, teacherId: link.teacherId };
+      return { ok: true, whiteboardId: whiteboard.id, teacherId: link.teacherId, accessWindowEnd: window.to };
     });
     if (result) return result;
   }
