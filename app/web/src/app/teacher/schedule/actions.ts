@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { requireRole } from "../../../lib/auth/current-user";
 import {
@@ -8,6 +9,7 @@ import {
   updateLessonStatus,
   setLessonPaid,
 } from "../../../server/lessons";
+import { syncLessonToGoogleCalendar } from "../../../server/calendar-sync";
 import type { LessonStatus } from "../../../../generated/prisma/client";
 
 const VALID_STATUSES: LessonStatus[] = ["scheduled", "completed", "cancelled", "no_show"];
@@ -33,7 +35,7 @@ export async function createLessonAction(formData: FormData): Promise<void> {
   }
 
   try {
-    await createLessonForStudent({
+    const lesson = await createLessonForStudent({
       teacherId: user.teacherId!,
       studentLinkId,
       scheduledAt,
@@ -41,6 +43,8 @@ export async function createLessonAction(formData: FormData): Promise<void> {
       priceCents: Math.round(priceRubles * 100),
       notes: notes || undefined,
     });
+    // Best-effort, off the request path (docs/CALENDAR.md §4) — never blocks this redirect.
+    after(() => syncLessonToGoogleCalendar(user.teacherId!, lesson.id));
   } catch {
     redirect("/teacher/schedule?error=create_failed");
   }
@@ -67,7 +71,7 @@ export async function createGroupLessonAction(formData: FormData): Promise<void>
   }
 
   try {
-    await createLessonForGroup({
+    const lesson = await createLessonForGroup({
       teacherId: user.teacherId!,
       groupId,
       scheduledAt,
@@ -75,6 +79,7 @@ export async function createGroupLessonAction(formData: FormData): Promise<void>
       priceCents: Math.round(priceRubles * 100),
       notes: notes || undefined,
     });
+    after(() => syncLessonToGoogleCalendar(user.teacherId!, lesson.id));
   } catch {
     redirect("/teacher/schedule?error=create_group_failed");
   }
@@ -93,6 +98,9 @@ export async function updateLessonStatusAction(formData: FormData): Promise<void
 
   try {
     await updateLessonStatus(user.teacherId!, lessonId, status);
+    // Mainly matters for status === "cancelled" (deletes the Google event, if any) —
+    // syncLessonToGoogleCalendar itself decides what, if anything, a given status needs.
+    after(() => syncLessonToGoogleCalendar(user.teacherId!, lessonId));
   } catch {
     redirect("/teacher/schedule?error=update_failed");
   }

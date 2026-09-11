@@ -1,8 +1,10 @@
 "use server";
 
+import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { requireRole } from "../../../lib/auth/current-user";
 import { rescheduleLesson } from "../../../server/lessons";
+import { syncLessonToGoogleCalendar } from "../../../server/calendar-sync";
 import {
   createPersonalEvent,
   reschedulePersonalEvent,
@@ -21,6 +23,7 @@ export async function rescheduleLessonFromCalendarAction(
   const user = await requireRole("teacher");
   try {
     await rescheduleLesson(user.teacherId!, lessonId, new Date(newScheduledAtIso));
+    after(() => syncLessonToGoogleCalendar(user.teacherId!, lessonId));
     return { ok: true };
   } catch {
     return { ok: false, error: "Не удалось перенести занятие." };

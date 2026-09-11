@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { requireRole } from "../../../lib/auth/current-user";
 import { updateTeacherProfile } from "../../../server/teacher-profile";
+import { disconnectCalendarIntegration } from "../../../server/calendar-integration";
 import { Prisma } from "../../../../generated/prisma/client";
 
 export async function updateTeacherProfileAction(formData: FormData): Promise<void> {
@@ -61,4 +62,10 @@ export async function updateTeacherProfileAction(formData: FormData): Promise<vo
   }
 
   redirect("/teacher/profile?saved=1");
+}
+
+export async function disconnectGoogleCalendarAction(): Promise<void> {
+  const user = await requireRole("teacher");
+  await disconnectCalendarIntegration(user.teacherId!);
+  redirect("/teacher/profile?calendarDisconnected=1");
 }
