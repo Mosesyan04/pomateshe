@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { requireRole } from "../../../lib/auth/current-user";
+import { requireRole, assertEmailVerified } from "../../../lib/auth/current-user";
 import {
   createGroup,
   addStudentToGroup,
@@ -11,6 +11,7 @@ import {
 
 export async function createGroupAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/groups");
   const name = String(formData.get("name") ?? "").trim();
 
   if (!name) {
@@ -23,6 +24,7 @@ export async function createGroupAction(formData: FormData): Promise<void> {
 
 export async function addStudentToGroupAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/groups");
   const groupId = String(formData.get("groupId") ?? "");
   const studentLinkId = String(formData.get("studentLinkId") ?? "");
 
@@ -41,6 +43,7 @@ export async function addStudentToGroupAction(formData: FormData): Promise<void>
 
 export async function removeStudentFromGroupAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/groups");
   const groupId = String(formData.get("groupId") ?? "");
   const studentLinkId = String(formData.get("studentLinkId") ?? "");
 
@@ -55,6 +58,7 @@ export async function removeStudentFromGroupAction(formData: FormData): Promise<
 
 export async function archiveGroupAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/groups");
   const groupId = String(formData.get("groupId") ?? "");
 
   try {

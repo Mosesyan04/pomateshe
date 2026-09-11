@@ -75,6 +75,7 @@ model User {
   studentLinks        TeacherStudentLink[]
   sessions            Session[]
   passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
   consentRecords      ConsentRecord[]
   auditLogEntries     AuditLog[]
   personalCalendarEvents PersonalCalendarEvent[]
@@ -109,6 +110,23 @@ model PasswordResetToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("password_reset_tokens")
+}
+
+/// Same shape and RLS-exclusion rationale as PasswordResetToken above — an unguessable token
+/// hash is the authorization, docs/DATABASE.md §2. Sent on teacher registration
+/// (docs/AUTH.md §3); a student never gets one (see the model's own registration path never
+/// creates one for role=student — invites already establish a verified-by-the-teacher email).
+model EmailVerificationToken {
+  id        String    @id @default(cuid(2))
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("email_verification_tokens")
 }
 
 /// Has a second RLS policy beyond the standard owner-scoped one — `public_read` (added in the

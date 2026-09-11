@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { validateSession } from "./session";
 
 export const SESSION_COOKIE_NAME = "pomateshe_session";
@@ -18,6 +19,9 @@ export interface CurrentUser {
   role: "admin" | "teacher" | "student";
   /** Present only for role === "teacher". */
   teacherId?: string;
+  /** Always true for a student/admin (never sent a verification email in the first place —
+   *  docs/AUTH.md §3 only verifies teacher email). Meaningful only for role === "teacher". */
+  emailVerified: boolean;
 }
 
 /**
@@ -40,10 +44,15 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
     // this lookup) and silently return zero rows every time — the actual Phase 1 bug this
     // fix replaced. See the User.teacherProfileId comment in schema.prisma.
     if (!session.teacherProfileId) return null;
-    return { userId: session.userId, role: "teacher", teacherId: session.teacherProfileId };
+    return {
+      userId: session.userId,
+      role: "teacher",
+      teacherId: session.teacherProfileId,
+      emailVerified: session.emailVerifiedAt != null,
+    };
   }
 
-  return { userId: session.userId, role: session.role };
+  return { userId: session.userId, role: session.role, emailVerified: true };
 });
 
 /**
@@ -60,4 +69,25 @@ export async function requireRole(role: "teacher" | "student"): Promise<CurrentU
     throw new Error(`UNAUTHORIZED: expected role "${role}"`);
   }
   return user;
+}
+
+/**
+ * docs/AUTH.md §3: "До подтверждения email — доступ read-only". Call this at the top of every
+ * teacher Server Action that WRITES (not the pages/data-access that only read — those must
+ * keep working, or a freshly-registered teacher couldn't even see their own dashboard to find
+ * the "resend verification" button). Unlike requireRole, this redirects rather than throwing:
+ * an unverified email is an expected, everyday state for a legitimate teacher who still has
+ * working UI buttons in front of them, not a security violation worth crashing the request
+ * over — every other validation failure in this app's actions already redirects with a
+ * friendly message (missing fields, rate limits, etc.), this matches that convention instead
+ * of requireRole's "throw and let the caller decide" contract, which exists for a different
+ * reason (staying usable from contexts requireRole itself doesn't want to assume about).
+ *
+ * `redirectPath` is the calling action's own page (e.g. "/teacher/schedule") so the teacher
+ * lands back where they were, with a clear reason, not on some unrelated screen.
+ */
+export function assertEmailVerified(user: CurrentUser, redirectPath: string): void {
+  if (!user.emailVerified) {
+    redirect(`${redirectPath}?error=email_not_verified`);
+  }
 }

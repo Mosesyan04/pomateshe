@@ -14,6 +14,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   add_failed: "Не удалось добавить ученика в группу.",
   remove_failed: "Не удалось убрать ученика из группы.",
   archive_failed: "Не удалось архивировать группу.",
+  email_not_verified: "Подтвердите email, чтобы управлять группами.",
 };
 
 export default async function GroupsPage({

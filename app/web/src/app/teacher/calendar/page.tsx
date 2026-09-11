@@ -19,6 +19,7 @@ import {
 const ERROR_MESSAGES: Record<string, string> = {
   missing_fields: "Заполните название, время и длительность.",
   invalid_date: "Некорректная дата/время.",
+  email_not_verified: "Подтвердите email, чтобы вносить изменения в календарь.",
 };
 
 export default async function TeacherCalendarPage({

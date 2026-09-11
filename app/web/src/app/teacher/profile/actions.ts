@@ -1,13 +1,14 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { requireRole } from "../../../lib/auth/current-user";
+import { requireRole, assertEmailVerified } from "../../../lib/auth/current-user";
 import { updateTeacherProfile } from "../../../server/teacher-profile";
 import { disconnectCalendarIntegration } from "../../../server/calendar-integration";
 import { Prisma } from "../../../../generated/prisma/client";
 
 export async function updateTeacherProfileAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/profile");
 
   const displayName = String(formData.get("displayName") ?? "").trim();
   const slug = String(formData.get("slug") ?? "").trim();
@@ -66,6 +67,7 @@ export async function updateTeacherProfileAction(formData: FormData): Promise<vo
 
 export async function disconnectGoogleCalendarAction(): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/profile");
   await disconnectCalendarIntegration(user.teacherId!);
   redirect("/teacher/profile?calendarDisconnected=1");
 }

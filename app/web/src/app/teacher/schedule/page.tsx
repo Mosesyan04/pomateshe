@@ -18,6 +18,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   create_group_failed: "Не удалось создать занятие — проверьте, что группа не архивирована.",
   invalid_status: "Некорректный статус.",
   update_failed: "Не удалось обновить занятие.",
+  email_not_verified: "Подтвердите email, чтобы вносить изменения в расписание.",
 };
 
 const STATUS_LABELS: Record<string, string> = {

@@ -9,6 +9,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   missing_fields: "Заполните ученика и заголовок задания.",
   invalid_date: "Некорректный срок сдачи.",
   create_failed: "Не удалось создать задание — проверьте файл (jpeg/png/webp, до 10 МБ) и ученика.",
+  email_not_verified: "Подтвердите email, чтобы создавать задания.",
 };
 
 function formatDateTime(d: Date): string {

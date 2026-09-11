@@ -1,11 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { requireRole } from "../../../lib/auth/current-user";
+import { requireRole, assertEmailVerified } from "../../../lib/auth/current-user";
 import { createInvite, revokeInvite } from "../../../server/invites";
 
 export async function createInviteAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/students");
   const email = String(formData.get("email") ?? "")
     .trim()
     .toLowerCase();
@@ -27,6 +28,7 @@ export async function createInviteAction(formData: FormData): Promise<void> {
 
 export async function revokeInviteAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/students");
   const inviteId = String(formData.get("inviteId") ?? "");
 
   if (inviteId) {

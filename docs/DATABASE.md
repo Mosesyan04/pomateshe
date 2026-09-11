@@ -211,10 +211,11 @@ SECURITY` и владение таблицами — теперь единств
 | `Whiteboard` | Hard delete по `expiresAt` (cron), retention-период — продуктовая константа | `docs/WHITEBOARD.md` §5 |
 | `Session` | Hard delete истёкших записей (`expiresAt` в прошлом) плановой задачей | Этот документ §2 |
 | `PasswordResetToken` | Hard delete использованных/истёкших токенов плановой задачей | Этот документ §2 |
+| `EmailVerificationToken` | Hard delete использованных/истёкших токенов плановой задачей, тот же паттерн, что у `PasswordResetToken` | Этот документ §2 |
 | `StudentInvite` **[Phase 1]** | Истёкшие/отменённые приглашения — hard delete плановой задачей, тот же паттерн, что у `PasswordResetToken` | Этот документ §2 |
 | `ConsentRecord` | Никогда не удаляется, переживает удаление аккаунта (обезличивается, не стирается) | `docs/CONSENTS.md` §4 |
 | `AuditLog` | Никогда не удаляется в рамках обычных процессов, переживает удаление актора | Этот документ §2 |
 | БД-бэкапы | ≥ 30 дней, зашифрованы, в РФ-периметре | Этот документ §6 |
 
-Задачи плановой очистки (`Session`, `PasswordResetToken`, `StudentInvite`, `Whiteboard`) — единый список cron-задач
+Задачи плановой очистки (`Session`, `PasswordResetToken`, `EmailVerificationToken`, `StudentInvite`, `Whiteboard`) — единый список cron-задач
 фиксируется в `docs/ARCHITECTURE.md` §7 и `docs/DEPLOYMENT.md`.

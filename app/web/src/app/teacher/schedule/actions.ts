@@ -2,7 +2,7 @@
 
 import { after } from "next/server";
 import { redirect } from "next/navigation";
-import { requireRole } from "../../../lib/auth/current-user";
+import { requireRole, assertEmailVerified } from "../../../lib/auth/current-user";
 import {
   createLessonForStudent,
   createLessonForGroup,
@@ -16,6 +16,7 @@ const VALID_STATUSES: LessonStatus[] = ["scheduled", "completed", "cancelled", "
 
 export async function createLessonAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/schedule");
 
   const studentLinkId = String(formData.get("studentLinkId") ?? "");
   const scheduledAtRaw = String(formData.get("scheduledAt") ?? "");
@@ -54,6 +55,7 @@ export async function createLessonAction(formData: FormData): Promise<void> {
 
 export async function createGroupLessonAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/schedule");
 
   const groupId = String(formData.get("groupId") ?? "");
   const scheduledAtRaw = String(formData.get("scheduledAt") ?? "");
@@ -89,6 +91,7 @@ export async function createGroupLessonAction(formData: FormData): Promise<void>
 
 export async function updateLessonStatusAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/schedule");
   const lessonId = String(formData.get("lessonId") ?? "");
   const status = String(formData.get("status") ?? "") as LessonStatus;
 
@@ -110,6 +113,7 @@ export async function updateLessonStatusAction(formData: FormData): Promise<void
 
 export async function toggleLessonPaidAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/schedule");
   const lessonId = String(formData.get("lessonId") ?? "");
   const paid = formData.get("paid") === "true";
 

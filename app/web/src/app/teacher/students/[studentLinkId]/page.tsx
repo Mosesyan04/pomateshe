@@ -29,7 +29,7 @@ export default async function StudentCardPage({
       {saved && <p role="status" style={{ color: "#0a7d2c" }}>Сохранено.</p>}
       {error && (
         <p role="alert" style={{ color: "#b00020" }}>
-          Не удалось сохранить.
+          {error === "email_not_verified" ? "Подтвердите email, чтобы изменить карточку ученика." : "Не удалось сохранить."}
         </p>
       )}
 

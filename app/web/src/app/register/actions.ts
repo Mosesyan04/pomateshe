@@ -6,6 +6,8 @@ import { registerTeacher } from "../../server/teachers";
 import { recordConsent } from "../../server/consents";
 import { SESSION_COOKIE_NAME } from "../../lib/auth/current-user";
 import { createSession } from "../../lib/auth/session";
+import { createEmailVerificationToken } from "../../lib/auth/email-verification";
+import { sendEmail } from "../../lib/email/send-email";
 import { Prisma } from "../../../generated/prisma/client";
 import { checkAndRecord } from "../../lib/rate-limit";
 import { getClientIp } from "../../lib/http/client-ip";
@@ -92,6 +94,18 @@ export async function registerTeacherAction(formData: FormData): Promise<void> {
     policyVersion: POLICY_VERSION,
     ip,
     userAgent,
+  });
+
+  // docs/AUTH.md §3: "письмо с подтверждением email" — sent right after the account exists,
+  // same reasoning as recordConsent above (never block/skip account creation itself over it).
+  const { token: verificationToken } = await createEmailVerificationToken(userId);
+  const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/verify-email/${verificationToken}`;
+  await sendEmail({
+    to: email.toLowerCase().trim(),
+    subject: "Подтвердите email — Pomateshe",
+    text:
+      `Подтвердите свой email, перейдя по ссылке (действует 24 часа):\n${verifyUrl}\n\n` +
+      `До подтверждения доступ к некоторым действиям в кабинете ограничен.`,
   });
 
   const session = await createSession(userId);

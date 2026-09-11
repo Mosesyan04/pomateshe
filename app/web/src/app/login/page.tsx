@@ -4,14 +4,21 @@ const ERROR_MESSAGES: Record<string, string> = {
   missing_fields: "Введите email и пароль.",
   invalid_credentials: "Неверный email или пароль.",
   rate_limited: "Слишком много попыток входа. Попробуйте позже.",
+  invalid_or_expired: "Ссылка подтверждения email недействительна или уже использована.",
 };
 
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; next?: string; retryAfter?: string; reset?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    next?: string;
+    retryAfter?: string;
+    reset?: string;
+    emailVerified?: string;
+  }>;
 }) {
-  const { error, next, retryAfter, reset } = await searchParams;
+  const { error, next, retryAfter, reset, emailVerified } = await searchParams;
 
   return (
     <main style={{ maxWidth: 420, margin: "4rem auto", padding: "0 1rem" }}>
@@ -20,6 +27,12 @@ export default async function LoginPage({
       {reset && (
         <p role="status" style={{ color: "#0a7d2c" }}>
           Пароль изменён. Войдите с новым паролем.
+        </p>
+      )}
+
+      {emailVerified && (
+        <p role="status" style={{ color: "#0a7d2c" }}>
+          Email подтверждён. Войдите, чтобы продолжить.
         </p>
       )}
 

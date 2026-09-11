@@ -6,6 +6,7 @@ import { createInviteAction, revokeInviteAction } from "./actions";
 
 const ERROR_MESSAGES: Record<string, string> = {
   invalid_email: "Введите корректный email.",
+  email_not_verified: "Подтвердите email, чтобы приглашать учеников.",
 };
 
 function formatMoney(cents: number): string {

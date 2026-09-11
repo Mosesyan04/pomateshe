@@ -1,12 +1,13 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { requireRole } from "../../../../lib/auth/current-user";
+import { requireRole, assertEmailVerified } from "../../../../lib/auth/current-user";
 import { updateStudentLink } from "../../../../server/teachers";
 
 export async function updateStudentLinkAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
   const studentLinkId = String(formData.get("studentLinkId") ?? "");
+  assertEmailVerified(user, studentLinkId ? `/teacher/students/${studentLinkId}` : "/teacher/students");
 
   const displayName = String(formData.get("displayName") ?? "").trim();
   const subject = String(formData.get("subject") ?? "").trim();

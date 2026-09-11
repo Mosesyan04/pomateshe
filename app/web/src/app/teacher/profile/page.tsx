@@ -9,6 +9,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   slug_taken: "Этот адрес страницы уже занят другим преподавателем.",
   bad_avatar: "Не удалось загрузить фото — проверьте формат (JPEG/PNG/WebP) и размер (до 5 МБ).",
   bad_zoom_link: "Ссылка не похожа на Zoom (ожидается https://...zoom.us/...).",
+  email_not_verified: "Подтвердите email, чтобы изменить профиль (см. кабинет — /teacher/dashboard).",
 };
 
 const CALENDAR_ERROR_MESSAGES: Record<string, string> = {

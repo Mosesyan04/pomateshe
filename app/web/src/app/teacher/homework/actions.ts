@@ -1,11 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { requireRole } from "../../../lib/auth/current-user";
+import { requireRole, assertEmailVerified } from "../../../lib/auth/current-user";
 import { createHomework } from "../../../server/homework";
 
 export async function createHomeworkAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/homework");
 
   const studentLinkId = String(formData.get("studentLinkId") ?? "");
   const title = String(formData.get("title") ?? "").trim();

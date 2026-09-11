@@ -2,7 +2,7 @@
 
 import { after } from "next/server";
 import { redirect } from "next/navigation";
-import { requireRole } from "../../../lib/auth/current-user";
+import { requireRole, assertEmailVerified } from "../../../lib/auth/current-user";
 import { rescheduleLesson } from "../../../server/lessons";
 import { syncLessonToGoogleCalendar } from "../../../server/calendar-sync";
 import {
@@ -21,6 +21,12 @@ export async function rescheduleLessonFromCalendarAction(
   newScheduledAtIso: string,
 ): Promise<{ ok: boolean; error?: string }> {
   const user = await requireRole("teacher");
+  // Programmatic action (no <form>, see the file comment) — assertEmailVerified redirects,
+  // which doesn't fit this call shape, so check and return a result object instead, same as
+  // every other failure path here.
+  if (!user.emailVerified) {
+    return { ok: false, error: "Подтвердите email, чтобы вносить изменения." };
+  }
   try {
     await rescheduleLesson(user.teacherId!, lessonId, new Date(newScheduledAtIso));
     after(() => syncLessonToGoogleCalendar(user.teacherId!, lessonId));
@@ -35,6 +41,9 @@ export async function reschedulePersonalEventFromCalendarAction(
   newScheduledAtIso: string,
 ): Promise<{ ok: boolean; error?: string }> {
   const user = await requireRole("teacher");
+  if (!user.emailVerified) {
+    return { ok: false, error: "Подтвердите email, чтобы вносить изменения." };
+  }
   try {
     await reschedulePersonalEvent(user.userId, eventId, new Date(newScheduledAtIso));
     return { ok: true };
@@ -45,6 +54,7 @@ export async function reschedulePersonalEventFromCalendarAction(
 
 export async function createPersonalEventAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/calendar");
   const title = String(formData.get("title") ?? "").trim();
   const scheduledAtRaw = String(formData.get("scheduledAt") ?? "");
   const durationMinutes = Number(formData.get("durationMinutes"));
@@ -63,6 +73,7 @@ export async function createPersonalEventAction(formData: FormData): Promise<voi
 
 export async function deletePersonalEventAction(formData: FormData): Promise<void> {
   const user = await requireRole("teacher");
+  assertEmailVerified(user, "/teacher/calendar");
   const eventId = String(formData.get("eventId") ?? "");
   if (eventId) {
     await deletePersonalEvent(user.userId, eventId).catch(() => {});

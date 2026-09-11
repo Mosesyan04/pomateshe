@@ -39,6 +39,10 @@ export interface ValidatedSession {
   role: "admin" | "teacher" | "student";
   /** Only set when role === "teacher" — see User.teacherProfileId in schema.prisma. */
   teacherProfileId: string | null;
+  /** docs/AUTH.md §3: "До подтверждения email — доступ read-only" — only meaningful for
+   *  role === "teacher" (the only role that goes through email verification, see
+   *  src/lib/auth/email-verification.ts); null for a student/admin, who were never sent one. */
+  emailVerifiedAt: Date | null;
 }
 
 /**
@@ -67,6 +71,7 @@ export async function validateSession(token: string): Promise<ValidatedSession |
     userId: session.user.id,
     role: session.user.role,
     teacherProfileId: session.user.teacherProfileId,
+    emailVerifiedAt: session.user.emailVerifiedAt,
   };
 }
 
