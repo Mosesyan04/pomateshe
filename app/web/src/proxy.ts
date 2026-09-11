@@ -9,7 +9,7 @@ import { SESSION_COOKIE_NAME } from "./lib/auth/current-user";
  *
  * Two independent jobs live here, both cheap enough to run on every request:
  *
- * 1. Optimistic auth redirect for /teacher and /student — docs/ARCHITECTURE.md §5:
+ * 1. Optimistic auth redirect for /teacher, /student, and /admin — docs/ARCHITECTURE.md §5:
  *    "Middleware проверяет сессию и роль только для UX ... все реальные проверки доступа
  *    дублируются на сервере". Looks at cookie PRESENCE only, nothing more — it cannot query
  *    Postgres here (Next's own guidance: proxy "should not be used as a full session
@@ -63,7 +63,8 @@ export function proxy(request: NextRequest) {
   // --- Route protection (unchanged logic, now living alongside the headers above) ---
   const hasSessionCookie = request.cookies.has(SESSION_COOKIE_NAME);
   const { pathname } = request.nextUrl;
-  const isProtected = pathname.startsWith("/teacher") || pathname.startsWith("/student");
+  const isProtected =
+    pathname.startsWith("/teacher") || pathname.startsWith("/student") || pathname.startsWith("/admin");
 
   let response: NextResponse;
   if (isProtected && !hasSessionCookie) {

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "../../lib/auth/current-user";
+import { getCurrentUser, dashboardPathForRole } from "../../lib/auth/current-user";
 import { logoutAction } from "../logout/actions";
 
 export default async function StudentLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +9,7 @@ export default async function StudentLayout({ children }: { children: React.Reac
     redirect("/login?next=/student/dashboard");
   }
   if (user.role !== "student") {
-    redirect("/teacher/dashboard");
+    redirect(dashboardPathForRole(user.role));
   }
 
   return (

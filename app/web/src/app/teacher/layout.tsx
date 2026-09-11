@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "../../lib/auth/current-user";
+import { getCurrentUser, dashboardPathForRole } from "../../lib/auth/current-user";
 import { logoutAction } from "../logout/actions";
 
 /**
@@ -15,10 +15,10 @@ export default async function TeacherLayout({ children }: { children: React.Reac
     redirect("/login?next=/teacher/dashboard");
   }
   if (user.role !== "teacher") {
-    // Authenticated, but as the wrong role — a student who wandered into /teacher/* by
+    // Authenticated, but as the wrong role — a student/admin who wandered into /teacher/* by
     // typing the URL. Send them to their own area rather than a generic 403 page (not built
     // yet), still never rendering teacher content for them.
-    redirect("/student/dashboard");
+    redirect(dashboardPathForRole(user.role));
   }
 
   return (

@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:migrate": "prisma migrate deploy",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "admin:create": "tsx scripts/create-admin.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.1",
@@ -32,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "prisma": "7.10.0",
+    "tsx": "^4.23.13",
     "typescript": "^5",
     "vitest": "^5.0.0"
   }

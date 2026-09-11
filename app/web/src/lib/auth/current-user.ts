@@ -91,3 +91,21 @@ export function assertEmailVerified(user: CurrentUser, redirectPath: string): vo
     redirect(`${redirectPath}?error=email_not_verified`);
   }
 }
+
+/**
+ * The one place that knows where each role lands after login/when it wanders into another
+ * role's area — used by src/app/login/actions.ts and every role-scoped layout
+ * (src/app/teacher/layout.tsx, src/app/student/layout.tsx, src/app/admin/layout.tsx). Factored
+ * out after a real bug this fixed: those three layouts used to hardcode "the other" role's
+ * dashboard as the redirect target (e.g. teacher/layout.tsx sending any non-teacher straight
+ * to /student/dashboard), which was fine back when only two roles could ever reach a
+ * protected layout — the moment an admin account existed, logging in bounced them
+ * /student/dashboard -> (student layout: not a student) -> /teacher/dashboard -> (teacher
+ * layout: not a teacher) -> /student/dashboard forever. Caught by an actual browser run while
+ * verifying scripts/create-admin.ts, not by any unit test.
+ */
+export function dashboardPathForRole(role: "admin" | "teacher" | "student"): string {
+  if (role === "teacher") return "/teacher/dashboard";
+  if (role === "student") return "/student/dashboard";
+  return "/admin/dashboard";
+}

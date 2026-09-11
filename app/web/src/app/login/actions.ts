@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { login } from "../../lib/auth/login";
-import { SESSION_COOKIE_NAME } from "../../lib/auth/current-user";
+import { SESSION_COOKIE_NAME, dashboardPathForRole } from "../../lib/auth/current-user";
 import { isRateLimited, recordAttempt } from "../../lib/rate-limit";
 import { getClientIp } from "../../lib/http/client-ip";
 
@@ -48,11 +48,11 @@ export async function loginAction(formData: FormData): Promise<void> {
     path: "/",
   });
 
-  if (next && (next.startsWith("/teacher") || next.startsWith("/student"))) {
+  if (next && (next.startsWith("/teacher") || next.startsWith("/student") || next.startsWith("/admin"))) {
     // Only ever redirect within the app's own protected areas — never to an
     // externally-supplied absolute URL (open-redirect guard, docs/SECURITY.md §5).
     redirect(next);
   }
 
-  redirect(result.role === "teacher" ? "/teacher/dashboard" : "/student/dashboard");
+  redirect(dashboardPathForRole(result.role));
 }
