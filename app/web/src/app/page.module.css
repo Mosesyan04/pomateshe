@@ -1,0 +1,699 @@
+/* Pomateshe landing page — docs/DESIGN_SYSTEM.md §3/§6 (brand indigo, Inter, dark mode).
+   Redesign-preserve of the old index.html's public section: same content, same brand tokens,
+   new markup/CSS (CSS Modules, no Tailwind dependency added just for this one page — see
+   docs/DESIGN_SYSTEM.md's own note that Phase 1 hasn't picked a styling system yet). */
+
+.page {
+  --surface: #f8fafc;
+  --surface-raised: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-muted: #475569;
+  --text-faint: #64748b;
+  --accent: var(--brand-600);
+  --accent-strong: var(--brand-700);
+  --accent-soft: var(--brand-50);
+  --highlight: #059669;
+  --highlight-soft: #ecfdf5;
+  color: var(--text);
+  background: var(--surface);
+}
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    --surface: #0b1120;
+    --surface-raised: #131b2e;
+    --border: #232f47;
+    --text: #f1f5f9;
+    --text-muted: #b3bdd1;
+    --text-faint: #8996ad;
+    --accent: var(--brand-500);
+    --accent-strong: #818cf8;
+    --accent-soft: rgba(99, 102, 241, 0.16);
+    --highlight: #34d399;
+    --highlight-soft: rgba(16, 185, 129, 0.14);
+  }
+}
+
+.container {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ---------- Header ---------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 4rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.logoMark {
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.brandNames {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  min-width: 0;
+}
+
+.brandName {
+  font-weight: 800;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brandSub {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.nav {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+@media (min-width: 860px) {
+  .nav {
+    display: flex;
+  }
+}
+
+.nav a {
+  transition: color 0.15s ease;
+}
+
+.nav a:hover,
+.nav a:focus-visible {
+  color: var(--text);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+}
+
+.loginLink {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.65rem;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.loginLink:hover,
+.loginLink:focus-visible {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+/* ---------- Buttons ---------- */
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.85rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.btnPrimary:hover {
+  background: var(--accent-strong);
+}
+
+.btnPrimary:active {
+  transform: scale(0.98);
+}
+
+.btnPrimary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  padding: 3rem 0 3.5rem;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+@media (min-width: 960px) {
+  .heroGrid {
+    grid-template-columns: 1.15fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
+}
+
+.heroHeadline {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+
+.heroHeadline em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.heroSubtext {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 34rem;
+  margin: 0 0 1.75rem;
+}
+
+.heroCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.85rem;
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.btnSecondary:hover {
+  border-color: var(--accent);
+}
+
+.btnSecondary:active {
+  transform: scale(0.98);
+}
+
+/* ---------- Results card (hero asset) ---------- */
+
+.resultsCard {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  padding: 1.75rem;
+  box-shadow: 0 20px 45px -30px rgba(15, 23, 42, 0.35);
+}
+
+.resultsTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 0 0 1.25rem;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.statCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.9rem 0.75rem;
+  text-align: center;
+}
+
+.statNumber {
+  display: block;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.statNumberAlt {
+  color: var(--highlight);
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  margin-top: 0.2rem;
+}
+
+.factList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.factList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.factIcon {
+  flex: none;
+  color: var(--accent);
+  margin-top: 0.1rem;
+}
+
+.factList b {
+  color: var(--text);
+}
+
+/* ---------- Section shell ---------- */
+
+.section {
+  padding: 3rem 0;
+}
+
+.sectionHead {
+  margin-bottom: 1.75rem;
+  max-width: 40rem;
+}
+
+.sectionTitle {
+  font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+}
+
+.sectionLead {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------- About ---------- */
+
+.aboutBody {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+  max-width: 46rem;
+}
+
+.aboutBody p {
+  margin: 0 0 1rem;
+}
+
+.aboutBody p:last-child {
+  margin-bottom: 0;
+}
+
+.aboutBody strong {
+  color: var(--text);
+}
+
+/* ---------- Lessons (asymmetric grid, not 3 equal cards) ---------- */
+
+.lessonsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 760px) {
+  .lessonsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.lessonCard {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.lessonCard:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.lessonTag {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+}
+
+.lessonTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.lessonDesc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------- Diplomas: horizontal scroll-snap strip ---------- */
+
+.scrollStrip {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.5rem;
+  margin: 0 -1.25rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.scrollStrip::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scrollStrip::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.diplomaCard {
+  scroll-snap-align: start;
+  flex: none;
+  width: 17rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.diplomaTag {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+}
+
+.diplomaTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem;
+}
+
+.diplomaDesc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ---------- Reviews: staggered 2-col grid (different family from diplomas) ---------- */
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 760px) {
+  .reviewsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .reviewsGrid > *:nth-child(2n) {
+    margin-top: 1.5rem;
+  }
+}
+
+.reviewCard {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.reviewHead {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reviewAvatar {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.reviewName {
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.reviewScore {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--highlight);
+}
+
+.reviewText {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ---------- Trial form ---------- */
+
+.formSection {
+  background: var(--surface-raised);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 3.5rem 0;
+}
+
+.formWrap {
+  max-width: 30rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.formNotice {
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  border-radius: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.formNoticeSuccess {
+  background: var(--highlight-soft);
+  color: var(--highlight);
+}
+
+.formNoticeError {
+  background: color-mix(in srgb, #dc2626 12%, transparent);
+  color: #dc2626;
+}
+
+.form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-faint);
+}
+
+.field input,
+.field select {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.field input:focus-visible,
+.field select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.consentField {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.consentField label {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 500;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.consentField a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ---------- Landing footer note (above the global legal footer) ---------- */
+
+.landingFooter {
+  padding: 2.5rem 0;
+  text-align: center;
+}
+
+.landingFooterText {
+  font-size: 0.8rem;
+  color: var(--text-faint);
+}
+
+.landingFooterText a {
+  color: var(--accent);
+  font-weight: 700;
+}

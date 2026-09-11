@@ -1,6 +1,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Brand tokens (docs/DESIGN_SYSTEM.md §3/§6) — indigo accent carried over from the original
+     index.html prototype, not reinvented. */
+  --brand-50: #eef2ff;
+  --brand-100: #e0e7ff;
+  --brand-500: #6366f1;
+  --brand-600: #4f46e5;
+  --brand-700: #4338ca;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,7 +34,7 @@ body {
   flex-direction: column;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
