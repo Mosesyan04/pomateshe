@@ -201,6 +201,12 @@ model TeacherStudentLink {
   groupMembers GroupMember[]
   lessons      Lesson[]
   homework     Homework[]
+  /// At most one, in practice — enforced by the DB unique index on (teacherId, studentLinkId),
+  /// not by Prisma's type here: a composite-key-backed one-to-one relation isn't expressible
+  /// as `Whiteboard?` in this Prisma version (it requires a single-field @unique on the FK
+  /// side), so this stays plural at the type level. See src/server/whiteboard.ts for the data
+  /// layer that actually treats it as "zero or one".
+  whiteboards  Whiteboard[]
 
   @@unique([teacherId, studentUserId])
   @@index([teacherId])
@@ -240,9 +246,11 @@ model Group {
   createdAt  DateTime  @default(now())
   archivedAt DateTime?
 
-  teacher TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  members GroupMember[]
-  lessons Lesson[]
+  teacher     TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  members     GroupMember[]
+  lessons     Lesson[]
+  /// At most one, in practice — see the identical comment on TeacherStudentLink.whiteboards.
+  whiteboards Whiteboard[]
 
   @@index([teacherId])
   @@map("groups")
@@ -293,7 +301,6 @@ model Lesson {
   group         Group?              @relation(fields: [groupId], references: [id])
   homework      Homework[]
   materialFiles MaterialFile[]
-  whiteboard  Whiteboard?
 
   @@index([teacherId, scheduledAt])
   @@index([teacherId, paidAt])
@@ -346,20 +353,32 @@ model MaterialFile {
   @@map("material_files")
 }
 
-/// FK lives here only (not also on Lesson) — see docs/DATABASE.md §1 (review-2: resolved the
-/// redundant bidirectional Lesson<->Whiteboard link from the first draft).
+/// One board per (teacher, student) or (teacher, group) pair — NOT per Lesson. Продуктовое
+/// решение (docs/WHITEBOARD.md §3, §9 review-3): the board continues across a student's whole
+/// lesson series, so it can't be keyed by a single Lesson row. Same "exactly one of the two"
+/// shape as Lesson.studentLinkId/groupId (docs/DATABASE.md §1) — CHECK constraint added in raw
+/// SQL migration, Prisma's schema DSL can't express it at this version (same reason Lesson's
+/// own constraint is raw SQL too).
 model Whiteboard {
   id                 String    @id @default(cuid(2))
   teacherId          String
-  lessonId           String    @unique
+  studentLinkId      String?
+  groupId            String?
   snapshotStorageKey String?
   lastActivityAt     DateTime  @default(now())
   expiresAt          DateTime
   createdAt          DateTime  @default(now())
 
-  teacher TeacherProfile @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  lesson  Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  teacher     TeacherProfile      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  studentLink TeacherStudentLink? @relation(fields: [studentLinkId], references: [id], onDelete: Cascade)
+  group       Group?              @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
+  // Postgres treats every NULL as distinct for uniqueness purposes, so each of these two
+  // constraints only actually enforces "at most one" on the side that's populated — exactly
+  // one is ever non-null per row (CHECK below), so together they give "at most one whiteboard
+  // per student" AND "at most one per group", never both interfering with each other.
+  @@unique([teacherId, studentLinkId])
+  @@unique([teacherId, groupId])
   @@index([teacherId])
   @@index([expiresAt])
   @@map("whiteboards")
