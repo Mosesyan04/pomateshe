@@ -9,13 +9,19 @@ const ERROR_MESSAGES: Record<string, string> = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; next?: string; retryAfter?: string }>;
+  searchParams: Promise<{ error?: string; next?: string; retryAfter?: string; reset?: string }>;
 }) {
-  const { error, next, retryAfter } = await searchParams;
+  const { error, next, retryAfter, reset } = await searchParams;
 
   return (
     <main style={{ maxWidth: 420, margin: "4rem auto", padding: "0 1rem" }}>
       <h1>Вход</h1>
+
+      {reset && (
+        <p role="status" style={{ color: "#0a7d2c" }}>
+          Пароль изменён. Войдите с новым паролем.
+        </p>
+      )}
 
       {error && (
         <p role="alert" style={{ color: "#b00020" }}>
@@ -37,6 +43,9 @@ export default async function LoginPage({
         <button type="submit">Войти</button>
       </form>
 
+      <p>
+        <a href="/forgot-password">Забыли пароль?</a>
+      </p>
       <p>
         Ещё нет аккаунта? <a href="/register">Зарегистрироваться как преподаватель</a>
       </p>
