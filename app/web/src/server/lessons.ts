@@ -110,6 +110,26 @@ export async function getLessonsForTeacher(teacherId: string) {
   );
 }
 
+/** Bounded fetch for /teacher/calendar — the plain table on /teacher/schedule wants
+ *  everything, the calendar only ever renders one visible window at a time. */
+export async function getLessonsForTeacherInRange(
+  teacherId: string,
+  range: { from: Date; toExclusive: Date },
+) {
+  return withTenantContext({ teacherId }, (tx) =>
+    tx.lesson.findMany({
+      where: { teacherId, scheduledAt: { gte: range.from, lt: range.toExclusive } },
+      include: {
+        studentLink: {
+          select: { id: true, displayName: true, studentUser: { select: { email: true } } },
+        },
+        group: { select: { id: true, name: true } },
+      },
+      orderBy: { scheduledAt: "asc" },
+    }),
+  );
+}
+
 /**
  * updateMany, not update — mirrors src/server/invites.ts's revokeInvite: the compound
  * {id, teacherId} filter is the real ownership check, RLS is the backstop behind it. Unlike
@@ -127,6 +147,32 @@ export async function updateLessonStatus(
     const result = await tx.lesson.updateMany({
       where: { id: lessonId, teacherId },
       data: { status },
+    });
+    if (result.count === 0) {
+      throw new Error("Занятие не найдено.");
+    }
+  });
+}
+
+/**
+ * The drag-and-drop target on /teacher/calendar. Same updateMany + throw-on-zero ownership
+ * guard as updateLessonStatus above. A group lesson is one row for the whole session (see the
+ * file-level comment) — rescheduling it here already moves it for every member in one action,
+ * with no per-student fan-out needed, because there was never a per-student row to move.
+ */
+export async function rescheduleLesson(
+  teacherId: string,
+  lessonId: string,
+  newScheduledAt: Date,
+  newDurationMinutes?: number,
+): Promise<void> {
+  return withTenantContext({ teacherId }, async (tx) => {
+    const result = await tx.lesson.updateMany({
+      where: { id: lessonId, teacherId },
+      data: {
+        scheduledAt: newScheduledAt,
+        ...(newDurationMinutes != null ? { durationMinutes: newDurationMinutes } : {}),
+      },
     });
     if (result.count === 0) {
       throw new Error("Занятие не найдено.");
@@ -174,10 +220,16 @@ export interface StudentLessonGroup {
  * documented in docs/MULTI_TENANCY.md §4.1-4.2 specifically so this wouldn't need
  * rediscovering by trial and error a third time.
  */
-export async function getMyLessonsAsStudent(studentUserId: string): Promise<StudentLessonGroup[]> {
+export async function getMyLessonsAsStudent(
+  studentUserId: string,
+  /** Bounds the query for the calendar view (/student/calendar) — omitted, it fetches every
+   *  lesson ever, which is what /student/schedule's plain table has always wanted. */
+  range?: { from: Date; toExclusive: Date },
+): Promise<StudentLessonGroup[]> {
   const links = await withTenantContext({ studentUserId }, (tx) =>
     tx.teacherStudentLink.findMany({ where: { studentUserId, status: "active" } }),
   );
+  const scheduledAtFilter = range ? { scheduledAt: { gte: range.from, lt: range.toExclusive } } : {};
 
   return Promise.all(
     links.map(async (link) => {
@@ -190,7 +242,7 @@ export async function getMyLessonsAsStudent(studentUserId: string): Promise<Stud
         ),
         withTenantContext({ teacherId: link.teacherId }, (tx) =>
           tx.lesson.findMany({
-            where: { teacherId: link.teacherId, studentLinkId: link.id },
+            where: { teacherId: link.teacherId, studentLinkId: link.id, ...scheduledAtFilter },
             select: {
               id: true,
               scheduledAt: true,
@@ -222,7 +274,7 @@ export async function getMyLessonsAsStudent(studentUserId: string): Promise<Stud
           ? []
           : await withTenantContext({ teacherId: link.teacherId }, (tx) =>
               tx.lesson.findMany({
-                where: { teacherId: link.teacherId, groupId: { in: groupIds } },
+                where: { teacherId: link.teacherId, groupId: { in: groupIds }, ...scheduledAtFilter },
                 select: {
                   id: true,
                   groupId: true,

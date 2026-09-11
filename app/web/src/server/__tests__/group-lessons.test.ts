@@ -8,6 +8,7 @@ import {
   getMyLessonsAsStudent,
   updateLessonStatus,
   setLessonPaid,
+  rescheduleLesson,
 } from "../lessons";
 import { updateTeacherProfile, getTeacherProfileForEditing } from "../teacher-profile";
 import { cleanupTestData } from "./test-helpers";
@@ -208,5 +209,33 @@ describe("Group lessons", () => {
     // relationship to teacherB at all.
     const groups = await getMyLessonsAsStudent(linkA.studentUserId);
     expect(groups.find((g) => g.teacherId === teacherB.teacherId)).toBeUndefined();
+  });
+
+  it("rescheduling a group lesson moves it for every member in one action — there's only ever one row to move", async () => {
+    const teacher = await makeTeacher("grouplesson-reschedule");
+    const { link: link1 } = await linkNewStudent(teacher.teacherId, "grouplesson-reschedule-1");
+    const { link: link2 } = await linkNewStudent(teacher.teacherId, "grouplesson-reschedule-2");
+    const group = await createGroup(teacher.teacherId, "Reschedule group");
+    await addStudentToGroup(teacher.teacherId, group.id, link1.id);
+    await addStudentToGroup(teacher.teacherId, group.id, link2.id);
+
+    const lesson = await createLessonForGroup({
+      teacherId: teacher.teacherId,
+      groupId: group.id,
+      scheduledAt: new Date("2026-10-01T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 200000,
+    });
+
+    await rescheduleLesson(teacher.teacherId, lesson.id, new Date("2026-10-03T14:00:00Z"));
+
+    const [teacherSide] = await getLessonsForTeacher(teacher.teacherId);
+    expect(teacherSide.scheduledAt.toISOString()).toBe("2026-10-03T14:00:00.000Z");
+
+    for (const link of [link1, link2]) {
+      const groups = await getMyLessonsAsStudent(link.studentUserId);
+      const found = groups.find((g) => g.teacherId === teacher.teacherId)!.lessons.find((l) => l.id === lesson.id);
+      expect(found?.scheduledAt.toISOString()).toBe("2026-10-03T14:00:00.000Z");
+    }
   });
 });

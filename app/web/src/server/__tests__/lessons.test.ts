@@ -4,8 +4,10 @@ import { createInvite, acceptInviteAsNewUser, acceptInviteForExistingUser } from
 import {
   createLessonForStudent,
   getLessonsForTeacher,
+  getLessonsForTeacherInRange,
   updateLessonStatus,
   setLessonPaid,
+  rescheduleLesson,
   getMyLessonsAsStudent,
 } from "../lessons";
 import { updateTeacherProfile, getTeacherProfileForEditing } from "../teacher-profile";
@@ -248,5 +250,128 @@ describe("Zoom link snapshotting (docs/ZOOM.md §1)", () => {
     const groups = await getMyLessonsAsStudent(link.studentUserId);
     const found = groups.find((g) => g.teacherId === teacher.teacherId)!.lessons.find((l) => l.id === lesson.id);
     expect(found?.zoomLinkSnapshot).toBe("https://zoom.us/j/5556667778");
+  });
+});
+
+describe("rescheduleLesson (calendar drag-and-drop target)", () => {
+  it("moves a lesson to a new time and, when given, a new duration", async () => {
+    const teacher = await makeTeacher("reschedule-basic");
+    const { link } = await linkNewStudent(teacher.teacherId, "reschedule-basic-student");
+
+    const lesson = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date("2026-10-01T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    await rescheduleLesson(teacher.teacherId, lesson.id, new Date("2026-10-02T15:00:00Z"), 45);
+
+    const [updated] = await getLessonsForTeacher(teacher.teacherId);
+    expect(updated.scheduledAt.toISOString()).toBe("2026-10-02T15:00:00.000Z");
+    expect(updated.durationMinutes).toBe(45);
+  });
+
+  it("leaves the duration untouched when none is given", async () => {
+    const teacher = await makeTeacher("reschedule-keep-duration");
+    const { link } = await linkNewStudent(teacher.teacherId, "reschedule-keep-duration-student");
+
+    const lesson = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date("2026-10-01T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    await rescheduleLesson(teacher.teacherId, lesson.id, new Date("2026-10-01T11:00:00Z"));
+
+    const [updated] = await getLessonsForTeacher(teacher.teacherId);
+    expect(updated.durationMinutes).toBe(60);
+  });
+
+  it("rejects rescheduling a lesson belonging to a DIFFERENT teacher", async () => {
+    const teacherA = await makeTeacher("reschedule-cross-a");
+    const teacherB = await makeTeacher("reschedule-cross-b");
+    const { link } = await linkNewStudent(teacherA.teacherId, "reschedule-cross-student");
+
+    const lesson = await createLessonForStudent({
+      teacherId: teacherA.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date("2026-10-01T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    await expect(
+      rescheduleLesson(teacherB.teacherId, lesson.id, new Date("2026-10-05T10:00:00Z")),
+    ).rejects.toThrow(/не найдено/);
+
+    const [untouched] = await getLessonsForTeacher(teacherA.teacherId);
+    expect(untouched.scheduledAt.toISOString()).toBe("2026-10-01T10:00:00.000Z");
+  });
+});
+
+describe("Range-bounded queries for the calendar view", () => {
+  it("getLessonsForTeacherInRange only returns lessons scheduled within [from, toExclusive)", async () => {
+    const teacher = await makeTeacher("range-teacher");
+    const { link } = await linkNewStudent(teacher.teacherId, "range-teacher-student");
+
+    const inside = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date("2026-10-15T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+    const outside = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date("2026-01-01T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    const result = await getLessonsForTeacherInRange(teacher.teacherId, {
+      from: new Date("2026-10-13T00:00:00Z"),
+      toExclusive: new Date("2026-10-20T00:00:00Z"),
+    });
+    const ids = result.map((l) => l.id);
+    expect(ids).toContain(inside.id);
+    expect(ids).not.toContain(outside.id);
+  });
+
+  it("getMyLessonsAsStudent with a range only returns lessons in that window, without one returns everything", async () => {
+    const teacher = await makeTeacher("range-student");
+    const { link } = await linkNewStudent(teacher.teacherId, "range-student-student");
+
+    const inside = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date("2026-10-15T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+    const outside = await createLessonForStudent({
+      teacherId: teacher.teacherId,
+      studentLinkId: link.id,
+      scheduledAt: new Date("2026-01-01T10:00:00Z"),
+      durationMinutes: 60,
+      priceCents: 100000,
+    });
+
+    const bounded = await getMyLessonsAsStudent(link.studentUserId, {
+      from: new Date("2026-10-13T00:00:00Z"),
+      toExclusive: new Date("2026-10-20T00:00:00Z"),
+    });
+    const boundedIds = bounded.find((g) => g.teacherId === teacher.teacherId)!.lessons.map((l) => l.id);
+    expect(boundedIds).toContain(inside.id);
+    expect(boundedIds).not.toContain(outside.id);
+
+    const unbounded = await getMyLessonsAsStudent(link.studentUserId);
+    const unboundedIds = unbounded.find((g) => g.teacherId === teacher.teacherId)!.lessons.map((l) => l.id);
+    expect(unboundedIds).toContain(inside.id);
+    expect(unboundedIds).toContain(outside.id);
   });
 });
