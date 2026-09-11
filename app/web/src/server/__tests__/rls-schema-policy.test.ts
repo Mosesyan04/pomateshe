@@ -22,6 +22,7 @@ const TENANT_TABLES = [
   "material_files",
   "whiteboards",
   "calendar_integrations",
+  "personal_calendar_events",
 ];
 
 const NON_TENANT_TABLES = [
