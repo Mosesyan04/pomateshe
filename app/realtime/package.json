@@ -1,0 +1,28 @@
+{
+  "name": "realtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Whiteboard realtime service — separate Node process, no Postgres credentials. See docs/WHITEBOARD.md §2.",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "lib0": "0.2.117",
+    "ws": "8.21.3",
+    "y-protocols": "1.0.7",
+    "yjs": "13.6.32"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "@types/ws": "8.18.1",
+    "tsx": "^4.23.13",
+    "typescript": "^5",
+    "vitest": "^5.0.0"
+  }
+}
