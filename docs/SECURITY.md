@@ -89,6 +89,17 @@ Redis подключается только при горизонтальном 
   сторон одновременно. Когда Phase 2 (`docs/DESIGN_SYSTEM.md`) уберёт инлайн-стили в пользу
   CSS Modules/Tailwind-классов, `style-src` можно будет перевести на nonce и убрать
   `unsafe-inline` — до этого момента это осознанный, документированный компромисс, не пробел.
+- `connect-src` **[Phase 3]** — `'self'` plus, when `REALTIME_WS_URL` is configured, that
+  URL's origin: the whiteboard client (`src/lib/whiteboard/yjs-store-binding.ts`) connects
+  directly to app/realtime over WebSocket, a genuinely different origin/port from this app, so
+  it's the one legitimate case where `connect-src` has to widen past the `default-src 'self'`
+  fallback. No other origin is added for the whiteboard: tldraw's own static assets
+  (icons/fonts/translations, normally fetched from `cdn.tldraw.com`) are self-hosted under
+  `/tldraw-assets` instead (`scripts/copy-tldraw-assets.mjs`, regenerated from the real
+  `@tldraw/assets` package on every `npm install`) — found during implementation that the
+  strict CSP above silently broke tldraw's toolbar icons/translations until this was added,
+  which turned out to be the right call anyway (avoids a third-party CDN dependency, consistent
+  with docs/WHITEBOARD.md §2's "no SaaS dependency" stance, not just a CSP workaround).
 - `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`.
 - `X-Content-Type-Options: nosniff`.
 - `Referrer-Policy: strict-origin-when-cross-origin`.

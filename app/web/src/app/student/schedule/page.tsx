@@ -42,6 +42,7 @@ export default async function StudentSchedulePage() {
                   <th>Статус</th>
                   <th>Оплата</th>
                   <th>Zoom</th>
+                  <th>Доска</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,6 +56,9 @@ export default async function StudentSchedulePage() {
                     </td>
                     <td>
                       <ZoomJoinLink url={lesson.zoomLinkSnapshot} />
+                    </td>
+                    <td>
+                      <a href={`/student/whiteboard/${lesson.id}`}>Открыть</a>
                     </td>
                   </tr>
                 ))}

@@ -42,12 +42,21 @@ export function proxy(request: NextRequest) {
   // <style> tags and our inline attributes at once. Keeping style-src nonce-free and
   // unsafe-inline-only avoids that trap; script-src has no such attribute-vs-element
   // distinction to worry about and stays strict.
+  // The whiteboard client (src/lib/whiteboard/yjs-store-binding.ts) connects directly to
+  // app/realtime over WebSocket, a different origin/port from this app — the only reason
+  // connect-src needs to widen beyond the 'self' default-src fallback at all. Everything else
+  // tldraw needs (icons/fonts/translations) is self-hosted under /tldraw-assets (see
+  // scripts/copy-tldraw-assets.mjs), never fetched from cdn.tldraw.com, so no other origin is
+  // ever added here.
+  const realtimeOrigin = process.env.REALTIME_WS_URL ? new URL(process.env.REALTIME_WS_URL).origin : null;
+
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""};
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data:;
     font-src 'self';
+    connect-src 'self'${realtimeOrigin ? " " + realtimeOrigin : ""};
     object-src 'none';
     base-uri 'self';
     form-action 'self';

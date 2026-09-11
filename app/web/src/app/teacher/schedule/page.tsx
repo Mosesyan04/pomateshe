@@ -152,6 +152,7 @@ export default async function SchedulePage({
                 <th>Статус</th>
                 <th>Оплата</th>
                 <th>Zoom</th>
+                <th>Доска</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -170,6 +171,9 @@ export default async function SchedulePage({
                   </td>
                   <td>
                     <ZoomJoinLink url={lesson.zoomLinkSnapshot} />
+                  </td>
+                  <td>
+                    <a href={`/teacher/whiteboard/${lesson.id}`}>Открыть</a>
                   </td>
                   <td style={{ display: "flex", gap: "0.25rem", flexWrap: "wrap" }}>
                     {lesson.status === "scheduled" && (
