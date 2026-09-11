@@ -219,3 +219,11 @@ SECURITY` и владение таблицами — теперь единств
 
 Задачи плановой очистки (`Session`, `PasswordResetToken`, `EmailVerificationToken`, `StudentInvite`, `Whiteboard`) — единый список cron-задач
 фиксируется в `docs/ARCHITECTURE.md` §7 и `docs/DEPLOYMENT.md`.
+
+✅ **Реализовано** для первых четырёх (`Session`/`PasswordResetToken`/`EmailVerificationToken`/
+`StudentInvite`) — `POST /api/internal/cron/auth-cleanup` (`src/server/auth-cleanup.ts`),
+защищён секретным заголовком (`Authorization: Bearer $INTERNAL_CRON_SECRET`, сравнение —
+constant-time), fail-closed при отсутствующем секрете. Удаляются истёкшие сессии,
+использованные/истёкшие токены сброса пароля и подтверждения email, отменённые и истёкшие
+(но не принятые) приглашения. Вызывается системным cron — `docs/API.md` §5. `Whiteboard` —
+не реализовано, Phase 3 ещё не начата (`docs/WHITEBOARD.md` §5).
