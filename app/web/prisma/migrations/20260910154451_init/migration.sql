@@ -368,9 +368,19 @@ ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_actorUserId_fkey" FOREIGN KE
 -- FORCE, CREATE POLICY), in the migration that creates it. See docs/DEPLOYMENT.md §5.
 -- =============================================================================
 
--- Runtime role: NOT the owner of these tables (this migration runs as pomateshe_migrator,
--- which owns everything created above). No BYPASSRLS. This is what makes RLS actually take
--- effect instead of being silently bypassed by table ownership.
+-- [Updated pre-deploy, docs/MULTI_TENANCY.md §2.3.1] Originally written assuming a separate
+-- pomateshe_migrator (schema owner) and pomateshe_app (runtime, non-owner) role. SprintHost's
+-- shared-hosting tariff confirmed only ONE fixed Postgres role is available at all — no second
+-- role can be created, by the panel or on request. pomateshe_app is therefore now BOTH the
+-- schema owner (runs this migration) AND the runtime role — GRANTs below are harmless no-ops
+-- for an owner (already implied by ownership) but are kept for environments that still can
+-- run two roles (e.g. local dev, or a future managed-Postgres move). What actually keeps RLS
+-- enforced despite pomateshe_app owning the tables is FORCE ROW LEVEL SECURITY on every
+-- statement below, verified empirically (see rls-schema-policy.test.ts) — plus pomateshe_app
+-- having neither SUPERUSER nor BYPASSRLS, which no GRANT can confer. The real, load-bearing
+-- consequence: this role's own credentials can now ALTER/DROP the policies that protect it
+-- (an owner always can) — a defense-in-depth layer the original two-role design provided is
+-- gone, accepted as a documented tradeoff, not an oversight.
 GRANT USAGE ON SCHEMA public TO pomateshe_app;
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO pomateshe_app;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO pomateshe_app;
